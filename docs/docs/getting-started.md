@@ -1,13 +1,11 @@
 ---
-title: What is Helmless?
+title: Getting Started
 description: A detailed look at how Helmless simplifies serverless deployments using familiar tools
 ---
 
-# What is Helmless?
+# Getting Started
 
-!!! warning "Page under construction"
-
-    🚧 This page is under construction. 🚧
+--8<-- "docs/_partials/wip.md"
 
 Helmless is an open-source project that brings the power and simplicity of Helm to serverless deployments. It provides a familiar GitOps workflow for deploying containerized applications to serverless platforms like Google Cloud Run, without the complexity of Kubernetes or the verbosity of Terraform.
 

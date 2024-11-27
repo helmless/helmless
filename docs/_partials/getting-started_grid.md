@@ -6,7 +6,7 @@
 
     Learn the core concepts and understand how Helmless simplifies serverless deployments
 
-    [:octicons-arrow-right-24: Learn More](/what-is-helmless)
+    [:octicons-arrow-right-24: Learn More](/docs/what-is-helmless)
 
 -   :material-cog-outline:{ .lg .middle } __How does it work?__
 
@@ -14,7 +14,7 @@
 
     Understand the architecture, technical details behind Helmless, and how to extended it to other platforms.
 
-    [:octicons-arrow-right-24: Architecture](/architecture)
+    [:octicons-arrow-right-24: Architecture](/docs/architecture)
 
 -   :material-rocket-launch:{ .lg .middle } __Deploy Your First Service__
 

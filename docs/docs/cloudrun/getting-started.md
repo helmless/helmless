@@ -5,7 +5,7 @@ description: Learn how to deploy a simple Hello World image to Google Cloud Run 
 
 # Getting Started
 
-In this guide you will learn how to deploy a simple Hello World image to Google Cloud Run using Helmless. Read [what is Helmless](/what-is-helmless) first if you want to understand how it works. See the [architecture](/architecture) for more information on how to adopt it to other cloud providers.
+In this guide you will learn how to deploy a simple Hello World image to Google Cloud Run using Helmless. Read [what is Helmless](../what-is-helmless.md) first if you want to understand how it works. See the [architecture](../architecture.md) for more information on how to adopt it to other cloud providers.
 
 Deploying from a CI/CD pipeline is covered in a [later guide](./ci-cd.md).
 
@@ -164,7 +164,7 @@ gcloud run services delete tutorial-service
 
 ## Next Steps
 
-From here you can head back to the [overview](/what-is-helmless) to learn more about Helmless for Google Cloud Run or jump to the next guide to learn how to [deploy from a CI/CD pipeline](ci-cd.md) using Github Actions.
+From here you can head back to the [overview](../what-is-helmless.md) to learn more about Helmless for Google Cloud Run or jump to the next guide to learn how to [deploy from a CI/CD pipeline](./ci-cd.md) using Github Actions.
 
 
 --8<-- "docs/_partials/getting-started_grid.md"

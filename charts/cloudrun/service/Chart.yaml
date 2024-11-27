@@ -1,8 +1,7 @@
 apiVersion: v2
 name: google-cloudrun-service
-description:
-  Templates a Google Cloud Run Service YAML manifest that can be deployed
-  using the Google Cloud CLI.
+description: Templates a Google Cloud Run Service YAML manifest that can be
+  deployed using the Google Cloud CLI.
 type: application
 version: 0.1.0
 maintainers:

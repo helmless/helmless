@@ -35,6 +35,9 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
 
     md.append(f"<!-- md:version {prop.get('since', '0.1.0')} -->")
     md.append(f"<!-- md:type {type_str} -->")
+    if 'enum' in prop:
+        enum_values = ' · '.join(f'`{v}`' for v in prop['enum'])
+        md.append(f"<!-- md:enum {enum_values} -->")
 
     if 'maxLength' in prop:
         md.append(f"<!-- md:maxLength {prop['maxLength']} -->")

@@ -61,6 +61,7 @@ def on_page_markdown(
         elif type == "minLength":    return _badge_for_min_length(args, page, files)
         elif type == "pattern":      return _badge_for_pattern(args, page, files)
         elif type == "deprecated":   return _badge_for_deprecated(args, page, files)
+        elif type == "enum":         return _badge_for_enum(args, page, files)
         elif type == "default":
             if   args == "none":     return _badge_for_default_none(page, files)
             elif args == "computed": return _badge_for_default_computed(page, files)
@@ -254,4 +255,12 @@ def _badge_for_deprecated(text: str, page: Page, files: Files):
     return _badge(
         icon = f"[:{icon}:]({href} 'Deprecated')",
         text = text if text else ""
+    )
+
+def _badge_for_enum(text: str, page: Page, files: Files):
+    icon = "material-format-list-bulleted"
+    href = _resolve_path(f"{CONVENTIONS_PATH}#enum", page, files)
+    return _badge(
+        icon = f"[:{icon}:]({href} 'Enumeration')",
+        text = text
     )

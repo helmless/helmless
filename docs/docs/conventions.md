@@ -44,3 +44,7 @@ Some properties are required, which means they must be explicitly set in the `va
 ### <!-- md:type --> – Type { #type data-toc-label="Type" }
 
 All properties have a type, for example `string`, `boolean`, `object`, etc.
+
+### <!-- md:enum --> – Enumeration { #enum data-toc-label="Enumeration" }
+
+Some properties have a set of allowed values, which are listed in the `enum` property.

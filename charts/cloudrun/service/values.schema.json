@@ -8,8 +8,19 @@
             "$title": "Minimal Service",
             "name": "my-service",
             "image": "ghcr.io/my-org/my-image@sha256:abc123",
+            "region": "us-central1",
             "autoscaling": {
                 "minScale": 0
+            }
+        },
+        {
+            "$title": "Service with connection to VPC",
+            "name": "my-service",
+            "image": "ghcr.io/my-org/my-image@sha256:abc123",
+            "region": "us-central1",
+            "vpc": {
+                "network": "my-network",
+                "subnetwork": "my-subnetwork"
             }
         }
     ],

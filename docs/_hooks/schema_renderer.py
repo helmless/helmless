@@ -113,16 +113,7 @@ def _render_schema(schema: dict, changelog_path: str = None) -> str:
     return '\n'.join(md)
 
 def _render_dict_example(data: dict, indent: str, prefix: str = "") -> list[str]:
-    """Helper function to render dictionary examples with proper YAML formatting.
-
-    Args:
-        data: Dictionary containing the example data
-        indent: Current indentation string
-        prefix: Optional prefix to add before the content (for nested objects)
-
-    Returns:
-        List of strings containing the YAML formatted example
-    """
+    """Helper function to render dictionary examples with proper YAML formatting."""
     yaml_lines = []
 
     # Handle $value special case
@@ -141,32 +132,41 @@ def _render_dict_example(data: dict, indent: str, prefix: str = "") -> list[str]
         if isinstance(v, dict):
             yaml_lines.extend(_render_example(k, v, indent=indent))
         else:
+            # Convert Python bool to YAML bool
+            if isinstance(v, bool):
+                v = str(v).lower()
             yaml_lines.append(f"{indent}{k}: {v}")
 
     return yaml_lines
 
 def _render_example(name: str, example: any, indent: str = "") -> list[str]:
-    """Render a single example as YAML with proper indentation.
-
-    Args:
-        name: The property name
-        example: The example value (can be dict or simple value)
-        indent: Additional indentation prefix for nested examples
-
-    Returns:
-        List of strings containing the YAML formatted example
-    """
-    if isinstance(example, dict):
-        if name is None:
+    """Render a single example as YAML with proper indentation."""
+    if name is None:
+        if isinstance(example, dict):
             return _render_dict_example(example, indent)
         else:
-            return _render_dict_example(example, indent, f"{name}:")
-    else:
-        # For simple values, use single line format
-        if name is None:
             return [f"{indent}{example}"]
-        else:
-            return [f"{indent}{name}: {example}"]
+
+    yaml_lines = []
+
+    # Handle dotted names by creating nested structure
+    if '.' in name:
+        parts = name.split('.')
+        for part in parts[:-1]:
+            yaml_lines.append(f"{indent}{part}:")
+            indent = indent + "  "
+        name = parts[-1]
+
+    # Now handle the actual value with the final name part
+    if isinstance(example, dict):
+        yaml_lines.extend(_render_dict_example(example, indent, f"{name}:"))
+    else:
+        # Convert Python bool to YAML bool
+        if isinstance(example, bool):
+            example = str(example).lower()
+        yaml_lines.append(f"{indent}{name}: {example}")
+
+    return yaml_lines
 
 def _render_examples(examples: list, name: str = None, indent: str = "") -> list[str]:
     """Render a list of examples as YAML with proper formatting.
@@ -189,8 +189,7 @@ def _render_examples(examples: list, name: str = None, indent: str = "") -> list
     elif len(examples) > 1:
         for example in examples:
             if isinstance(example, dict) and '$title' in example:
-                title = example['$title']
-                example = {k:v for k,v in example.items() if k != '$title'}
+                title = example.pop('$title')
                 md.append(f"{indent}=== \"{title}\"")
             else:
                 md.append(f"{indent}=== \"Example {examples.index(example) + 1}\"")

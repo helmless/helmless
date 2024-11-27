@@ -9,12 +9,15 @@
             "name": "my-service",
             "image": "ghcr.io/my-org/my-image@sha256:abc123",
             "region": "us-central1",
+            "env": {
+                "MY_ENV_VAR": "my-value"
+            },
             "autoscaling": {
-                "minScale": 0
+                "minScale": "0 # scale to zero"
             }
         },
         {
-            "$title": "Service with connection to VPC",
+            "$title": "Service with Direct VPC Connect",
             "name": "my-service",
             "image": "ghcr.io/my-org/my-image@sha256:abc123",
             "region": "us-central1",
@@ -45,6 +48,13 @@
             "examples": [
                 "My service does xyz."
             ]
+        },
+        "region": {
+            "description": "The region to deploy the CloudRun service to. Uses the default region if not provided.",
+            "type": [
+                "string"
+            ],
+            "default": "us-central1"
         },
         "image": {
             "description": "Container image to deploy. You can provide a direct reference to an image using a `string` or split up the inputs using the `object`.",
@@ -117,6 +127,17 @@
                 }
             ]
         },
+        "env": {
+            "description": "Environment variables to set in the CloudRun container. Using an object allows merging of stages.",
+            "type": [
+                "object"
+            ],
+            "examples": [
+                {
+                    "MY_ENV_VAR": "my-value"
+                }
+            ]
+        },
         "command": {
             "description": "Command that runs when the container starts.",
             "default": [],
@@ -182,23 +203,57 @@
                 }
             ]
         },
-        "containerPort": {
-            "description": "Container port to expose. In CloudRun only a single port can be exposed and defaults to 8080.",
-            "type": [
-                "integer"
-            ]
-        },
-        "env": {
-            "description": "Environment variables to set in the CloudRun container.",
-            "properties": {},
+        "resources": {
+            "description": "Resource requests and limits for the CloudRun container. If not provided, defaults are used.",
+            "properties": {
+                "cpuThrottling": {
+                    "default": true,
+                    "description": "Whether to throttle the CPU. This has significant impact on billing if set to `false`.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "examples": [
+                        false
+                    ]
+                },
+                "limits": {
+                    "properties": {
+                        "cpu": {
+                            "default": 1,
+                            "description": "Maximum CPUs to allocate for the CloudRun container. Can be 1, 2, 4, 6, 8, or any fractional value from 0.01 to 1.",
+                            "type": [
+                                "integer"
+                            ]
+                        },
+                        "memory": {
+                            "description": "Maximum memory to allocate for the CloudRun container. Requires a minimum number of CPUs of 2 over 4GiB.",
+                            "type": [
+                                "string"
+                            ]
+                        }
+                    },
+                    "type": "object"
+                },
+                "startupBoost": {
+                    "default": false,
+                    "description": "Whether to boost the CPUs at the start of the container.",
+                    "type": [
+                        "boolean"
+                    ]
+                }
+            },
             "type": [
                 "object"
             ]
         },
-        "executionEnvironment": {
-            "description": "The execution environment to use for the CloudRun container. Must be either 'gen2' or 'gen1'.",
+        "containerPort": {
+            "description": "Container port to expose. In CloudRun only a single port can be exposed and defaults to 8080.",
             "type": [
-                "string"
+                "integer"
+            ],
+            "default": 8080,
+            "examples": [
+                8081
             ]
         },
         "ingress": {
@@ -208,8 +263,12 @@
                 "internal",
                 "internal-and-cloud-load-balancing"
             ],
+            "default": "all",
             "type": [
                 "string"
+            ],
+            "examples": [
+                "internal"
             ]
         },
         "labels": {
@@ -219,17 +278,6 @@
             "properties": {},
             "type": [
                 "object"
-            ]
-        },
-        "launchStage": {
-            "description": "The launch stage of the CloudRun service. Controls feature availability and SLA.",
-            "enum": [
-                "ALPHA",
-                "BETA",
-                "GA"
-            ],
-            "type": [
-                "string"
             ]
         },
         "livenessProbe": {
@@ -325,52 +373,6 @@
                     "type": [
                         "integer",
                         "null"
-                    ]
-                }
-            },
-            "type": [
-                "object"
-            ]
-        },
-        "region": {
-            "description": "The region to deploy the CloudRun service to.",
-            "type": [
-                "string"
-            ]
-        },
-        "resources": {
-            "description": "Resource requests and limits for the CloudRun container. If not provided, defaults are used.",
-            "properties": {
-                "cpuThrottling": {
-                    "default": true,
-                    "description": "Whether to throttle the CPU. This has significant impact on billing.",
-                    "type": [
-                        "boolean"
-                    ]
-                },
-                "limits": {
-                    "properties": {
-                        "cpu": {
-                            "default": 1,
-                            "description": "Maximum CPUs to allocate for the CloudRun container. Can be 1, 2, 4, 6, 8, or any fractional value from 0.01 to 1.",
-                            "type": [
-                                "integer"
-                            ]
-                        },
-                        "memory": {
-                            "description": "Maximum memory to allocate for the CloudRun container. Requires a minimum number of CPUs of 2 over 4GiB.",
-                            "type": [
-                                "string"
-                            ]
-                        }
-                    },
-                    "type": "object"
-                },
-                "startupBoost": {
-                    "default": false,
-                    "description": "Whether to boost the CPUs at the start of the container.",
-                    "type": [
-                        "boolean"
                     ]
                 }
             },
@@ -501,6 +503,31 @@
                 }
             },
             "type": "object"
+        },
+        "executionEnvironment": {
+            "description": "The execution environment to use for the CloudRun container. Must be either 'gen2' or 'gen1'.",
+            "enum": [
+                "gen2",
+                "gen1"
+            ],
+            "default": "gen2",
+            "type": [
+                "string"
+            ],
+            "examples": [
+                "gen1"
+            ]
+        },
+        "launchStage": {
+            "description": "The launch stage of the CloudRun service. Controls feature availability and SLA.",
+            "enum": [
+                "ALPHA",
+                "BETA",
+                "GA"
+            ],
+            "type": [
+                "string"
+            ]
         }
     },
     "required": [

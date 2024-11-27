@@ -102,13 +102,16 @@ def _render_schema(schema: dict, changelog_path: str = None) -> str:
 
     # Render each top-level property
     for prop_name, prop in schema.get('properties', {}).items():
-        md.append(_render_property(
-            prop_name,
+        try:
+            md.append(_render_property(
+                prop_name,
             prop,
             schema.get('required', []),
-            changelog_path=changelog_path
-        ))
-        md.append("")
+                changelog_path=changelog_path
+            ))
+            md.append("")
+        except Exception as e:
+            log.error(f"Failed to render property {prop_name}: {e}")
 
     return '\n'.join(md)
 

@@ -23,7 +23,9 @@ metadata:
     {{- with .Values.ingress }}
     run.googleapis.com/ingress: {{ . }}
     {{- end }}
-    run.googleapis.com/region: {{ .Values.region }}
+    {{- with .Values.region }}
+    run.googleapis.com/region: {{ . }}
+    {{- end }}
 spec:
   template:
     metadata:

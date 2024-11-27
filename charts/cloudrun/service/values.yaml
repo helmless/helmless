@@ -3,7 +3,6 @@ type: service # @schema type:string;required:false;enum:service,job;description:
 name: serverless-helm # @schema type:string;required:true;description:Name of the CloudRun  resource to deploy. Truncated to 63 characters.
 description: null # @schema type:[string,null];required:false;description:A human-readable description of the CloudRun service.
 launchStage: 'GA' # @schema type:[string];enum:["ALPHA","BETA","GA"];required:false;description:The launch stage of the CloudRun service. Controls feature availability and SLA.
-region: 'us-central1' # @schema type:[string];default:us-central1;required:false;description:The region to deploy the CloudRun service to.
 
 env: {} # @schema type:object;required:false;description:Environment variables to set in the CloudRun container.
 # env:

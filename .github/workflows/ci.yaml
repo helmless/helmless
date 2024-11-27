@@ -23,8 +23,11 @@ jobs:
       - name: ⚙️ Setup Helm
         uses: azure/setup-helm@v4
 
-      - name: 🧪 Run Helm Lint
+      - name: 🧹 Run Helm Lint
         run: helm lint ${{ matrix.chart }}
+
+      - name: 🧪 Run Helm Test
+        run: helm unittest ${{ matrix.chart }}
 
       - name: 📦 Test Helm Package
         run: helm package ${{ matrix.chart }} --debug

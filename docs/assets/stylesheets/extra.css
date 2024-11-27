@@ -26,3 +26,30 @@
         --md-code-hl-color: rgba(66, 153, 225, 0.15);
     }
 }
+
+.mdx-badge {
+    font-size: 0.85em;
+}
+
+.mdx-badge--right {
+    float: right;
+    margin-left: 0.35em;
+}
+
+.mdx-badge__icon {
+    padding: 0.25rem;
+    background: var(--md-accent-fg-color--transparent);
+    border-start-start-radius: 0.125rem;
+    border-end-start-radius: 0.125rem;
+}
+
+.mdx-badge__icon:last-child {
+    border-radius: 0.125rem;
+}
+
+.mdx-badge__text {
+    padding: 0.25rem 0.375rem;
+    border-start-end-radius: 0.125rem;
+    border-end-end-radius: 0.125rem;
+    box-shadow: 0 0 0 1px inset var(--md-accent-fg-color--transparent);
+}

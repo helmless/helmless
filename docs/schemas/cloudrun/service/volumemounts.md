@@ -1,3 +1,0 @@
-## volumeMounts Type
-
-`array`

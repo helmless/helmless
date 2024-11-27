@@ -1,3 +1,0 @@
-## initialDelaySeconds Type
-
-`integer`

@@ -1,3 +1,0 @@
-## serviceAccountName Type
-
-`string`

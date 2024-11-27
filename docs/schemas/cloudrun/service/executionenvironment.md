@@ -1,3 +1,0 @@
-## executionEnvironment Type
-
-`string`

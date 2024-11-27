@@ -1,3 +1,0 @@
-## repository Type
-
-`string`

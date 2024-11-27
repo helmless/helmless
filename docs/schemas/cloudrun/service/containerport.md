@@ -1,3 +1,0 @@
-## containerPort Type
-
-`integer`

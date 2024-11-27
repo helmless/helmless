@@ -1,3 +1,0 @@
-## region Type
-
-`string`

@@ -1,3 +1,0 @@
-## failureThreshold Type
-
-`integer`

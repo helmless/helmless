@@ -1,3 +1,0 @@
-## sessionAffinity Type
-
-`boolean`

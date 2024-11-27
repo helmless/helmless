@@ -1,3 +1,0 @@
-## volumes Type
-
-`array`

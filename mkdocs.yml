@@ -3,32 +3,45 @@ site_description: Deploy containers to Google Cloud Run with Helm's, avoiding th
 site_url: https://helmless.io
 repo_url: https://github.com/helmless/helmless
 edit_uri: edit/main/docs/
+
+conventions_path: docs/conventions.md
+schema_renderer:
+  write_output: false
+  schemas:
+    - schema_path: charts/cloudrun/service/values.schema.json
+      changelog_path: charts/cloudrun/service/CHANGELOG.md
+      nav_path: docs/cloudrun/charts/service/schema.md
+
 nav:
   - Home: index.md
-  - What is Helmless?:
-      - what-is-helmless.md
-      - Architecture: architecture.md
   - Documentation:
       - docs/index.md
+      - What is Helmless?: docs/what-is-helmless.md
+      - Architecture: docs/architecture.md
+      - Conventions: docs/conventions.md
       - Google CloudRun:
-          - docs/cloudrun/index.md
+          # - docs/cloudrun/index.md
           - Getting Started: docs/cloudrun/getting-started.md
           - CI/CD: docs/cloudrun/ci-cd.md
           - Examples: docs/cloudrun/examples.md
           - Advanced Infrastructure: docs/cloudrun/advanced.md
-  - Helmless Chart Schemas: schemas/
+          - Cloud Run Service Chart:
+              - docs/cloudrun/charts/service/index.md
+              - Schema: docs/cloudrun/charts/service/schema.md
+              - Changelog: docs/cloudrun/charts/service/CHANGELOG.md
+
 plugins:
   - privacy
   - search
   - minify:
       minify_html: true
-  - awesome-pages:
-      filename: .pages
-      collapse_single_pages: true
-      strict: false
-      order: asc
-      sort_type: natural
-      order_by: title
+  # - awesome-pages:
+  #     filename: .pages
+  #     collapse_single_pages: true
+  #     strict: false
+  #     order: asc
+  #     sort_type: natural
+  #     order_by: title
   # - multirepo:
   #     cleanup: false
   #     keep_docs_dir: false
@@ -124,7 +137,6 @@ markdown_extensions:
   - md_in_html
   - toc:
       permalink: true
-
   # Python Markdown Extensions
   - pymdownx.arithmatex:
       generic: true
@@ -145,6 +157,8 @@ markdown_extensions:
   - pymdownx.smartsymbols
   - pymdownx.snippets:
       url_download: true
+      auto_append:
+        - docs/_includes/abbreviations.md
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -158,6 +172,19 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+    absolute_links: info
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: warn
+    unrecognized_links: warn
 extra_css:
   - assets/stylesheets/extra.css
   - assets/stylesheets/social.css
+hooks:
+  - docs/_hooks/schema_renderer.py
+  - docs/_hooks/shortcodes.py

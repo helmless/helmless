@@ -1,3 +1,0 @@
-## minScale Type
-
-`integer`

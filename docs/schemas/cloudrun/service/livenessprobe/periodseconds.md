@@ -1,3 +1,0 @@
-## periodSeconds Type
-
-`integer`

@@ -1,3 +1,0 @@
-## subnetwork Type
-
-`string`

@@ -1,3 +1,0 @@
-## startupBoost Type
-
-`boolean`

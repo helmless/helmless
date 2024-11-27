@@ -1,3 +1,0 @@
-## connector Type
-
-`string`

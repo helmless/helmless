@@ -1,3 +1,0 @@
-## network Type
-
-`string`

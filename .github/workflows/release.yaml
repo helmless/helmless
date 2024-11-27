@@ -18,6 +18,9 @@ jobs:
   release:
     name: 🏷️ Release Please
     runs-on: ubuntu-latest
+    outputs:
+      paths_released: ${{ steps.release.outputs.paths_released }}
+      releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
       # Required so that a release triggers follow up workflows
       - name: 🔑 Generate Token

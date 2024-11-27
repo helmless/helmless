@@ -150,8 +150,8 @@ def on_files(files: Files, config, **kwargs) -> Files:
 
                     # Add IDs to version headers
                     changelog_content = re.sub(
-                        r'^## \[(\d+\.\d+\.\d+)\](.*?)$',
-                        r'## [\1]\2 { id="\1" }',
+                        r'^## (?:\[)?(\d+\.\d+\.\d+)(?:\])?(.*?)$',
+                        r'## \1\2 { id="\1" }',
                         changelog_content,
                         flags=re.MULTILINE
                     )

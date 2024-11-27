@@ -60,7 +60,6 @@ jobs:
         with:
           gcp_project: ${{ secrets.GCP_PROJECT_ID }}
           dry_run: ${{ env.DRY_RUN }}
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL }}
 
       - name: 💣 Cleanup Service
         if: always() && ${{ env.DRY_RUN == 'false' }}

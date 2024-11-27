@@ -57,6 +57,10 @@ def on_page_markdown(
         elif type == "feature":      return _badge_for_feature(args, page, files)
         elif type == "example":      return _badge_for_example(args, page, files)
         elif type == "type":         return _badge_for_type(args, page, files)
+        elif type == "maxLength":    return _badge_for_max_length(args, page, files)
+        elif type == "minLength":    return _badge_for_min_length(args, page, files)
+        elif type == "pattern":      return _badge_for_pattern(args, page, files)
+        elif type == "deprecated":   return _badge_for_deprecated(args, page, files)
         elif type == "default":
             if   args == "none":     return _badge_for_default_none(page, files)
             elif args == "computed": return _badge_for_default_computed(page, files)
@@ -195,10 +199,10 @@ def _badge_for_default_computed(page: Page, files: Files):
 
 # Create badge for required value flag
 def _badge_for_required(page: Page, files: Files):
-    icon = "material-alert"
+    icon = "material-radiobox-marked"
     href = _resolve_path(f"{CONVENTIONS_PATH}#required", page, files)
     return _badge(
-        icon = f"[:{icon}:]({href} 'Required value')"
+        icon = f"[:{icon}:{{.red-icon}}]({href} 'Required value')"
     )
 
 # Create badge for experimental flag
@@ -216,4 +220,38 @@ def _badge_for_type(text: str, page: Page, files: Files):
     return _badge(
         icon = f"[:{icon}:]({href} 'Schema type')",
         text = text
+    )
+
+# Add these new functions at the bottom with other badge functions:
+
+def _badge_for_max_length(text: str, page: Page, files: Files):
+    icon = "material-ruler"
+    href = _resolve_path(f"{CONVENTIONS_PATH}#max-length", page, files)
+    return _badge(
+        icon = f"[:{icon}:]({href} 'Maximum length')",
+        text = text
+    )
+
+def _badge_for_min_length(text: str, page: Page, files: Files):
+    icon = "material-ruler"
+    href = _resolve_path(f"{CONVENTIONS_PATH}#min-length", page, files)
+    return _badge(
+        icon = f"[:{icon}:]({href} 'Minimum length')",
+        text = text
+    )
+
+def _badge_for_pattern(text: str, page: Page, files: Files):
+    icon = "material-regex"
+    href = _resolve_path(f"{CONVENTIONS_PATH}#pattern", page, files)
+    return _badge(
+        icon = f"[:{icon}:]({href} 'Pattern')",
+        text = text
+    )
+
+def _badge_for_deprecated(text: str, page: Page, files: Files):
+    icon = "material-alert"
+    href = _resolve_path(f"{CONVENTIONS_PATH}#deprecated", page, files)
+    return _badge(
+        icon = f"[:{icon}:]({href} 'Deprecated')",
+        text = text if text else ""
     )

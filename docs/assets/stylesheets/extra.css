@@ -53,3 +53,7 @@
     border-end-end-radius: 0.125rem;
     box-shadow: 0 0 0 1px inset var(--md-accent-fg-color--transparent);
 }
+
+.red-icon {
+    color: #F56565;
+}

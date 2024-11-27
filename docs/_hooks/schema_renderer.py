@@ -28,34 +28,50 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
 
     # Build markdown output
     md.append(f"{prefix} <!-- md:setting values.{name} -->")
+
     md.append("")
+    if 'deprecated' in prop and prop['deprecated']:
+        md.append("<!-- md:deprecated -->")
+
     md.append(f"<!-- md:version {prop.get('since', '0.1.0')} -->")
     md.append(f"<!-- md:type {type_str} -->")
-    if is_required:
-        md.append("<!-- md:flag required -->")
 
-    # Handle default value
+    if 'maxLength' in prop:
+        md.append(f"<!-- md:maxLength {prop['maxLength']} -->")
+    if 'minLength' in prop:
+        md.append(f"<!-- md:minLength {prop['minLength']} -->")
+    if 'pattern' in prop:
+        md.append(f"<!-- md:pattern `{prop['pattern']}` -->")
+
     default = prop.get('default', None)
     if default is not None:
         md.append(f"<!-- md:default `{default}` -->")
     else:
         md.append("<!-- md:default none -->")
 
+
+    if is_required:
+        md.append("<!-- md:flag required -->")
+
     # Add description
     if 'description' in prop:
         md.append("")
         md.append(prop['description'])
 
-    # Handle nested properties
+    if 'examples' in prop:
+        md.extend(_render_examples(prop['examples'], name))
+
+    # Render sub-properties if this is an object type
     if 'properties' in prop:
+        md.append("")
         for sub_name, sub_prop in prop['properties'].items():
             md.append("")
             md.append(_render_property(
                 f"{name}.{sub_name}",
                 sub_prop,
                 prop.get('required', []),
-                level + 1,
-                changelog_path
+                level=level + 1,
+                changelog_path=changelog_path
             ))
 
     return '\n'.join(md)
@@ -77,6 +93,10 @@ def _render_schema(schema: dict, changelog_path: str = None) -> str:
         ""
     ])
 
+    if 'examples' in schema:
+        md.extend(_render_examples(schema['examples']))
+        md.append("")
+
     # Render each top-level property
     for prop_name, prop in schema.get('properties', {}).items():
         md.append(_render_property(
@@ -88,6 +108,93 @@ def _render_schema(schema: dict, changelog_path: str = None) -> str:
         md.append("")
 
     return '\n'.join(md)
+
+def _render_dict_example(data: dict, indent: str, prefix: str = "") -> list[str]:
+    """Helper function to render dictionary examples with proper YAML formatting.
+
+    Args:
+        data: Dictionary containing the example data
+        indent: Current indentation string
+        prefix: Optional prefix to add before the content (for nested objects)
+
+    Returns:
+        List of strings containing the YAML formatted example
+    """
+    yaml_lines = []
+
+    # Handle $value special case
+    if "$value" in data:
+        return [f"{indent}{prefix} {data['$value']}"]
+
+    # Add prefix if provided (for nested objects)
+    if prefix:
+        yaml_lines.append(f"{indent}{prefix} ")
+        indent = indent + "  "
+
+    # Format as YAML with proper indentation
+    for k, v in data.items():
+        if k.startswith('$'):
+            continue
+        if isinstance(v, dict):
+            yaml_lines.extend(_render_example(k, v, indent=indent))
+        else:
+            yaml_lines.append(f"{indent}{k}: {v}")
+
+    return yaml_lines
+
+def _render_example(name: str, example: any, indent: str = "") -> list[str]:
+    """Render a single example as YAML with proper indentation.
+
+    Args:
+        name: The property name
+        example: The example value (can be dict or simple value)
+        indent: Additional indentation prefix for nested examples
+
+    Returns:
+        List of strings containing the YAML formatted example
+    """
+    if isinstance(example, dict):
+        if name is None:
+            return _render_dict_example(example, indent)
+        else:
+            return _render_dict_example(example, indent, f"{name}:")
+    else:
+        # For simple values, use single line format
+        if name is None:
+            return [f"{indent}{example}"]
+        else:
+            return [f"{indent}{name}: {example}"]
+
+def _render_examples(examples: list, name: str = None, indent: str = "") -> list[str]:
+    """Render a list of examples as YAML with proper formatting.
+
+    Args:
+        examples: List of example values
+        name: The property name (optional)
+        indent: Additional indentation prefix for nested examples
+
+    Returns:
+        List of strings containing the formatted examples
+    """
+    md = []
+    md.append("")
+    if len(examples) == 1:
+        example = examples[0]
+        md.append(f"{indent}```yaml")
+        md.extend(_render_example(name, example, indent=indent))
+        md.append(f"{indent}```")
+    elif len(examples) > 1:
+        for example in examples:
+            if isinstance(example, dict) and '$title' in example:
+                title = example['$title']
+                example = {k:v for k,v in example.items() if k != '$title'}
+                md.append(f"{indent}=== \"{title}\"")
+            else:
+                md.append(f"{indent}=== \"Example {examples.index(example) + 1}\"")
+            md.append(f"{indent + "    "}```yaml")
+            md.extend(_render_example(name, example, indent=indent + "    "))
+            md.append(f"{indent + "    "}```")
+    return md
 
 def on_files(files: Files, config, **kwargs) -> Files:
     """

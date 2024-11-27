@@ -1,13 +1,134 @@
 {
-    "$id": "https://github.com/helmless/google-cloudrun",
+    "$id": "https://github.com/helmless/helmless/charts/cloudrun/service",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "additionalProperties": false,
     "description": "A Helm chart to template the manifest of a Cloud Run service or job.",
+    "examples": [
+        {
+            "$title": "Minimal Service",
+            "name": "my-service",
+            "image": "ghcr.io/my-org/my-image@sha256:abc123",
+            "autoscaling": {
+                "minScale": 0
+            }
+        }
+    ],
     "properties": {
-        "args": {
-            "description": "Arguments to pass to the command.",
+        "name": {
+            "description": "Name of the Cloud Run Service to deploy. Must be unique within the project region combination.",
+            "maxLength": 63,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+            "deprecated": true,
+            "type": [
+                "string"
+            ],
+            "examples": [
+                "my-service"
+            ]
+        },
+        "description": {
+            "description": "A human-readable description of the CloudRun service.",
+            "type": [
+                "string"
+            ],
+            "examples": [
+                "My service does xyz."
+            ]
+        },
+        "image": {
+            "description": "Container image to deploy. You can provide a direct reference to an image using a `string` or split up the inputs using the `object`.",
+            "properties": {
+                "name": {
+                    "description": "Container image name.",
+                    "type": [
+                        "string"
+                    ],
+                    "examples": [
+                        "my-image"
+                    ]
+                },
+                "registry": {
+                    "description": "Container image registry.",
+                    "type": [
+                        "string"
+                    ],
+                    "examples": [
+                        "gcr.io"
+                    ]
+                },
+                "repository": {
+                    "description": "Container image repository.",
+                    "type": [
+                        "string"
+                    ],
+                    "examples": [
+                        "gcr.io/my-project",
+                        "my-project # if used with a registry"
+                    ]
+                },
+                "tag": {
+                    "description": "Container image tag.",
+                    "default": "latest",
+                    "type": [
+                        "string"
+                    ],
+                    "examples": [
+                        "latest",
+                        "@sha256:abc123",
+                        "1.0.0"
+                    ]
+                }
+            },
+            "required": [
+                "repository",
+                "name"
+            ],
+            "type": [
+                "object",
+                "string"
+            ],
+            "examples": [
+                {
+                    "$title": "Direct image reference",
+                    "$value": "ghcr.io/my-org/my-image@sha256:abc123"
+                },
+                {
+                    "$title": "Split image reference",
+                    "repository": "ghcr.io/my-project",
+                    "name": "my-image"
+                },
+                {
+                    "$title": "Split image reference with tag and registry",
+                    "registry": "ghcr.io",
+                    "repository": "my-project",
+                    "name": "my-image",
+                    "tag": "1.0.0"
+                }
+            ]
+        },
+        "command": {
+            "description": "Command that runs when the container starts.",
+            "default": [],
             "type": [
                 "array"
+            ],
+            "examples": [
+                [
+                    "echo",
+                    "Hello, world!"
+                ]
+            ]
+        },
+        "args": {
+            "description": "Arguments to pass to the command.",
+            "default": [],
+            "type": [
+                "array"
+            ],
+            "examples": [
+                [
+                    "--help"
+                ]
             ]
         },
         "autoscaling": {
@@ -27,32 +148,33 @@
                     ]
                 },
                 "minScale": {
-                    "default": 0,
+                    "default": 1,
                     "description": "Minimum number of replicas to scale down to. 0 enables scale to zero.",
                     "type": [
                         "integer"
                     ]
                 }
             },
-            "type": "object"
-        },
-        "command": {
-            "description": "Command to run in the container.",
-            "type": [
-                "array"
+            "type": "object",
+            "examples": [
+                {
+                    "$title": "Default",
+                    "minScale": 1,
+                    "maxScale": 100,
+                    "maxConcurrentRequests": 80
+                },
+                {
+                    "$title": "Scale to zero",
+                    "minScale": 0,
+                    "maxScale": 100,
+                    "maxConcurrentRequests": 80
+                }
             ]
         },
         "containerPort": {
             "description": "Container port to expose. In CloudRun only a single port can be exposed and defaults to 8080.",
             "type": [
                 "integer"
-            ]
-        },
-        "description": {
-            "description": "A human-readable description of the CloudRun service.",
-            "type": [
-                "string",
-                "null"
             ]
         },
         "env": {
@@ -65,45 +187,6 @@
         "executionEnvironment": {
             "description": "The execution environment to use for the CloudRun container. Must be either 'gen2' or 'gen1'.",
             "type": [
-                "string"
-            ]
-        },
-        "image": {
-            "description": "Container image to deploy. You can provide a direct reference to an image or split up the inputs.",
-            "properties": {
-                "name": {
-                    "description": "Container image name.",
-                    "type": [
-                        "string"
-                    ]
-                },
-                "registry": {
-                    "description": "Container image registry.",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "repository": {
-                    "description": "Container image repository.",
-                    "type": [
-                        "string"
-                    ]
-                },
-                "tag": {
-                    "description": "Container image tag. For example, 'latest' or '@sha256:abc123'.",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                }
-            },
-            "required": [
-                "repository",
-                "name"
-            ],
-            "type": [
-                "object",
                 "string"
             ]
         },
@@ -186,12 +269,6 @@
             },
             "type": [
                 "object"
-            ]
-        },
-        "name": {
-            "description": "Name of the CloudRun  resource to deploy. Truncated to 63 characters.",
-            "type": [
-                "string"
             ]
         },
         "readinessProbe": {

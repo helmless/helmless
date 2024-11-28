@@ -11,3 +11,11 @@ repos:
     rev: v0.1.15
     hooks:
       - id: helmlint
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.29.4
+    hooks:
+      - id: check-jsonschema
+        files: ^charts/cloudrun/service/values.schema.json$
+        args:
+          ['--check-metaschema', 'charts/cloudrun/service/values.schema.json']

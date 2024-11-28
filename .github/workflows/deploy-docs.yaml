@@ -29,7 +29,7 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material mkdocs-multirepo-plugin mkdocs-minify-plugin mkdocs-redirects
+      - run: pip install mkdocs-material mkdocs-multirepo-plugin mkdocs-minify-plugin mkdocs-redirects jsonref
         name: 📚 Install Plugins
       - run: mkdocs gh-deploy --force
         name: 🚀 Deploy Docs

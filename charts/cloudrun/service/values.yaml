@@ -64,9 +64,10 @@ readinessProbe: # @schema type:object;required:false;description:Configuration f
   periodSeconds: null # @schema type:[integer,null];required:false;description:How often to perform probe checks.
   failureThreshold: null # @schema type:[integer,null];required:false;description:Number of consecutive failures before considering the container not ready.
 startupProbe: # @schema type:object;required:false;description:Configuration for startup probe health checking.
-  httpGet: # @schema type:object;required:false;description:HTTP GET probe configuration.
-    path: '/' # @schema type:string;required:false;default:/;description:Path to probe for HTTP health check.
-    port: 8080 # @schema type:[integer,string];required:false;default:8080;description:Port to probe for HTTP health check.
+  httpGet:
+    path: '/'
+  tcpSocket:
+    port: 8080
   initialDelaySeconds: null # @schema type:[integer,null];required:false;description:Number of seconds to wait before starting probe checks.
   periodSeconds: null # @schema type:[integer,null];required:false;description:How often to perform probe checks.
   failureThreshold: null # @schema type:[integer,null];required:false;description:Number of consecutive failures before considering the startup failed.

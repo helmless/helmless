@@ -1,4 +1,4 @@
-import json
+import jsonref
 import logging
 from pathlib import Path
 from mkdocs.structure.files import Files, File
@@ -22,9 +22,6 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
         type_str = ', '.join(f'`{t}`' for t in prop_type)
     else:
         type_str = f'`{prop_type}`'
-
-    # Determine if property is required
-    is_required = name in (required or [])
 
     # Build markdown output
     md.append(f"{prefix} <!-- md:setting values.{name} -->")
@@ -53,7 +50,7 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
         md.append("<!-- md:default none -->")
 
 
-    if is_required:
+    if name.split('.')[-1] in (required or []):
         md.append("<!-- md:flag required -->")
 
     # Add description
@@ -67,6 +64,7 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
     # Render sub-properties if this is an object type
     if 'properties' in prop:
         md.append("")
+        md.append("---")
         for sub_name, sub_prop in prop['properties'].items():
             md.append("")
             md.append(_render_property(
@@ -77,7 +75,33 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
                 changelog_path=changelog_path
             ))
 
-    return '\n'.join(md)
+    if 'oneOf' in prop:
+        md.append("")
+        md.append("---")
+        md.append(f"???+ abstract \"The `{name}` setting requires **exactly one** of the following configurations:\"")
+        md.append("")
+        for i, option in enumerate(prop['oneOf'], 1):
+            # Determine the option title based on the properties
+            option_title = next(iter(option.get('properties', {}).keys()), f'Option {i}')
+            md.append(f"    === \"{option_title}\"")
+            md.append("")
+
+            # Render the option's properties
+            if 'properties' in option:
+                for sub_name, sub_prop in option['properties'].items():
+                    sub_content = _render_property(
+                        f"{name}.{sub_name}",
+                        sub_prop,
+                        option.get('required', []),
+                        level=level + 1,
+                        changelog_path=changelog_path
+                    )
+                    # Indent each line of the sub-content with 4 spaces
+                    indented_content = '\n'.join(f"        {line}" for line in sub_content.split('\n'))
+                    md.append(indented_content)
+            md.append("")
+
+    return f"\n".join(md)
 
 def _render_schema(schema: dict, changelog_path: str = None) -> str:
     """Render a complete schema into markdown."""
@@ -110,8 +134,10 @@ def _render_schema(schema: dict, changelog_path: str = None) -> str:
                 changelog_path=changelog_path
             ))
             md.append("")
+            md.append("---")
         except Exception as e:
-            log.error(f"Failed to render property {prop_name}: {e}")
+            log.error(f"Failed to render property `{prop_name}` {prop}: {e}")
+            log.exception("Full traceback:")
 
     return '\n'.join(md)
 
@@ -132,7 +158,7 @@ def _render_dict_example(data: dict, indent: str, prefix: str = "") -> list[str]
     for k, v in data.items():
         if k.startswith('$'):
             continue
-        if isinstance(v, dict):
+        if isinstance(v, dict) or isinstance(v, list):
             yaml_lines.extend(_render_example(k, v, indent=indent))
         else:
             # Convert Python bool to YAML bool
@@ -147,6 +173,18 @@ def _render_example(name: str, example: any, indent: str = "") -> list[str]:
     if name is None:
         if isinstance(example, dict):
             return _render_dict_example(example, indent)
+        elif isinstance(example, list):
+            # Handle array of objects
+            yaml_lines = []
+            for item in example:
+                if isinstance(item, dict):
+                    yaml_lines.append(f"{indent}-")  # Start array item
+                    # Indent the dictionary content
+                    dict_lines = _render_dict_example(item, indent + "  ")
+                    yaml_lines.extend(dict_lines)
+                else:
+                    yaml_lines.append(f"{indent}- {item}")
+            return yaml_lines
         else:
             return [f"{indent}{example}"]
 
@@ -163,6 +201,16 @@ def _render_example(name: str, example: any, indent: str = "") -> list[str]:
     # Now handle the actual value with the final name part
     if isinstance(example, dict):
         yaml_lines.extend(_render_dict_example(example, indent, f"{name}:"))
+    elif isinstance(example, list):
+        yaml_lines.append(f"{indent}{name}:")
+        for item in example:
+            if isinstance(item, dict):
+                yaml_lines.append(f"{indent}  -")  # Start array item
+                # Indent the dictionary content
+                dict_lines = _render_dict_example(item, indent + "    ")
+                yaml_lines.extend(dict_lines)
+            else:
+                yaml_lines.append(f"{indent}  - {item}")
     else:
         # Convert Python bool to YAML bool
         if isinstance(example, bool):
@@ -230,7 +278,7 @@ def on_files(files: Files, config, **kwargs) -> Files:
             log.info(f"Loading schema from: {abs_schema_path}")
 
             with open(abs_schema_path) as f:
-                schema = json.load(f)
+                schema = jsonref.load(f)
 
             # Convert schema to markdown
             markdown_output = _render_schema(schema, changelog_path=changelog_path)

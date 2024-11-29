@@ -2,6 +2,7 @@ site_name: Helmless
 site_description: Deploy containers to Google Cloud Run with Helm's, avoiding the complexity of Kubernetes and Terraform.
 site_url: https://helmless.io
 repo_url: https://github.com/helmless/helmless
+repo_name: helmless/helmless
 edit_uri: edit/main/docs/
 
 conventions_path: docs/conventions.md
@@ -106,6 +107,9 @@ extra:
     - icon: material/github
       name: GitHub
       link: https://github.com/helmless/helmless
+    - icon: simple/linkedin
+      name: LinkedIn
+      link: https://www.linkedin.com/in/michael-reichenbach/
     - icon: simple/discord
       name: Discord
       link: https://discord.gg/A5cjzfyAN5

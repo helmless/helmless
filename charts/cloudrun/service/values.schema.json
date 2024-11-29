@@ -62,9 +62,7 @@
         },
         "description": {
             "description": "A human-readable description of the CloudRun service.",
-            "type": [
-                "string"
-            ],
+            "type": "string",
             "examples": [
                 "My service does xyz."
             ]
@@ -196,9 +194,6 @@
                     }
                 }
             ],
-            "properties": {
-                "$ref": "#/$defs/probeProperties"
-            },
             "oneOf": [
                 {
                     "$ref": "#/$defs/httpProbe"
@@ -209,7 +204,29 @@
                 {
                     "$ref": "#/$defs/grpcProbe"
                 }
-            ]
+            ],
+            "properties": {
+                "initialDelaySeconds": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Number of seconds after the container starts before the probe is initiated"
+                },
+                "periodSeconds": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "How often (in seconds) to perform the probe"
+                },
+                "timeoutSeconds": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Number of seconds after which the probe times out"
+                },
+                "failureThreshold": {
+                    "type": "integer",
+                    "default": 3,
+                    "description": "Number of consecutive failures required to determine the container is not alive"
+                }
+            }
         },
         "livenessProbe": {
             "description": "The liveness probe controls how the Cloud Run service is monitored for health. If a liveness probe does not succeed within the specified time (failureThreshold * periodSeconds), the container is shut down using a SIGKILL signal. Any remaining requests that were still being served by the container are terminated with the HTTP status code 503. After the container is shut down, Cloud Run autoscaling starts up a new container instance.",
@@ -236,9 +253,6 @@
                     }
                 }
             ],
-            "properties": {
-                "$ref": "#/$defs/probeProperties"
-            },
             "oneOf": [
                 {
                     "$ref": "#/$defs/httpProbe"
@@ -246,163 +260,163 @@
                 {
                     "$ref": "#/$defs/grpcProbe"
                 }
-            ]
-        }
-    },
-    "serviceAccountName": {
-        "description": "Service account to use to run the CloudRun container. If not provided, the default service account of the project is used.",
-        "type": "string",
-        "examples": [
-            "my-service-account@my-project.iam.gserviceaccount.com"
-        ]
-    },
-    "labels": {
-        "description": "Labels to add to the Cloud Run container. Must conform to the Cloud Run label schema of lowercase alphanumeric characters, hyphens, and underscores and be 63 characters or less.",
-        "type": "object",
-        "examples": [
-            {
-                "my-label": "my-value"
+            ],
+            "properties": {
+                "initialDelaySeconds": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Number of seconds after the container starts before the probe is initiated"
+                },
+                "periodSeconds": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "How often (in seconds) to perform the probe"
+                },
+                "timeoutSeconds": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Number of seconds after which the probe times out"
+                },
+                "failureThreshold": {
+                    "type": "integer",
+                    "default": 3,
+                    "description": "Number of consecutive failures required to determine the container is not alive"
+                }
             }
-        ],
-        "patternProperties": {
-            "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$": {
-                "type": "string",
+        },
+        "serviceAccountName": {
+            "description": "Service account to use to run the CloudRun container. If not provided, the default service account of the project is used.",
+            "type": "string",
+            "examples": [
+                "my-service-account@my-project.iam.gserviceaccount.com"
+            ]
+        },
+        "labels": {
+            "description": "Labels to add to the Cloud Run container. Must conform to the Cloud Run label schema of lowercase alphanumeric characters, hyphens, and underscores and be 63 characters or less.",
+            "type": "object",
+            "examples": [
+                {
+                    "my-label": "my-value"
+                }
+            ],
+            "patternProperties": {
+                "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$": {
+                    "type": "string",
+                    "maxLength": 63,
+                    "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+                }
+            },
+            "propertyNames": {
                 "maxLength": 63,
                 "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-            }
-        },
-        "propertyNames": {
-            "maxLength": 63,
-            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "additionalProperties": false
-    },
-    "volumeMounts": {
-        "type": "array"
-    },
-    "volumes": {
-        "type": "array"
-    },
-    "network": {
-        "type": "object",
-        "examples": [
-            {
-                "$title": "Direct VPC Connection",
-                "vpc": "my-vpc",
-                "subnetwork": "my-subnetwork",
-                "egress": "all-traffic"
             },
-            {
-                "$title": "VPC Connector",
-                "egress": "private-ranges-only",
-                "connector": "my-private-vpc-connector"
-            }
-        ],
-        "properties": {
-            "egress": {
-                "description": "The egress type to use for the Cloud Run container if connected to a VPC. In general, use `private-ranges-only` to reduce latency and bottlenecks when calling external services. Can only be set when `connector` or `vpc` and `subnetwork` are set.",
-                "enum": [
-                    "private-ranges-only",
-                    "all-traffic"
-                ],
-                "examples": [
-                    "private-ranges-only"
-                ],
-                "type": "string",
-                "if": {
-                    "type": "string"
+            "additionalProperties": false
+        },
+        "volumeMounts": {
+            "type": "array"
+        },
+        "volumes": {
+            "type": "array"
+        },
+        "network": {
+            "type": "object",
+            "examples": [
+                {
+                    "$title": "Direct VPC Connection",
+                    "vpc": "my-vpc",
+                    "subnetwork": "my-subnetwork",
+                    "egress": "all-traffic"
                 },
-                "then": {
-                    "required": [
-                        "$parent.connector",
-                        "$parent.vpc"
-                    ]
+                {
+                    "$title": "VPC Connector",
+                    "egress": "private-ranges-only",
+                    "connector": "my-private-vpc-connector"
                 }
-            }
-        },
-        "oneOf": [
-            {
-                "required": [
-                    "connector"
-                ],
-                "properties": {
-                    "connector": {
-                        "description": "Name of the VPC connector to use for the CloudRun container. Uses a serverless VPC access connector. Cannot be used with network.",
+            ],
+            "properties": {
+                "egress": {
+                    "description": "The egress type to use for the Cloud Run container if connected to a VPC. In general, use `private-ranges-only` to reduce latency and bottlenecks when calling external services. Can only be set when `connector` or `vpc` and `subnetwork` are set.",
+                    "enum": [
+                        "private-ranges-only",
+                        "all-traffic"
+                    ],
+                    "examples": [
+                        "private-ranges-only"
+                    ],
+                    "type": "string",
+                    "if": {
                         "type": "string"
+                    },
+                    "then": {
+                        "required": [
+                            "$parent.connector",
+                            "$parent.vpc"
+                        ]
                     }
                 }
             },
-            {
-                "required": [
-                    "vpc",
-                    "subnetwork"
-                ],
-                "properties": {
-                    "vpc": {
-                        "type": "string",
-                        "description": "Name of the VPC network to use to create a direct VPC connection. Must be used tohether with subnetwork. Cannot be used with connector."
-                    },
-                    "subnetwork": {
-                        "type": "string",
-                        "description": "Name of the VPC subnetwork to use to create a direct VPC connection. Must be used together with network. Cannot be used with connector."
+            "oneOf": [
+                {
+                    "required": [
+                        "connector"
+                    ],
+                    "properties": {
+                        "connector": {
+                            "description": "Name of the VPC connector to use for the CloudRun container. Uses a serverless VPC access connector. Cannot be used with network.",
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "required": [
+                        "vpc",
+                        "subnetwork"
+                    ],
+                    "properties": {
+                        "vpc": {
+                            "type": "string",
+                            "description": "Name of the VPC network to use to create a direct VPC connection. Must be used tohether with subnetwork. Cannot be used with connector."
+                        },
+                        "subnetwork": {
+                            "type": "string",
+                            "description": "Name of the VPC subnetwork to use to create a direct VPC connection. Must be used together with network. Cannot be used with connector."
+                        }
                     }
                 }
-            }
-        ]
-    },
-    "disableInvokerIamPolicy": {
-        "description": "Whether to [disable the invoker IAM policy](https://cloud.google.com/run/docs/securing/managing-access#disable_invoker) for the Cloud Run service. This is useful when using a VPC connector or direct VPC connection to avoid conflicts with the invoker IAM policy.",
-        "type": "boolean",
-        "default": false
-    },
-    "executionEnvironment": {
-        "description": "The execution environment to use for the Cloud Run container.",
-        "enum": [
-            "gen2",
-            "gen1"
-        ],
-        "default": "gen2",
-        "type": "string",
-        "examples": [
-            "gen1"
-        ]
-    },
-    "launchStage": {
-        "description": "The launch stage of the Cloud Run service. Controls feature availability.",
-        "examples": [
-            "GA"
-        ],
-        "default": "BETA",
-        "enum": [
-            "ALPHA",
-            "BETA",
-            "GA"
-        ],
-        "type": "string"
+            ]
+        },
+        "disableInvokerIamPolicy": {
+            "description": "Whether to [disable the invoker IAM policy](https://cloud.google.com/run/docs/securing/managing-access#disable_invoker) for the Cloud Run service. This is useful when using a VPC connector or direct VPC connection to avoid conflicts with the invoker IAM policy.",
+            "type": "boolean",
+            "default": false
+        },
+        "executionEnvironment": {
+            "description": "The execution environment to use for the Cloud Run container.",
+            "enum": [
+                "gen2",
+                "gen1"
+            ],
+            "default": "gen2",
+            "type": "string",
+            "examples": [
+                "gen1"
+            ]
+        },
+        "launchStage": {
+            "description": "The launch stage of the Cloud Run service. Controls feature availability.",
+            "examples": [
+                "GA"
+            ],
+            "default": "BETA",
+            "enum": [
+                "ALPHA",
+                "BETA",
+                "GA"
+            ],
+            "type": "string"
+        }
     },
     "$defs": {
-        "probeProperties": {
-            "initialDelaySeconds": {
-                "type": "integer",
-                "default": 0,
-                "description": "Number of seconds after the container starts before the probe is initiated"
-            },
-            "periodSeconds": {
-                "type": "integer",
-                "default": 10,
-                "description": "How often (in seconds) to perform the probe"
-            },
-            "timeoutSeconds": {
-                "type": "integer",
-                "default": 1,
-                "description": "Number of seconds after which the probe times out"
-            },
-            "failureThreshold": {
-                "type": "integer",
-                "default": 3,
-                "description": "Number of consecutive failures required to determine the container is not alive"
-            }
-        },
         "httpProbe": {
             "type": "object",
             "required": [

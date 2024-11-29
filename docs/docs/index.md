@@ -1,3 +1,9 @@
+---
+title: Documentation
+description: Welcome to the Helmless documentation.
+icon: octicons/book-24
+---
+
 # Documentation
 
 Welcome to the Helmless documentation.

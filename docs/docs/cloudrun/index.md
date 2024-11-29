@@ -1,6 +1,7 @@
 ---
 title: Helmless Chart for Google Cloud Run
 description: A Helm chart for deploying your container to Google Cloud Run.
+icon: material/google-cloud
 ---
 
---8<-- "https://raw.githubusercontent.com/helmless/helmless/refs/heads/main/charts/cloudrun/service/README.md"
+# Google Cloud Run

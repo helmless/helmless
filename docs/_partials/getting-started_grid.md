@@ -30,6 +30,6 @@
 
     Explore real-world examples and sample configurations
 
-    [:octicons-arrow-right-24: View Examples](/docs/cloudrun/examples)
+    [:octicons-arrow-right-24: View Examples](https://github.com/helmless/helmless/tree/main/examples)
 
 </div>

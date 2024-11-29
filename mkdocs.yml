@@ -9,8 +9,8 @@ schema_renderer:
   write_output: false
   schemas:
     - schema_path: charts/cloudrun/service/values.schema.json
-      changelog_path: charts/cloudrun/service/CHANGELOG.md
-      nav_path: docs/cloudrun/charts/service/schema.md
+      changelog_path: charts/cloudrun/CHANGELOG.md
+      nav_path: docs/cloudrun/schema.md
 
 nav:
   - Home: index.md
@@ -23,12 +23,10 @@ nav:
           # - docs/cloudrun/index.md
           - Getting Started: docs/cloudrun/getting-started.md
           - CI/CD: docs/cloudrun/ci-cd.md
-          - Examples: docs/cloudrun/examples.md
-          - Advanced Infrastructure: docs/cloudrun/advanced.md
-          - Cloud Run Service Chart:
-              - docs/cloudrun/charts/service/index.md
-              - Schema: docs/cloudrun/charts/service/schema.md
-              - Changelog: docs/cloudrun/charts/service/CHANGELOG.md
+          # - Examples: docs/cloudrun/examples.md
+          # - Advanced Infrastructure: docs/cloudrun/advanced.md
+          - Schema: docs/cloudrun/schema.md
+          - Changelog: docs/cloudrun/CHANGELOG.md
 
 plugins:
   - privacy
@@ -94,6 +92,7 @@ theme:
     - search.suggest
     - toc.follow
     # - toc.integrate
+copyright: Copyright &copy; 2024 Helmless
 extra:
   generator: false
   consent:
@@ -103,6 +102,13 @@ extra:
       as to measure the effectiveness of our documentation and whether users
       find what they're searching for. With your consent, you're helping us to
       make our documentation better.
+  social:
+    - icon: material/github
+      name: GitHub
+      link: https://github.com/helmless/helmless
+    - icon: simple/discord
+      name: Discord
+      link: https://discord.gg/A5cjzfyAN5
   analytics:
     provider: google
     property: G-1ZHVXV2WWV
@@ -184,7 +190,7 @@ validation:
     unrecognized_links: warn
 extra_css:
   - assets/stylesheets/extra.css
-  - assets/stylesheets/social.css
+  - assets/stylesheets/footer.css
 hooks:
   - docs/_hooks/schema_renderer.py
   - docs/_hooks/shortcodes.py

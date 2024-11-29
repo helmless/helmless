@@ -11,15 +11,27 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 3rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     justify-items: center;
 }
 
+.footer-column {
+    width: 100%;
+    min-width: 180px;
+    padding: 0 3.8rem;
+}
+
 .footer-column h3 {
-    color: var(--cloud-white);
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    text-align: left;
 }
 
 .footer-column ul {
@@ -29,18 +41,37 @@
 }
 
 .footer-column ul li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .footer-column ul li a {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
+.footer-icon {
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.footer-icon svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    fill: currentColor;
+}
+
 .footer-column ul li a:hover {
     color: var(--cloud-white);
-    text-decoration: none;
+}
+
+.footer-column ul li a:hover .footer-icon {
+    opacity: 1;
 }
 
 .footer-bottom {

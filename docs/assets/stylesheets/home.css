@@ -31,6 +31,11 @@ body {
     display: none
 }
 
+.md-footer {
+    background: var(--md-footer-bg-color--dark) !important;
+    padding-top: 1rem;
+}
+
 @media screen and (min-width:60em) {
     .md-sidebar--secondary {
         display: none

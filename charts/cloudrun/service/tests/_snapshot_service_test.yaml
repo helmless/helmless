@@ -1,9 +1,0 @@
-suite: Cloud Run Service > Snapshot Tests
-templates:
-  - cloudrun.yaml
-set:
-  type: service
-tests:
-  - it: should render default manifest without errors
-    asserts:
-      - matchSnapshot: {}

@@ -72,7 +72,13 @@
             "type": [
                 "string"
             ],
-            "default": "us-central1"
+            "default": "us-central1",
+            "pattern": "^(asia|europe|me|us|africa|australia|northamerica|southamerica)-[a-z]+(\\d+)$",
+            "examples": [
+                "us-central1",
+                "europe-west1",
+                "asia-east1"
+            ]
         },
         "image": {
             "$ref": "#/$defs/imageProperties"

@@ -1,0 +1,132 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {{ .Values.name | quote }}
+  labels:
+    cloud.googleapis.com/location: {{ .Values.region | default "us-central1" | quote }}
+  annotations:
+    {{- with .Values.description }}
+    run.googleapis.com/description: {{ . | quote }}
+    {{- end }}
+    run.googleapis.com/launch-stage: {{ .Values.launchStage | default "BETA" | quote }}
+    run.googleapis.com/ingress: INGRESS
+    run.googleapis.com/binary-authorization: POLICY
+    run.googleapis.com/binary-authorization-breakglass: JUSTIFICATION
+    run.googleapis.com/minScale: SERVICE_MIN_INSTANCES
+    run.googleapis.com/function-target: FUNCTION_ENTRY_POINT
+    run.googleapis.com/invoker-iam-disabled: INVOKER_IAM_CHECK
+spec:
+  template:
+    metadata:
+      {{- with .Values.revisionName }}
+      name: {{ . | quote }}
+      {{- end }}
+      annotations:
+        autoscaling.knative.dev/minScale: MIN_INSTANCES
+        autoscaling.knative.dev/maxScale: MAX_INSTANCES
+        run.googleapis.com/cpu-throttling: CPU_ALLOCATION
+        run.googleapis.com/startup-cpu-boost: CPU_BOOST
+        run.googleapis.com/sessionAffinity: SESSION_AFFINITY
+        run.googleapis.com/cloudsql-instances: CLOUD_SQL_CONNECTION
+        run.googleapis.com/execution-environment: EXECUTION_ENVIRONMENT
+        run.googleapis.com/vpc-access-connector: SERVERLESS_VPC_CONNECTOR
+        run.googleapis.com/vpc-access-egress: EGRESS
+        run.googleapis.com/network-interfaces: VPC_NETWORK_SETTINGS_IN_JSON
+        run.googleapis.com/encryption-key: CMEK
+        run.googleapis.com/custom-audiences: '["AUDIENCE1","AUDIENCE2"]'
+        run.googleapis.com/container-dependencies: CONTAINER_START_ORDER
+        run.googleapis.com/base-images: '{"":"BASE_IMAGE"}'
+    spec:
+      containerConcurrency: MAX_CONCURRENCY
+      timeoutSeconds: REQUEST_TIMEOUT
+      nodeSelector:
+        run.googleapis.com/accelerator: GPU_TYPE
+      serviceAccountName: SERVICE_ACCOUNT_EMAIL
+      containers:
+        - {{- with .Values.containerName }}
+          name: {{ . | quote }}
+          {{- end }}
+          image: {{ .Values.image | quote }}
+          command:
+            - COMMAND1
+            - COMMAND2
+          args:
+            - ARGUMENT1
+            - ARGUMENT2
+          ports:
+            - name: HTTP1_OR_H2C
+              containerPort: PORT
+          env:
+            - name: KEY
+              value: VALUE
+          resources:
+            limits:
+              cpu: CPU_LIMIT
+              memory: MEMORY_LIMIT
+              nvidia.com/gpu: GPU_NUMBER
+          volumeMounts:
+            - name: VOLUME_NAME
+              mountPath: MOUNT_PATH
+          startupProbe:
+            httpGet:
+              path: CHECK_PATH
+              httpHeaders:
+                - name: HEADER_NAME
+                  value: HEADER_VALUE
+              port: PORT
+            tcpSocket:
+              port: PORT
+            grpc:
+              service: GRPC_SERVICE
+              port: PORT
+            initialDelaySeconds: DELAY
+            timeoutSeconds: TIMEOUT
+            failureThreshold: THRESHOLD
+            periodSeconds: PERIOD
+          livenessProbe:
+            httpGet:
+              path: CHECK_PATH
+              port: PORT
+              httpHeaders:
+                - name: HEADER_NAME
+                  value: HEADER_VALUE
+            grpc:
+              service: GRPC_SERVICE
+              port: PORT
+            initialDelaySeconds: DELAY
+            timeoutSeconds: TIMEOUT
+            failureThreshold: THRESHOLD
+            periodSeconds: PERIOD
+        - image: SIDECAR_IMAGE
+          name: SIDECAR_NAME
+      volumes:
+        - name: VOLUME_NAME
+          secret:
+            secretName: SECRET
+            items:
+              - key: SECRET_VERSION
+                path: PATH
+        - name: VOLUME_NAME
+          emptyDir:
+            sizeLimit: IN_MEMORY_VOLUME_SIZE
+            medium: Memory
+        - name: VOLUME_NAME
+          csi:
+            driver: gcsfuse.run.googleapis.com
+            readOnly: IS_READ_ONLY
+            volumeAttributes:
+              bucketName: BUCKET_NAME
+              mountOptions: OPTION1-NAME=OPTION1-VALUE,OPTION2-NAME=OPTION2-VALUE
+        - name: VOLUME_NAME
+          nfs:
+            server: IP_ADDRESS
+            path: NFS_PATH
+            readonly: IS_READ_ONLY
+    runtimeClassName: RUNTIME
+  traffic:
+    - percent: PERCENT_TO_LATEST
+      latestRevision: true
+    - percent: PERCENT_TO_REVISION
+      revisionName: REVISION_NAME
+    - tag: TAG
+      revisionName: REVISION_NAME

@@ -9,12 +9,16 @@ metadata:
     run.googleapis.com/description: {{ . | quote }}
     {{- end }}
     run.googleapis.com/launch-stage: {{ .Values.launchStage | default "BETA" | quote }}
+    {{- if .Values.binaryAuthorization }}
+    run.googleapis.com/binary-authorization: "true"
+    {{- end }}
+    {{- if .Values.disableInvokerIamPolicy }}
+    run.googleapis.com/invoker-iam-disabled: "true"
+    {{- end }}
     run.googleapis.com/ingress: INGRESS
-    run.googleapis.com/binary-authorization: POLICY
     run.googleapis.com/binary-authorization-breakglass: JUSTIFICATION
     run.googleapis.com/minScale: SERVICE_MIN_INSTANCES
     run.googleapis.com/function-target: FUNCTION_ENTRY_POINT
-    run.googleapis.com/invoker-iam-disabled: INVOKER_IAM_CHECK
 spec:
   template:
     metadata:
@@ -22,6 +26,12 @@ spec:
       name: {{ . | quote }}
       {{- end }}
       annotations:
+        {{- with .Values.encryptionKey }}
+        run.googleapis.com/encryption-key: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.customAudiences }}
+        run.googleapis.com/custom-audiences: {{ . | toJson | quote }}
+        {{- end }}
         autoscaling.knative.dev/minScale: MIN_INSTANCES
         autoscaling.knative.dev/maxScale: MAX_INSTANCES
         run.googleapis.com/cpu-throttling: CPU_ALLOCATION
@@ -32,16 +42,16 @@ spec:
         run.googleapis.com/vpc-access-connector: SERVERLESS_VPC_CONNECTOR
         run.googleapis.com/vpc-access-egress: EGRESS
         run.googleapis.com/network-interfaces: VPC_NETWORK_SETTINGS_IN_JSON
-        run.googleapis.com/encryption-key: CMEK
-        run.googleapis.com/custom-audiences: '["AUDIENCE1","AUDIENCE2"]'
         run.googleapis.com/container-dependencies: CONTAINER_START_ORDER
         run.googleapis.com/base-images: '{"":"BASE_IMAGE"}'
     spec:
+      {{- with .Values.serviceAccountName }}
+      serviceAccountName: {{ . }}
+      {{- end }}
       containerConcurrency: MAX_CONCURRENCY
       timeoutSeconds: REQUEST_TIMEOUT
       nodeSelector:
         run.googleapis.com/accelerator: GPU_TYPE
-      serviceAccountName: SERVICE_ACCOUNT_EMAIL
       containers:
         - {{- with .Values.containerName }}
           name: {{ . | quote }}

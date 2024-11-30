@@ -446,6 +446,35 @@
                 "GA"
             ],
             "type": "string"
+        },
+        "binaryAuthorization": {
+            "description": "Whether to enforce Binary Authorization policy for this service.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
+        "encryptionKey": {
+            "description": "The KMS key to use for encrypting this service. Must be in the format: projects/PROJECT/locations/LOCATION/keyRings/KEYRING/cryptoKeys/KEY",
+            "type": "string",
+            "pattern": "^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$",
+            "examples": [
+                "projects/my-project/locations/global/keyRings/my-keyring/cryptoKeys/my-key"
+            ]
+        },
+        "customAudiences": {
+            "description": "Custom audiences to set in the generated ID token when using Identity Platform.",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "examples": [
+                [
+                    "https://example.com",
+                    "my-audience"
+                ]
+            ]
         }
     },
     "$defs": {

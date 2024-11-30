@@ -8,7 +8,7 @@ Expand the name of the chart.
 {{/*
 Create the fully qualified image name.
 */}}
-{{- define "serverless-helm.cloudrun.image" -}}
+{{- define "helmless.image" -}}
 {{- if typeIs "string" .Values.image }}
 {{- .Values.image }}
 {{- else }}

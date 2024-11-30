@@ -172,6 +172,14 @@
                 8081
             ]
         },
+        "http2": {
+            "description": "Whether to use HTTP/2 for the container port. If enabled, the port name will be h2c instead of http1.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
         "ingress": {
             "description": "The ingress settings for the CloudRun service. Controls where the service can be accessed from.",
             "enum": [

@@ -53,19 +53,21 @@ spec:
       nodeSelector:
         run.googleapis.com/accelerator: GPU_TYPE
       containers:
-        - {{- with .Values.containerName }}
+        - image: {{ include "helmless.image" . | quote }}
+          {{- with .Values.containerName }}
           name: {{ . | quote }}
           {{- end }}
-          image: {{ .Values.image | quote }}
+          {{- with .Values.command }}
           command:
-            - COMMAND1
-            - COMMAND2
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.args }}
           args:
-            - ARGUMENT1
-            - ARGUMENT2
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
-            - name: HTTP1_OR_H2C
-              containerPort: PORT
+            - name: {{ .Values.http2 | default false | ternary "h2c" "http1" }}
+              containerPort: {{ .Values.containerPort | default 8080 }}
           env:
             - name: KEY
               value: VALUE

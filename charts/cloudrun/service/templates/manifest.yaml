@@ -38,7 +38,7 @@ spec:
         run.googleapis.com/startup-cpu-boost: CPU_BOOST
         run.googleapis.com/sessionAffinity: SESSION_AFFINITY
         run.googleapis.com/cloudsql-instances: CLOUD_SQL_CONNECTION
-        run.googleapis.com/execution-environment: EXECUTION_ENVIRONMENT
+        run.googleapis.com/execution-environment: {{ .Values.executionEnvironment | default "gen2" }}
         run.googleapis.com/vpc-access-connector: SERVERLESS_VPC_CONNECTOR
         run.googleapis.com/vpc-access-egress: EGRESS
         run.googleapis.com/network-interfaces: VPC_NETWORK_SETTINGS_IN_JSON

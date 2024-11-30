@@ -1,85 +1,49 @@
-# Core Configuration
-type: service # @schema type:string;required:false;enum:service,job;description:Type of CloudRun resource to deploy. Must be either 'service' or 'job'.
-name: serverless-helm # @schema type:string;required:true;description:Name of the CloudRun  resource to deploy. Truncated to 63 characters.
-description: null # @schema type:[string,null];required:false;description:A human-readable description of the CloudRun service.
-launchStage: 'GA' # @schema type:[string];enum:["ALPHA","BETA","GA"];required:false;description:The launch stage of the CloudRun service. Controls feature availability and SLA.
+# yaml-language-server: $schema=values.schema.json
 
-env: {} # @schema type:object;required:false;description:Environment variables to set in the CloudRun container.
-# env:
-#  FOO: bar
-#  HELLO: world
+name: 'helmless-cloudrun-service'
+image: 'us-docker.pkg.dev/cloudrun/container/hello'
+command: []
+args: []
 
-# Container Configuration
-image: # @schema type:[object, string];required:true;description:Container image to deploy. You can provide a direct reference to an image or split up the inputs.
-  registry: null # @schema type:[string, null];required:false;description:Container image registry.
-  repository: 'us-docker.pkg.dev/cloudrun/container' # @schema type:string;required:true;description:Container image repository.
-  name: 'hello' # @schema type:string;required:true;description:Container image name.
-  tag: null # @schema type:[string, null];required:false;description:Container image tag. For example, 'latest' or '@sha256:abc123'.
-command: [] # @schema type:array;required:false;description:Command to run in the container.
-args: [] # @schema type:array;required:false;description:Arguments to pass to the command.
-containerPort: 8080 # @schema type:integer;required:false;description:Container port to expose. In CloudRun only a single port can be exposed and defaults to 8080.
-executionEnvironment: gen2 # @schema type:string;default:gen2;required:false;description:The execution environment to use for the CloudRun container. Must be either 'gen2' or 'gen1'.
+env: {}
+secrets: {}
 
-# Resource Management
-resources: # @schema type:object;required:false;description:Resource requests and limits for the CloudRun container. If not provided, defaults are used.
-  cpuThrottling: true # @schema type:boolean;default:true;required:false;description:Whether to throttle the CPU. This has significant impact on billing.
-  startupBoost: false # @schema type:boolean;default:false;required:false;description:Whether to boost the CPUs at the start of the container.
-  limits:
-    cpu: 1 # @schema type:integer;default:1;required:false;description:Maximum CPUs to allocate for the CloudRun container. Can be 1, 2, 4, 6, 8, or any fractional value from 0.01 to 1.
-    memory: 512Mi # @schema type:string;default:512MiB;required:false;description:Maximum memory to allocate for the CloudRun container. Requires a minimum number of CPUs of 2 over 4GiB.
-
-# Scaling Configuration
 autoscaling:
-  minScale: 0 # @schema type:integer;default:0;required:false;description:Minimum number of replicas to scale down to. 0 enables scale to zero.
-  maxScale: 100 # @schema type:integer;default:100;required:false;description:Maximum number of replicas to scale up to.
-  maxConcurrentRequests: 80 # @schema type:integer;default:80;required:false;description:The number of concurrent requests per instance. Controls how many requests are processed before the autoscaler scales up. Setting this to 1 means 1 request per instance at a time.
-timeoutSeconds: 300 # @schema type:integer;default:60;required:false;description:The maximum time the container will wait before responding with a 504 error.
+  minScale: 0 # scale to zero by default
+  maxScale: 100
+  maxConcurrentRequests: 80
+  timeoutSeconds: 300
+sessionAffinity: false
 
-# Network Configuration
-vpc:
-  network: null # @schema type:[string, null];required:false;description:Name of the VPC network to use to create a direct VPC connection. Must be used tohether with subnetwork. Cannot be used with connector.
-  subnetwork: null # @schema type:[string, null];required:false;description:Name of the VPC subnetwork to use to create a direct VPC connection. Must be used together with network. Cannot be used with connector.
-  connector: null # @schema type:[string, null];required:false;description:Name of the VPC connector to use for the CloudRun container. Uses a serverless VPC access connector. Cannot be used with network.
-  egress: 'private-ranges-only' # @schema type:string;enum:[private-ranges-only,all-traffic];required:false;description:Name of the VPC egress to use for the CloudRun container.
-ingress: 'all' # @schema type:string;enum:["all","internal","internal-and-cloud-load-balancing"];default:all;required:false;description:The ingress settings for the CloudRun service. Controls where the service can be accessed from.
-sessionAffinity: false # @schema type:boolean;default:false;required:false;description:Whether to enable session affinity for the CloudRun service. When enabled, requests from the same client are routed to the same container instance.
+launchStage: 'BETA'
+executionEnvironment: gen2
 
-# Identity & Security
-serviceAccountName: null # @schema type:[string, null];required:false;description:Service account to use to run the CloudRun container. If not provided, the default service account of the project is used.
-labels: {} # @schema type:object;required:false;pattern:^[a-z0-9]([-a-z0-9]*[a-z0-9])?$;maxLength:63;description:Labels to add to the CloudRun container. Must conform to the CloudRun label schema.
+ingress: 'all'
+# network:
+#   egress: 'private-ranges-only'
+#   # vpc + subnetwork and connector are mutually exclusive
+#   vpc: 'my-vpc'
+#   subnetwork: 'my-subnetwork'
+#   connector: 'my-connector'
 
-# Health Checking
-livenessProbe: # @schema type:object;required:false;description:Configuration for liveness probe health checking.
-  httpGet: # @schema type:object;required:false;description:HTTP GET probe configuration.
-    path: / # @schema type:string;required:false;description:Path to probe for HTTP health check.
-    port: 8080 # @schema type:[integer,string];required:false;description:Port to probe for HTTP health check.
-  initialDelaySeconds: null # @schema type:[integer,null];required:false;description:Number of seconds to wait before starting probe checks.
-  periodSeconds: null # @schema type:[integer,null];required:false;description:How often to perform probe checks.
-  failureThreshold: null # @schema type:[integer,null];required:false;description:Number of consecutive failures before considering the container unhealthy.
-readinessProbe: # @schema type:object;required:false;description:Configuration for readiness probe health checking.
-  httpGet: # @schema type:object;required:false;description:HTTP GET probe configuration.
-    path: / # @schema type:string;required:false;description:Path to probe for HTTP health check.
-    port: 8080 # @schema type:[integer,string];required:false;description:Port to probe for HTTP health check.
-  initialDelaySeconds: null # @schema type:[integer,null];required:false;description:Number of seconds to wait before starting probe checks.
-  periodSeconds: null # @schema type:[integer,null];required:false;description:How often to perform probe checks.
-  failureThreshold: null # @schema type:[integer,null];required:false;description:Number of consecutive failures before considering the container not ready.
-startupProbe: # @schema type:object;required:false;description:Configuration for startup probe health checking.
-  httpGet:
-    path: '/'
-  tcpSocket:
-    port: 8080
-  initialDelaySeconds: null # @schema type:[integer,null];required:false;description:Number of seconds to wait before starting probe checks.
-  periodSeconds: null # @schema type:[integer,null];required:false;description:How often to perform probe checks.
-  failureThreshold: null # @schema type:[integer,null];required:false;description:Number of consecutive failures before considering the startup failed.
-
-# Storage Configuration
-volumes: [] # Additional volumes on the output Deployment definition.
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-volumeMounts: [] # Additional volumeMounts on the output Deployment definition.
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+# serviceAccountName: 'my-service-account@my-project.iam.gserviceaccount.com'
+labels: {}
+# startupProbe:
+#   # httpGet:
+#   #   path: /
+#   # tcpSocket:
+#   #   port: 8080
+#   # grpc:
+#   #   port: 8080
+#   initialDelaySeconds: 0
+#   periodSeconds: 10
+#   failureThreshold: 3
+#   timeoutSeconds: 1
+# livenessProbe:
+#   # httpGet:
+#   #   path: /
+#   #   port: 8080
+#   initialDelaySeconds: 0
+#   periodSeconds: 10
+#   failureThreshold: 3
+#   timeoutSeconds: 1

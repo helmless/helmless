@@ -1,7 +1,0 @@
-{{- if eq .Values.type "service" -}}
-  {{ template "serverless-helm.cloudrun.service" . }}
-{{- else if eq .Values.type "job" -}}
-  {{ template "serverless-helm.cloudrun.job" . }}
-{{- else -}}
-  {{ fail "A valid type of either 'service' or 'job' is required!" }}
-{{- end -}}

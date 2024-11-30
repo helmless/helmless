@@ -89,6 +89,32 @@
                 }
             ]
         },
+        "secrets": {
+            "description": "Secrets to mount in the CloudRun container.",
+            "type": "object",
+            "additionalProperties": true,
+            "examples": [
+                {
+                    "$title": "Latest Secret",
+                    "MY_SECRET": "my-secret-value"
+                },
+                {
+                    "$title": "Specific Secret Version",
+                    "MY_SECRET": {
+                        "secret": "my-secret-name",
+                        "version": "2"
+                    }
+                },
+                {
+                    "$title": "Cross Project Secret",
+                    "CROSS_PROJECT_SECRET": {
+                        "secret": "another-secret-name",
+                        "version": "1",
+                        "projectId": "another-project-id"
+                    }
+                }
+            ]
+        },
         "command": {
             "description": "Command that runs when the container starts.",
             "default": [],

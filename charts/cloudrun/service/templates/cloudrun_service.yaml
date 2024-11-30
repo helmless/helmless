@@ -1,7 +1,3 @@
-{{/*
-Templates out the manifest for a CloudRun Service.
-*/}}
-{{- define "serverless-helm.cloudrun.service" -}}
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -148,4 +144,3 @@ spec:
   traffic:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-{{- end -}}

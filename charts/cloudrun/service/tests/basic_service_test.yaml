@@ -106,3 +106,32 @@ tests:
       launchStage: PROD
     asserts:
       - failedTemplate: {}
+
+  # Execution Environment
+  - it: should set default execution environment when not specified
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
+          value: gen2
+
+  - it: should set gen1 execution environment when specified
+    set:
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
+          value: gen1
+
+  - it: should set gen2 execution environment when specified
+    set:
+      executionEnvironment: gen2
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
+          value: gen2
+
+  - it: should fail when invalid execution environment is specified
+    set:
+      executionEnvironment: invalid
+    asserts:
+      - failedTemplate: {}

@@ -39,6 +39,18 @@ spec:
         {{- with .Values.executionEnvironment }}
         run.googleapis.com/execution-environment: {{ . }}
         {{- end }}
+        {{- if .Values.network }}
+        {{- with .Values.network.connector }}
+        run.googleapis.com/vpc-access-connector: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.network.vpc }}
+        run.googleapis.com/vpc: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.network.subnetwork }}
+        run.googleapis.com/subnetwork: {{ . | quote }}
+        {{- end }}
+        run.googleapis.com/vpc-access-egress: {{ .Values.network.egress | default "private-ranges-only" | quote }}
+        {{- end }}
     spec:
       {{- with .Values.serviceAccountName }}
       serviceAccountName: {{ . }}

@@ -1,0 +1,152 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: VPC Configuration Tests
+templates:
+  - manifest.yaml
+set:
+  name: my-service
+  image: gcr.io/my-project/my-app:v1
+
+tests:
+  # VPC Connector Tests
+  - it: should set VPC connector when specified
+    set:
+      network:
+        connector: my-connector
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-connector"]
+          value: my-connector
+
+  - it: should set VPC connector with full resource name
+    set:
+      network:
+        connector: projects/other-project/locations/us-central1/connectors/my-connector
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-connector"]
+          value: projects/other-project/locations/us-central1/connectors/my-connector
+
+  - it: should set VPC egress with connector
+    set:
+      network:
+        connector: my-connector
+        egress: private-ranges-only
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-connector"]
+          value: my-connector
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-egress"]
+          value: private-ranges-only
+
+  # Direct VPC Access Tests
+  - it: should set direct VPC access when specified
+    set:
+      network:
+        vpc: my-vpc
+        subnetwork: my-subnetwork
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc"]
+          value: my-vpc
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/subnetwork"]
+          value: my-subnetwork
+
+  - it: should set cross-project VPC access
+    set:
+      network:
+        vpc: projects/other-project/global/networks/my-vpc
+        subnetwork: projects/other-project/regions/us-central1/subnetworks/my-subnet
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc"]
+          value: projects/other-project/global/networks/my-vpc
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/subnetwork"]
+          value: projects/other-project/regions/us-central1/subnetworks/my-subnet
+
+  - it: should set VPC egress with direct VPC
+    set:
+      network:
+        vpc: my-vpc
+        subnetwork: my-subnetwork
+        egress: all-traffic
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc"]
+          value: my-vpc
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/subnetwork"]
+          value: my-subnetwork
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-egress"]
+          value: all-traffic
+
+  # Default Values Tests
+  - it: should default to private-ranges-only egress with connector
+    set:
+      network:
+        connector: my-connector
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-egress"]
+          value: private-ranges-only
+
+  - it: should default to private-ranges-only egress with direct VPC
+    set:
+      network:
+        vpc: my-vpc
+        subnetwork: my-subnetwork
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-egress"]
+          value: private-ranges-only
+
+  # Validation Tests
+  - it: should fail when both connector and direct VPC are specified
+    set:
+      network:
+        connector: my-connector
+        vpc: my-vpc
+        subnetwork: my-subnetwork
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when vpc specified without subnetwork
+    set:
+      network:
+        vpc: my-vpc
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when subnetwork specified without vpc
+    set:
+      network:
+        subnetwork: my-subnetwork
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when invalid egress type specified
+    set:
+      network:
+        connector: my-connector
+        egress: invalid-type
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when vpc name is invalid
+    set:
+      network:
+        vpc: invalid/vpc/name
+        subnetwork: my-subnetwork
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when subnetwork name is invalid
+    set:
+      network:
+        vpc: my-vpc
+        subnetwork: invalid/subnetwork/name
+    asserts:
+      - failedTemplate: {}

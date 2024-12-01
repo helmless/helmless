@@ -405,17 +405,24 @@
         },
         "network": {
             "type": "object",
+            "description": "VPC and networking configuration for the Cloud Run service",
             "examples": [
                 {
                     "$title": "Direct VPC Connection",
                     "vpc": "my-vpc",
-                    "subnetwork": "my-subnetwork",
+                    "subnetwork": "my-subnet",
                     "egress": "all-traffic"
                 },
                 {
                     "$title": "VPC Connector",
                     "egress": "private-ranges-only",
-                    "connector": "my-private-vpc-connector"
+                    "connector": "my-connector"
+                },
+                {
+                    "$title": "Cross-Project VPC Access",
+                    "vpc": "projects/other-project/global/networks/my-vpc",
+                    "subnetwork": "projects/other-project/regions/us-central1/subnetworks/my-subnet",
+                    "egress": "all-traffic"
                 }
             ],
             "properties": {
@@ -425,48 +432,51 @@
                         "private-ranges-only",
                         "all-traffic"
                     ],
-                    "examples": [
-                        "private-ranges-only"
-                    ],
+                    "default": "private-ranges-only",
                     "type": "string",
-                    "if": {
-                        "type": "string"
-                    },
-                    "then": {
-                        "required": [
-                            "$parent.connector",
-                            "$parent.vpc"
-                        ]
-                    }
+                    "examples": [
+                        "all-traffic"
+                    ]
+                },
+                "connector": {
+                    "type": "string",
+                    "description": "Name of the VPC connector to use for the CloudRun container. Uses a serverless VPC access connector. Cannot be used with network.",
+                    "pattern": "^(projects/[^/]+/locations/[^/]+/connectors/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
+                    "examples": [
+                        "projects/my-project/locations/us-central1/connectors/my-connector",
+                        "my-connector"
+                    ]
+                },
+                "vpc": {
+                    "type": "string",
+                    "description": "Name of the VPC network to use to create a direct VPC connection. Must be used with subnetwork. Cannot be used with connector.",
+                    "pattern": "^(projects/[^/]+/global/networks/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
+                    "examples": [
+                        "projects/my-project/global/networks/my-vpc",
+                        "my-vpc"
+                    ]
+                },
+                "subnetwork": {
+                    "type": "string",
+                    "description": "Name of the VPC subnetwork to use to create a direct VPC connection. Must be used with vpc. Cannot be used with connector.",
+                    "pattern": "^(projects/[^/]+/regions/[^/]+/subnetworks/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
+                    "examples": [
+                        "projects/my-project/regions/us-central1/subnetworks/my-subnet",
+                        "my-subnet"
+                    ]
                 }
             },
             "oneOf": [
                 {
                     "required": [
                         "connector"
-                    ],
-                    "properties": {
-                        "connector": {
-                            "description": "Name of the VPC connector to use for the CloudRun container. Uses a serverless VPC access connector. Cannot be used with network.",
-                            "type": "string"
-                        }
-                    }
+                    ]
                 },
                 {
                     "required": [
                         "vpc",
                         "subnetwork"
-                    ],
-                    "properties": {
-                        "vpc": {
-                            "type": "string",
-                            "description": "Name of the VPC network to use to create a direct VPC connection. Must be used tohether with subnetwork. Cannot be used with connector."
-                        },
-                        "subnetwork": {
-                            "type": "string",
-                            "description": "Name of the VPC subnetwork to use to create a direct VPC connection. Must be used together with network. Cannot be used with connector."
-                        }
-                    }
+                    ]
                 }
             ]
         },

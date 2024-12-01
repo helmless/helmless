@@ -23,6 +23,9 @@ jobs:
       - name: ⚙️ Setup Helm
         uses: azure/setup-helm@v4
 
+      - name: 🧩 Install Helm Plugins
+        run: $ helm plugin install https://github.com/helm-unittest/helm-unittest.git
+
       - name: 🧹 Run Helm Lint
         run: helm lint ${{ matrix.chart }}
 
@@ -44,9 +47,6 @@ jobs:
 
       - name: ⚙️ Setup Helm
         uses: azure/setup-helm@v4
-
-      - name: 📦 Install Helm Schema Plugin
-        run: helm plugin install https://github.com/losisin/helm-values-schema-json.git
 
       - name: ⚙️ Setup pre-commit
         uses: pre-commit/action@v3.0.1

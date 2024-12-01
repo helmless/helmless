@@ -15,10 +15,6 @@ metadata:
     {{- if .Values.disableInvokerIamPolicy }}
     run.googleapis.com/invoker-iam-disabled: "true"
     {{- end }}
-    run.googleapis.com/ingress: INGRESS
-    run.googleapis.com/binary-authorization-breakglass: JUSTIFICATION
-    run.googleapis.com/minScale: SERVICE_MIN_INSTANCES
-    run.googleapis.com/function-target: FUNCTION_ENTRY_POINT
 spec:
   template:
     metadata:
@@ -32,26 +28,20 @@ spec:
         {{- with .Values.customAudiences }}
         run.googleapis.com/custom-audiences: {{ . | toJson | quote }}
         {{- end }}
-        autoscaling.knative.dev/minScale: MIN_INSTANCES
-        autoscaling.knative.dev/maxScale: MAX_INSTANCES
-        run.googleapis.com/cpu-throttling: CPU_ALLOCATION
-        run.googleapis.com/startup-cpu-boost: CPU_BOOST
-        run.googleapis.com/sessionAffinity: SESSION_AFFINITY
-        run.googleapis.com/cloudsql-instances: CLOUD_SQL_CONNECTION
-        run.googleapis.com/execution-environment: {{ .Values.executionEnvironment | default "gen2" }}
-        run.googleapis.com/vpc-access-connector: SERVERLESS_VPC_CONNECTOR
-        run.googleapis.com/vpc-access-egress: EGRESS
-        run.googleapis.com/network-interfaces: VPC_NETWORK_SETTINGS_IN_JSON
-        run.googleapis.com/container-dependencies: CONTAINER_START_ORDER
-        run.googleapis.com/base-images: '{"":"BASE_IMAGE"}'
+        {{- with include "helmless.crossProjectSecrets" .Values.secrets }}
+        run.googleapis.com/secrets: {{ . | quote }}
+        {{- end }}
+        autoscaling.knative.dev/minScale: {{ .Values.autoscaling.minScale | default 0 | quote }}
+        autoscaling.knative.dev/maxScale: {{ .Values.autoscaling.maxScale | default 100 | quote }}
+        {{- with .Values.executionEnvironment }}
+        run.googleapis.com/execution-environment: {{ . }}
+        {{- end }}
     spec:
       {{- with .Values.serviceAccountName }}
       serviceAccountName: {{ . }}
       {{- end }}
-      containerConcurrency: MAX_CONCURRENCY
-      timeoutSeconds: REQUEST_TIMEOUT
-      nodeSelector:
-        run.googleapis.com/accelerator: GPU_TYPE
+      containerConcurrency: {{ .Values.autoscaling.maxConcurrentRequests | default 80 }}
+      timeoutSeconds: {{ .Values.autoscaling.timeoutSeconds | default 300 }}
       containers:
         - image: {{ include "helmless.image" . | quote }}
           {{- with .Values.containerName }}
@@ -68,77 +58,25 @@ spec:
           ports:
             - name: {{ .Values.http2 | default false | ternary "h2c" "http1" }}
               containerPort: {{ .Values.containerPort | default 8080 }}
+          {{- if or .Values.env .Values.secrets }}
           env:
-            - name: KEY
-              value: VALUE
-          resources:
-            limits:
-              cpu: CPU_LIMIT
-              memory: MEMORY_LIMIT
-              nvidia.com/gpu: GPU_NUMBER
-          volumeMounts:
-            - name: VOLUME_NAME
-              mountPath: MOUNT_PATH
-          startupProbe:
-            httpGet:
-              path: CHECK_PATH
-              httpHeaders:
-                - name: HEADER_NAME
-                  value: HEADER_VALUE
-              port: PORT
-            tcpSocket:
-              port: PORT
-            grpc:
-              service: GRPC_SERVICE
-              port: PORT
-            initialDelaySeconds: DELAY
-            timeoutSeconds: TIMEOUT
-            failureThreshold: THRESHOLD
-            periodSeconds: PERIOD
-          livenessProbe:
-            httpGet:
-              path: CHECK_PATH
-              port: PORT
-              httpHeaders:
-                - name: HEADER_NAME
-                  value: HEADER_VALUE
-            grpc:
-              service: GRPC_SERVICE
-              port: PORT
-            initialDelaySeconds: DELAY
-            timeoutSeconds: TIMEOUT
-            failureThreshold: THRESHOLD
-            periodSeconds: PERIOD
-        - image: SIDECAR_IMAGE
-          name: SIDECAR_NAME
-      volumes:
-        - name: VOLUME_NAME
-          secret:
-            secretName: SECRET
-            items:
-              - key: SECRET_VERSION
-                path: PATH
-        - name: VOLUME_NAME
-          emptyDir:
-            sizeLimit: IN_MEMORY_VOLUME_SIZE
-            medium: Memory
-        - name: VOLUME_NAME
-          csi:
-            driver: gcsfuse.run.googleapis.com
-            readOnly: IS_READ_ONLY
-            volumeAttributes:
-              bucketName: BUCKET_NAME
-              mountOptions: OPTION1-NAME=OPTION1-VALUE,OPTION2-NAME=OPTION2-VALUE
-        - name: VOLUME_NAME
-          nfs:
-            server: IP_ADDRESS
-            path: NFS_PATH
-            readonly: IS_READ_ONLY
-    runtimeClassName: RUNTIME
-  traffic:
-    - percent: PERCENT_TO_LATEST
-      latestRevision: true
-    - percent: PERCENT_TO_REVISION
-      revisionName: REVISION_NAME
-    - tag: TAG
-      revisionName: REVISION_NAME
+          {{- range $key, $value := .Values.env }}
+          - name: {{ $key | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- range $key, $value := .Values.secrets }}
+          - name: {{ $key | quote }}
+            valueFrom:
+              secretKeyRef:
+                {{- if typeIs "string" $value }}
+                name: {{ $value | quote }}
+                key: "latest"
+                {{- else if $value.project }}
+                name: {{ $key | quote }}
+                key: {{ $value.version | default "latest" | quote }}
+                {{- else }}
+                name: {{ $value.secret | quote }}
+                key: {{ $value.version | default "latest" | quote }}
+                {{- end }}
+          {{- end }}
+          {{- end }}

@@ -1,0 +1,211 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Environment Variables and Secrets Tests
+templates:
+  - manifest.yaml
+set:
+  name: my-service
+  image: gcr.io/my-project/my-app:v1
+
+tests:
+  # Environment Variables
+  - it: should not set env when not specified
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].env
+
+  - it: should set simple environment variables
+    set:
+      env:
+        SIMPLE_VAR: 'simple-value'
+        ANOTHER_VAR: 'another-value'
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'SIMPLE_VAR'
+            value: 'simple-value'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'ANOTHER_VAR'
+            value: 'another-value'
+
+  # Secrets
+  - it: should not set secrets when not specified
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].env
+      - notExists:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+
+  - it: should set latest secret version without cross-project annotation
+    set:
+      secrets:
+        MY_SECRET: secret-name
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'MY_SECRET'
+            valueFrom:
+              secretKeyRef:
+                name: 'secret-name'
+                key: 'latest'
+      - notExists:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+
+  - it: should set specific secret version without cross-project annotation
+    set:
+      secrets:
+        MY_SECRET:
+          secret: secret-name
+          version: '2'
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'MY_SECRET'
+            valueFrom:
+              secretKeyRef:
+                name: 'secret-name'
+                key: '2'
+      - notExists:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+
+  - it: should set multiple regular secrets without cross-project annotation
+    set:
+      secrets:
+        SECRET_1: secret-one
+        SECRET_2:
+          secret: secret-two
+          version: '2'
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'SECRET_1'
+            valueFrom:
+              secretKeyRef:
+                name: 'secret-one'
+                key: 'latest'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'SECRET_2'
+            valueFrom:
+              secretKeyRef:
+                name: 'secret-two'
+                key: '2'
+      - notExists:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+
+  # Cross Project Secrets
+  - it: should set cross project secret with project number
+    set:
+      secrets:
+        MY_ENV_VAR:
+          secret: my-secret
+          project: '123456789'
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+          value: 'MY_ENV_VAR:projects/123456789/secrets/my-secret'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'MY_ENV_VAR'
+            valueFrom:
+              secretKeyRef:
+                name: 'MY_ENV_VAR'
+                key: 'latest'
+
+  - it: should set cross project secret with project id
+    set:
+      secrets:
+        MY_ENV_VAR:
+          secret: my-secret
+          project: my-project-id
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+          value: 'MY_ENV_VAR:projects/my-project-id/secrets/my-secret'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'MY_ENV_VAR'
+            valueFrom:
+              secretKeyRef:
+                name: 'MY_ENV_VAR'
+                key: 'latest'
+
+  - it: should set multiple cross project secrets with mixed project formats
+    set:
+      secrets:
+        ENV_VAR_1:
+          secret: secret-one
+          project: '123456789'
+        ENV_VAR_2:
+          secret: secret-two
+          project: my-project-id
+          version: '2'
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+          value: 'ENV_VAR_1:projects/123456789/secrets/secret-one,ENV_VAR_2:projects/my-project-id/secrets/secret-two'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'ENV_VAR_1'
+            valueFrom:
+              secretKeyRef:
+                name: 'ENV_VAR_1'
+                key: 'latest'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'ENV_VAR_2'
+            valueFrom:
+              secretKeyRef:
+                name: 'ENV_VAR_2'
+                key: '2'
+
+  - it: should mix local and cross project secrets
+    set:
+      secrets:
+        LOCAL_ENV:
+          secret: local-secret
+        CROSS_ENV:
+          secret: cross-secret
+          project: my-project-id
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/secrets"]
+          value: 'CROSS_ENV:projects/my-project-id/secrets/cross-secret'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'LOCAL_ENV'
+            valueFrom:
+              secretKeyRef:
+                name: 'local-secret'
+                key: 'latest'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: 'CROSS_ENV'
+            valueFrom:
+              secretKeyRef:
+                name: 'CROSS_ENV'
+                key: 'latest'

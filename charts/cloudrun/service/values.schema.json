@@ -96,30 +96,75 @@
             ]
         },
         "secrets": {
-            "description": "Secrets to mount in the CloudRun container.",
+            "description": "Secrets to map as environment variables in the Cloud Run container.",
             "type": "object",
-            "additionalProperties": true,
             "examples": [
                 {
                     "$title": "Latest Secret",
-                    "MY_SECRET": "my-secret-value"
+                    "MY_ENV_VAR": "my-secret-name"
                 },
                 {
                     "$title": "Specific Secret Version",
-                    "MY_SECRET": {
+                    "MY_ENV_VAR": {
                         "secret": "my-secret-name",
                         "version": "2"
                     }
                 },
                 {
-                    "$title": "Cross Project Secret",
-                    "CROSS_PROJECT_SECRET": {
+                    "$title": "Cross Project Secret with Project Number",
+                    "MY_ENV_VAR": {
                         "secret": "another-secret-name",
-                        "version": "1",
-                        "projectId": "another-project-id"
+                        "project": "123456789",
+                        "version": "1"
+                    }
+                },
+                {
+                    "$title": "Cross Project Secret with Project ID",
+                    "MY_ENV_VAR": {
+                        "secret": "another-secret-name",
+                        "project": "my-project-id",
+                        "version": "1"
+                    }
+                },
+                {
+                    "$title": "Mixed Local and Cross Project Secrets",
+                    "LOCAL_ENV_VAR": "my-secret-name",
+                    "CROSS_ENV_VAR": {
+                        "secret": "another-secret-name",
+                        "project": "my-project-id"
                     }
                 }
-            ]
+            ],
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string",
+                        "description": "A direct mapping between an environment variable and a secret in Secret Manager. Always uses the latest version of the secret."
+                    },
+                    {
+                        "type": "object",
+                        "description": "A secret to mount as an environment variable in the Cloud Run container.",
+                        "properties": {
+                            "secret": {
+                                "type": "string",
+                                "description": "Name of the secret in Secret Manager."
+                            },
+                            "version": {
+                                "type": "string",
+                                "default": "latest",
+                                "description": "Version of the secret to use. Defaults to the latest version."
+                            },
+                            "project": {
+                                "type": "string",
+                                "description": "Project ID or project number of the secret. Required for cross-project secrets."
+                            }
+                        },
+                        "required": [
+                            "secret"
+                        ]
+                    }
+                ]
+            }
         },
         "command": {
             "description": "Command that runs when the container starts.",

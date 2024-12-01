@@ -15,6 +15,9 @@ metadata:
     {{- if .Values.disableInvokerIamPolicy }}
     run.googleapis.com/invoker-iam-disabled: "true"
     {{- end }}
+    {{- with .Values.autoscaling.minScale }}
+    run.googleapis.com/minScale: {{ . | quote }}
+    {{- end }}
 spec:
   template:
     metadata:

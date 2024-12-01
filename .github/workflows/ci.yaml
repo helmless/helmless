@@ -24,7 +24,7 @@ jobs:
         uses: azure/setup-helm@v4
 
       - name: 🧩 Install Helm Plugins
-        run: $ helm plugin install https://github.com/helm-unittest/helm-unittest.git
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
       - name: 🧹 Run Helm Lint
         run: helm lint ${{ matrix.chart }}

@@ -1,3 +1,4 @@
+{{- include "helmless.cloudrun.validateCPU" . }}
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -15,7 +16,7 @@ metadata:
     {{- if .Values.disableInvokerIamPolicy }}
     run.googleapis.com/invoker-iam-disabled: "true"
     {{- end }}
-    {{- with .Values.autoscaling.minScale }}
+    {{- with (.Values.autoscaling).minScale }}
     run.googleapis.com/minScale: {{ . | quote }}
     {{- end }}
 spec:
@@ -34,11 +35,9 @@ spec:
         {{- with include "helmless.crossProjectSecrets" .Values.secrets }}
         run.googleapis.com/secrets: {{ . | quote }}
         {{- end }}
-        autoscaling.knative.dev/minScale: {{ .Values.autoscaling.minScale | default 0 | quote }}
-        autoscaling.knative.dev/maxScale: {{ .Values.autoscaling.maxScale | default 100 | quote }}
-        {{- with .Values.executionEnvironment }}
-        run.googleapis.com/execution-environment: {{ . }}
-        {{- end }}
+        autoscaling.knative.dev/minScale: {{ (.Values.autoscaling).minScale | default 0 | quote }}
+        autoscaling.knative.dev/maxScale: {{ (.Values.autoscaling).maxScale | default 100 | quote }}
+        run.googleapis.com/execution-environment: {{ .Values.executionEnvironment | default "gen2" | quote }}
         {{- if .Values.network }}
         {{- with .Values.network.connector }}
         run.googleapis.com/vpc-access-connector: {{ . | quote }}
@@ -51,12 +50,14 @@ spec:
         {{- end }}
         run.googleapis.com/vpc-access-egress: {{ .Values.network.egress | default "private-ranges-only" | quote }}
         {{- end }}
+        run.googleapis.com/cpu-throttling: {{ include "helmless.cloudrun.cpuThrottling" . | quote }}
+        run.googleapis.com/startup-cpu-boost: {{ (.Values.resources).startupBoost | default false | quote }}
     spec:
       {{- with .Values.serviceAccountName }}
       serviceAccountName: {{ . }}
       {{- end }}
-      containerConcurrency: {{ .Values.autoscaling.maxConcurrentRequests | default 80 }}
-      timeoutSeconds: {{ .Values.autoscaling.timeoutSeconds | default 300 }}
+      containerConcurrency: {{ (.Values.autoscaling).maxConcurrentRequests | default 80 }}
+      timeoutSeconds: {{ (.Values.autoscaling).timeoutSeconds | default 300 }}
       containers:
         - image: {{ include "helmless.image" . | quote }}
           {{- with .Values.containerName }}
@@ -73,6 +74,12 @@ spec:
           ports:
             - name: {{ .Values.http2 | default false | ternary "h2c" "http1" }}
               containerPort: {{ .Values.containerPort | default 8080 }}
+          {{- with (.Values.resources).limits | default (dict "cpu" 1 "memory" "512Mi") }}
+          resources:
+            limits:
+              cpu: {{ .cpu | default 1 }}
+              memory: {{ .memory | default "512Mi" | quote }}
+          {{- end }}
           {{- if or .Values.env .Values.secrets }}
           env:
           {{- range $key, $value := .Values.env }}

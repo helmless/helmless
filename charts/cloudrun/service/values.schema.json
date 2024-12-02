@@ -205,7 +205,170 @@
             ]
         },
         "resources": {
-            "$ref": "#/$defs/resourcesProperties"
+            "description": "Resource requests and limits for the CloudRun container. If not provided, defaults are used.",
+            "type": [
+                "object"
+            ],
+            "examples": [
+                {
+                    "$title": "Default",
+                    "cpuThrottling": true,
+                    "startupBoost": false,
+                    "limits": {
+                        "cpu": 1,
+                        "memory": "512Mi"
+                    }
+                },
+                {
+                    "$title": "Reduced Scaling Latency",
+                    "cpuThrottling": false,
+                    "startupBoost": true
+                },
+                {
+                    "$title": "High Memory",
+                    "limits": {
+                        "cpu": 4,
+                        "memory": "8Gi"
+                    }
+                }
+            ],
+            "properties": {
+                "cpuThrottling": {
+                    "default": true,
+                    "description": "Whether to throttle the CPU. This has significant impact on billing if set to `false`.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "examples": [
+                        false
+                    ]
+                },
+                "limits": {
+                    "properties": {
+                        "cpu": {
+                            "default": 1,
+                            "description": "Maximum CPUs to allocate for the Cloud Run container.  \n*Can be 1, 2, 4, 6, 8, or any fractional value from 0.08 to less than 1 in increments of 0.01.*\n\nThe following are minimum memory requirements for CPUs:\n\n| CPUs | Minimum memory |\n|------|----------------|\n| 4    | 2 GiB          |\n| 6    | 4 GiB          |\n| 8    | 4 GiB          |\n\n!!! warning \"If you use less than 1 CPU, the following requirments are enforced:\"\n\n    | Setting | Requirement |\n    |---------|-------------|\n    | Memory | A minimum of 0.5 CPU is needed to set a memory limit greater than 512MiB.<br>A minimum of 1 CPU is needed to set a memory limit greater than 1GiB. |\n    | Concurrency | Maximum concurrency must be set to 1. |\n    | CPU allocated | CPU allocation must be set to CPU allocated only during request processing. |\n    | Execution environment | You must use the first generation execution environment. |\n",
+                            "type": "number",
+                            "anyOf": [
+                                {
+                                    "enum": [
+                                        1,
+                                        2,
+                                        4,
+                                        6,
+                                        8
+                                    ]
+                                },
+                                {
+                                    "type": "number",
+                                    "minimum": 0.08,
+                                    "maximum": 0.99,
+                                    "multipleOf": 0.01
+                                }
+                            ],
+                            "examples": [
+                                {
+                                    "$title": "Minimum",
+                                    "$value": 0.08
+                                },
+                                {
+                                    "$title": "Maximum",
+                                    "$value": 8
+                                }
+                            ]
+                        },
+                        "memory": {
+                            "description": "Maximum memory to allocate for the Cloud Run container. Must be at least 2GiB for 4 CPUs and 4GiB for 6-8 CPUs.",
+                            "type": "string",
+                            "default": "512Mi",
+                            "pattern": "^\\d+(\\.\\d+)?(Mi|Gi)$",
+                            "examples": [
+                                "2Gi",
+                                "1024Mi"
+                            ]
+                        }
+                    },
+                    "type": "object",
+                    "allOf": [
+                        {
+                            "if": {
+                                "properties": {
+                                    "cpu": {
+                                        "minimum": 4,
+                                        "maximum": 4
+                                    }
+                                }
+                            },
+                            "then": {
+                                "properties": {
+                                    "memory": {
+                                        "pattern": "^([2-9]|[1-9][0-9]+)Gi$|^(2048|[2-9][0-9]{3}|[1-9][0-9]{4,})Mi$"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "if": {
+                                "properties": {
+                                    "cpu": {
+                                        "minimum": 6
+                                    }
+                                }
+                            },
+                            "then": {
+                                "properties": {
+                                    "memory": {
+                                        "pattern": "^([4-9]|[1-9][0-9]+)Gi$|^(4096|[4-9][0-9]{3}|[1-9][0-9]{4,})Mi$"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "if": {
+                                "properties": {
+                                    "cpu": {
+                                        "maximum": 0.49
+                                    }
+                                }
+                            },
+                            "then": {
+                                "properties": {
+                                    "memory": {
+                                        "pattern": "^([0-4]?[0-9]{1,2}|50[0-9]|51[0-2])Mi$"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "if": {
+                                "properties": {
+                                    "cpu": {
+                                        "minimum": 0.5,
+                                        "maximum": 0.99
+                                    }
+                                }
+                            },
+                            "then": {
+                                "properties": {
+                                    "memory": {
+                                        "pattern": "^([0-9]{1,3}|10[0-2][0-4])Mi$"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                "startupBoost": {
+                    "default": false,
+                    "description": "Whether to boost the CPUs at the start of the container.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "examples": [
+                        false
+                    ]
+                }
+            }
         },
         "containerPort": {
             "description": "Container port to expose. In CloudRun only a single port can be exposed and defaults to 8080.",
@@ -806,82 +969,6 @@
                     "tag": "1.0.0"
                 }
             ]
-        },
-        "resourcesProperties": {
-            "description": "Resource requests and limits for the CloudRun container. If not provided, defaults are used.",
-            "type": [
-                "object"
-            ],
-            "examples": [
-                {
-                    "$title": "Default",
-                    "cpuThrottling": true,
-                    "startupBoost": false,
-                    "limits": {
-                        "cpu": 1,
-                        "memory": "512Mi"
-                    }
-                },
-                {
-                    "$title": "Reduced Scaling Latency",
-                    "cpuThrottling": false,
-                    "startupBoost": true
-                },
-                {
-                    "$title": "High Memory",
-                    "limits": {
-                        "cpu": 4,
-                        "memory": "8Gi"
-                    }
-                }
-            ],
-            "properties": {
-                "cpuThrottling": {
-                    "default": true,
-                    "description": "Whether to throttle the CPU. This has significant impact on billing if set to `false`.",
-                    "type": [
-                        "boolean"
-                    ],
-                    "examples": [
-                        false
-                    ]
-                },
-                "limits": {
-                    "properties": {
-                        "cpu": {
-                            "default": 1,
-                            "description": "Maximum CPUs to allocate for the CloudRun container. Can be 1, 2, 4, 6, 8, or any fractional value from 0.01 to 1.",
-                            "type": [
-                                "integer"
-                            ],
-                            "examples": [
-                                2
-                            ]
-                        },
-                        "memory": {
-                            "description": "Maximum memory to allocate for the CloudRun container. Requires a minimum number of CPUs of 2 over 4GiB.",
-                            "type": [
-                                "string"
-                            ],
-                            "default": "512Mi",
-                            "examples": [
-                                "2Gi"
-                            ]
-                        }
-                    },
-                    "type": "object"
-                },
-                "startupBoost": {
-                    "default": false,
-                    "description": "Whether to boost the CPUs at the start of the container.",
-                    "type": [
-                        "boolean"
-                    ],
-                    "examples": [
-                        false
-                    ]
-                }
-            }
         }
     }
 }

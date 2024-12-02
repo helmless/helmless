@@ -1,0 +1,45 @@
+name: full-service
+image:
+  name: image
+  tag: v1.0.0
+  repository: project
+  registry: gcr.io
+description: 'A fully configured service'
+revisionName: full-v1
+region: us-west1
+launchStage: GA
+binaryAuthorization: true
+disableInvokerIamPolicy: true
+encryptionKey: projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
+customAudiences: ['audience1', 'audience2']
+serviceAccountName: my-service-account
+http2: true
+containerPort: 8080
+containerName: main-container
+command: ['/bin/sh']
+args: ['-c', 'echo hello']
+resources:
+  limits:
+    cpu: 4
+    memory: '2Gi'
+  startupBoost: true
+autoscaling:
+  minScale: 1
+  maxScale: 10
+  maxConcurrentRequests: 50
+  timeoutSeconds: 60
+network:
+  connector: projects/my-project/locations/us-central1/connectors/my-connector
+  egress: all-traffic
+env:
+  ENV_VAR1: 'value1'
+  ENV_VAR2: 'value2'
+secrets:
+  SECRET1: 'my-secret'
+  SECRET2:
+    secret: 'another-secret'
+    version: '1'
+  SECRET3:
+    secret: 'other-secret'
+    project: 'other-project'
+    version: 'latest'

@@ -1,0 +1,104 @@
+{{- include "helmless.cloudrun.validateCPU" . }}
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {{ .Values.name | quote }}
+  labels:
+    cloud.googleapis.com/location: {{ .Values.region | default "us-central1" | quote }}
+  annotations:
+    {{- with .Values.description }}
+    run.googleapis.com/description: {{ . | quote }}
+    {{- end }}
+    run.googleapis.com/launch-stage: {{ .Values.launchStage | default "BETA" | quote }}
+    {{- if .Values.binaryAuthorization }}
+    run.googleapis.com/binary-authorization: "true"
+    {{- end }}
+    {{- if .Values.disableInvokerIamPolicy }}
+    run.googleapis.com/invoker-iam-disabled: "true"
+    {{- end }}
+    {{- with (.Values.autoscaling).minScale }}
+    run.googleapis.com/minScale: {{ . | quote }}
+    {{- end }}
+spec:
+  template:
+    metadata:
+      {{- with .Values.revisionName }}
+      name: {{ . | quote }}
+      {{- end }}
+      annotations:
+        {{- with .Values.encryptionKey }}
+        run.googleapis.com/encryption-key: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.customAudiences }}
+        run.googleapis.com/custom-audiences: {{ . | toJson | quote }}
+        {{- end }}
+        {{- with include "helmless.crossProjectSecrets" .Values.secrets }}
+        run.googleapis.com/secrets: {{ . | quote }}
+        {{- end }}
+        autoscaling.knative.dev/minScale: {{ (.Values.autoscaling).minScale | default 0 | quote }}
+        autoscaling.knative.dev/maxScale: {{ (.Values.autoscaling).maxScale | default 100 | quote }}
+        run.googleapis.com/execution-environment: {{ .Values.executionEnvironment | default "gen2" | quote }}
+        {{- if .Values.network }}
+        {{- with .Values.network.connector }}
+        run.googleapis.com/vpc-access-connector: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.network.vpc }}
+        run.googleapis.com/vpc: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.network.subnetwork }}
+        run.googleapis.com/subnetwork: {{ . | quote }}
+        {{- end }}
+        run.googleapis.com/vpc-access-egress: {{ .Values.network.egress | default "private-ranges-only" | quote }}
+        {{- end }}
+        run.googleapis.com/cpu-throttling: {{ include "helmless.cloudrun.cpuThrottling" . | quote }}
+        run.googleapis.com/startup-cpu-boost: {{ (.Values.resources).startupBoost | default false | quote }}
+    spec:
+      {{- with .Values.serviceAccountName }}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      containerConcurrency: {{ (.Values.autoscaling).maxConcurrentRequests | default 80 }}
+      timeoutSeconds: {{ (.Values.autoscaling).timeoutSeconds | default 300 }}
+      containers:
+        - image: {{ include "helmless.image" . | quote }}
+          {{- with .Values.containerName }}
+          name: {{ . | quote }}
+          {{- end }}
+          {{- with .Values.command }}
+          command:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.args }}
+          args:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: {{ .Values.http2 | default false | ternary "h2c" "http1" }}
+              containerPort: {{ .Values.containerPort | default 8080 }}
+          {{- with (.Values.resources).limits | default (dict "cpu" 1 "memory" "512Mi") }}
+          resources:
+            limits:
+              cpu: {{ .cpu | default 1 | quote }}
+              memory: {{ .memory | default "512Mi" | quote }}
+          {{- end }}
+          {{- if or .Values.env .Values.secrets }}
+          env:
+          {{- range $key, $value := .Values.env }}
+          - name: {{ $key | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- range $key, $value := .Values.secrets }}
+          - name: {{ $key | quote }}
+            valueFrom:
+              secretKeyRef:
+                {{- if typeIs "string" $value }}
+                name: {{ $value | quote }}
+                key: "latest"
+                {{- else if $value.project }}
+                name: {{ $key | quote }}
+                key: {{ $value.version | default "latest" | quote }}
+                {{- else }}
+                name: {{ $value.secret | quote }}
+                key: {{ $value.version | default "latest" | quote }}
+                {{- end }}
+          {{- end }}
+          {{- end }}

@@ -18,7 +18,7 @@ tests:
           value: 'false'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 1
+          value: '1'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '512Mi'
@@ -33,7 +33,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 4
+          value: '4'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '2Gi'
@@ -56,7 +56,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 6
+          value: '6'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '4Gi'
@@ -79,7 +79,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 8
+          value: '8'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '4Gi'
@@ -106,7 +106,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 0.5
+          value: '0.5'
 
   - it: should allow minimum fractional CPU (0.08)
     set:
@@ -119,7 +119,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 0.08
+          value: '0.08'
 
   - it: should fail when CPU limit is below minimum
     set:
@@ -218,7 +218,7 @@ tests:
           value: 'true'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 4
+          value: '4'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '2Gi'
@@ -236,7 +236,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 0.25
+          value: '0.25'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '512Mi'
@@ -265,7 +265,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 0.75
+          value: '0.75'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '1024Mi'
@@ -294,7 +294,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 0.08
+          value: '0.08'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '128Mi'
@@ -311,7 +311,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 0.5
+          value: '0.5'
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: '1024Mi'
@@ -329,7 +329,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 0.25
+          value: '0.25'
       - equal:
           path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
           value: gen1
@@ -388,7 +388,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
-          value: 1
+          value: '1'
       - equal:
           path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
           value: gen2

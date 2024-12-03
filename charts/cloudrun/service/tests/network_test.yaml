@@ -179,3 +179,24 @@ tests:
       ingress: invalid-type
     asserts:
       - failedTemplate: {}
+
+  # Session Affinity Tests
+  - it: should set session affinity to none by default
+    asserts:
+      - notExists:
+          path: metadata.annotations["run.googleapis.com/session-affinity"]
+
+  - it: should set session affinity to true
+    set:
+      sessionAffinity: true
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/session-affinity"]
+          value: 'true'
+
+  - it: should set session affinity to false
+    set:
+      sessionAffinity: false
+    asserts:
+      - notExists:
+          path: spec.template.metadata.annotations["run.googleapis.com/session-affinity"]

@@ -54,6 +54,9 @@ spec:
         {{- end }}
         run.googleapis.com/cpu-throttling: {{ include "helmless.cloudrun.cpuThrottling" . | quote }}
         run.googleapis.com/startup-cpu-boost: {{ (.Values.resources).startupBoost | default false | quote }}
+        {{- with .Values.sessionAffinity }}
+        run.googleapis.com/session-affinity: {{ . | quote }}
+        {{- end }}
     spec:
       {{- with .Values.serviceAccountName }}
       serviceAccountName: {{ . }}

@@ -19,3 +19,13 @@ repos:
         files: ^charts/cloudrun/service/values.schema.json$
         args:
           ['--check-metaschema', 'charts/cloudrun/service/values.schema.json']
+
+  - repo: local
+    hooks:
+      - id: helm-unittest
+        name: Helm-unittest
+        files: ^charts/cloudrun/service/values.schema.json$
+        entry: bin/pre-commit-hooks/helm-unittest.sh
+        language: script
+        pass_filenames: false
+        always_run: true

@@ -37,13 +37,69 @@ Helmless is organized into focused repositories:
 
 ## 🤝 Contributing
 
-We welcome contributions! The documentation site is built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/). To contribute:
+You want to contribute to Helmless? Great ❤️!
+We use [asdf](https://asdf-vm.com/) to manage the tools and dependencies and [pre-commit](https://pre-commit.com/) to check if everything is fine before committing.
 
-1. Fork this repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+To setup the development environment, install [asdf](https://asdf-vm.com/) and the following plugins:
+
+```sh
+asdf plugin add python
+asdf plugin add helm
+asdf plugin add helm-docs
+asdf plugin add pre-commit
+```
+
+Then install the tools and dependencies:
+
+```sh
+asdf install
+```
+
+After that install the pre-commit hooks:
+
+```sh
+pre-commit install
+```
+
+### 📜 Documentation
+
+The documentation site is built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
+
+To setup the development environment, install [Python](https://www.python.org/) using asdf and the following dependencies:
+
+```sh
+pip install -r docs/requirements.txt
+```
+
+To run the documentation site locally, run:
+
+```sh
+mkdocs serve
+```
+
+All primary documentation is located in the `docs/docs/` folder and written in [Markdown](https://www.markdownguide.org/) with some additional files for the website.
+
+The Chart schemas are written in [JSON Schema](https://json-schema.org/) and are located in the `charts/` folder and rendered using a [custom mkdocs plugin](docs/_hooks/schema_renderer.py).
+
+### ⚙️ Helm Charts
+
+All charts are written schema and test first and use [helm-unittest](https://github.com/helm-unittest/helm-unittest) to test the charts. To setup the testing environment, install the helm-unittest plugin:
+
+```sh
+helm plugin install https://github.com/helm-unittest/helm-unittest.git
+```
+
+To run the tests for a chart, navigate to the chart directory and run:
+
+```sh
+helm unittest .
+```
+
+To update the snapshot tests, run:
+
+```sh
+helm unittest . -u
+```
 
 ## 📝 License
 

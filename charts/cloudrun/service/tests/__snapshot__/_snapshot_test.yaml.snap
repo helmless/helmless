@@ -79,6 +79,90 @@ should render with basic configuration:
                   port: 3000
                 timeoutSeconds: 1
           timeoutSeconds: 300
+should render with full configuration:
+  1: |
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    metadata:
+      annotations:
+        run.googleapis.com/binary-authorization: "true"
+        run.googleapis.com/description: A fully configured service
+        run.googleapis.com/invoker-iam-disabled: "true"
+        run.googleapis.com/launch-stage: GA
+        run.googleapis.com/minScale: "1"
+      labels:
+        cloud.googleapis.com/location: us-west1
+      name: full-service
+    spec:
+      template:
+        metadata:
+          annotations:
+            autoscaling.knative.dev/maxScale: "10"
+            autoscaling.knative.dev/minScale: "1"
+            run.googleapis.com/cpu-throttling: "true"
+            run.googleapis.com/custom-audiences: '["audience1","audience2"]'
+            run.googleapis.com/encryption-key: projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
+            run.googleapis.com/execution-environment: gen2
+            run.googleapis.com/secrets: SECRET3:projects/other-project/secrets/other-secret
+            run.googleapis.com/startup-cpu-boost: "true"
+            run.googleapis.com/vpc-access-connector: projects/my-project/locations/us-central1/connectors/my-connector
+            run.googleapis.com/vpc-access-egress: all-traffic
+          name: full-v1
+        spec:
+          containerConcurrency: 50
+          containers:
+            - args:
+                - -c
+                - echo hello
+              command:
+                - /bin/sh
+              env:
+                - name: ENV_VAR1
+                  value: value1
+                - name: ENV_VAR2
+                  value: value2
+                - name: SECRET1
+                  valueFrom:
+                    secretKeyRef:
+                      key: latest
+                      name: my-secret
+                - name: SECRET2
+                  valueFrom:
+                    secretKeyRef:
+                      key: "1"
+                      name: another-secret
+                - name: SECRET3
+                  valueFrom:
+                    secretKeyRef:
+                      key: latest
+                      name: SECRET3
+              image: gcr.io/project/image:v1.0.0
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                initialDelaySeconds: 5
+                periodSeconds: 10
+                timeoutSeconds: 1
+              name: main-container
+              ports:
+                - containerPort: 8080
+                  name: http1
+              resources:
+                limits:
+                  cpu: "4"
+                  memory: 2Gi
+              startupProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                initialDelaySeconds: 5
+                periodSeconds: 10
+                timeoutSeconds: 1
+          serviceAccountName: my-service-account
+          timeoutSeconds: 60
 should render with network configuration:
   1: |
     apiVersion: serving.knative.dev/v1

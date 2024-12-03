@@ -6,7 +6,7 @@ Validate probe configuration
   {{- if .Values.startupProbe }}
     {{- if and .Values.startupProbe.timeoutSeconds .Values.startupProbe.periodSeconds }}
       {{- if gt (int .Values.startupProbe.timeoutSeconds) (int .Values.startupProbe.periodSeconds) }}
-        {{- fail (printf "timeoutSeconds (%d) cannot exceed periodSeconds (%d)" .Values.startupProbe.timeoutSeconds .Values.startupProbe.periodSeconds) }}
+        {{- fail (printf "timeoutSeconds (%v) cannot exceed periodSeconds (%v)" .Values.startupProbe.timeoutSeconds .Values.startupProbe.periodSeconds) }}
       {{- end }}
     {{- end }}
     {{- if .Values.startupProbe.periodSeconds }}
@@ -23,7 +23,7 @@ Validate probe configuration
   {{- if .Values.livenessProbe }}
     {{- if and .Values.livenessProbe.timeoutSeconds .Values.livenessProbe.periodSeconds }}
       {{- if gt (int .Values.livenessProbe.timeoutSeconds) (int .Values.livenessProbe.periodSeconds) }}
-        {{- fail (printf "timeoutSeconds (%d) cannot exceed periodSeconds (%d)" .Values.livenessProbe.timeoutSeconds .Values.livenessProbe.periodSeconds) }}
+        {{- fail (printf "timeoutSeconds (%v) cannot exceed periodSeconds (%v)" .Values.livenessProbe.timeoutSeconds .Values.livenessProbe.periodSeconds) }}
       {{- end }}
     {{- end }}
     {{- if .Values.livenessProbe.periodSeconds }}

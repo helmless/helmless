@@ -13,7 +13,6 @@ disableInvokerIamPolicy: true
 encryptionKey: projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
 customAudiences: ['audience1', 'audience2']
 serviceAccountName: my-service-account
-http2: true
 containerPort: 8080
 containerName: main-container
 command: ['/bin/sh']

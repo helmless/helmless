@@ -276,6 +276,8 @@ tests:
       startupProbe:
         periodSeconds: 10
         timeoutSeconds: 20
+        tcpSocket:
+          port: 8080
     asserts:
       - failedTemplate:
           errorMessage: 'timeoutSeconds (20) cannot exceed periodSeconds (10)'
@@ -284,6 +286,8 @@ tests:
     set:
       startupProbe:
         periodSeconds: 300
+        grpc:
+          port: 8080
     asserts:
       - failedTemplate:
           errorMessage: 'startupProbe.periodSeconds cannot exceed 240 seconds'
@@ -292,6 +296,8 @@ tests:
     set:
       livenessProbe:
         periodSeconds: 4000
+        httpGet:
+          path: /live
     asserts:
       - failedTemplate:
           errorMessage: 'livenessProbe.periodSeconds cannot exceed 3600 seconds'

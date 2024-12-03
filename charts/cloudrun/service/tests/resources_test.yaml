@@ -395,3 +395,23 @@ tests:
       - equal:
           path: spec.template.spec.containerConcurrency
           value: 80
+
+  # GPU Support
+  - it: should enable GPU support
+    set:
+      resources:
+        gpu: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits["nvidia.com/gpu"]
+          value: '1'
+      - equal:
+          path: spec.template.spec.containers[0].nodeSelector["run.googleapis.com/accelerator"]
+          value: 'nvidia-l4'
+
+  - it: should not enable GPU support when not specified
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].resources.limits["nvidia.com/gpu"]
+      - notExists:
+          path: spec.template.spec.containers[0].nodeSelector["run.googleapis.com/accelerator"]

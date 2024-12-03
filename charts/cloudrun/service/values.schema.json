@@ -243,6 +243,16 @@
                         false
                     ]
                 },
+                "gpu": {
+                    "default": false,
+                    "description": "Whether to enable [GPU support](https://cloud.google.com/run/docs/configuring/services/gpu#yaml) for the Cloud Run container. Only a single GPU per cloud run container is supported and will incur additional costs.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "examples": [
+                        true
+                    ]
+                },
                 "limits": {
                     "properties": {
                         "cpu": {

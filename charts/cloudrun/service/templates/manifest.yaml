@@ -78,11 +78,16 @@ spec:
               containerPort: {{ .Values.containerPort | default 8080 }}
           {{- include "helmless.cloudrun.startupProbe" . | nindent 10 }}
           {{- include "helmless.cloudrun.livenessProbe" . | nindent 10 }}
-          {{- with (.Values.resources).limits | default (dict "cpu" 1 "memory" "512Mi") }}
           resources:
             limits:
-              cpu: {{ .cpu | default 1 | quote }}
-              memory: {{ .memory | default "512Mi" | quote }}
+              cpu: {{ ((.Values.resources).limits).cpu | default 1 | quote }}
+              memory: {{ ((.Values.resources).limits).memory | default "512Mi" | quote }}
+              {{- if (.Values.resources).gpu }}
+              nvidia.com/gpu: "1"
+              {{- end }}
+          {{- if (.Values.resources).gpu }}
+          nodeSelector:
+            run.googleapis.com/accelerator: "nvidia-l4"
           {{- end }}
           {{- if or .Values.env .Values.secrets }}
           env:

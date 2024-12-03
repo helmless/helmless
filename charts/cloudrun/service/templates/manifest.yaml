@@ -1,4 +1,5 @@
 {{- include "helmless.cloudrun.validateCPU" . }}
+{{- include "helmless.cloudrun.validateProbes" . }}
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -74,6 +75,8 @@ spec:
           ports:
             - name: {{ .Values.http2 | default false | ternary "h2c" "http1" }}
               containerPort: {{ .Values.containerPort | default 8080 }}
+          {{- include "helmless.cloudrun.startupProbe" . | nindent 10 }}
+          {{- include "helmless.cloudrun.livenessProbe" . | nindent 10 }}
           {{- with (.Values.resources).limits | default (dict "cpu" 1 "memory" "512Mi") }}
           resources:
             limits:

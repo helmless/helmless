@@ -453,28 +453,11 @@
                     "$ref": "#/$defs/grpcProbe"
                 }
             ],
-            "properties": {
-                "initialDelaySeconds": {
-                    "type": "integer",
-                    "default": 0,
-                    "description": "Number of seconds after the container starts before the probe is initiated"
-                },
-                "periodSeconds": {
-                    "type": "integer",
-                    "default": 10,
-                    "description": "How often (in seconds) to perform the probe"
-                },
-                "timeoutSeconds": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Number of seconds after which the probe times out"
-                },
-                "failureThreshold": {
-                    "type": "integer",
-                    "default": 3,
-                    "description": "Number of consecutive failures required to determine the container is not alive"
+            "allOf": [
+                {
+                    "$ref": "#/$defs/probeProperties"
                 }
-            }
+            ]
         },
         "livenessProbe": {
             "description": "The liveness probe controls how the Cloud Run service is monitored for health. If a liveness probe does not succeed within the specified time (failureThreshold * periodSeconds), the container is shut down using a SIGKILL signal. Any remaining requests that were still being served by the container are terminated with the HTTP status code 503. After the container is shut down, Cloud Run autoscaling starts up a new container instance.",
@@ -509,28 +492,11 @@
                     "$ref": "#/$defs/grpcProbe"
                 }
             ],
-            "properties": {
-                "initialDelaySeconds": {
-                    "type": "integer",
-                    "default": 0,
-                    "description": "Number of seconds after the container starts before the probe is initiated"
-                },
-                "periodSeconds": {
-                    "type": "integer",
-                    "default": 10,
-                    "description": "How often (in seconds) to perform the probe"
-                },
-                "timeoutSeconds": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Number of seconds after which the probe times out"
-                },
-                "failureThreshold": {
-                    "type": "integer",
-                    "default": 3,
-                    "description": "Number of consecutive failures required to determine the container is not alive"
+            "allOf": [
+                {
+                    "$ref": "#/$defs/probeProperties"
                 }
-            }
+            ]
         },
         "serviceAccountName": {
             "description": "Service account to use to run the CloudRun container. If not provided, the default service account of the project is used.",
@@ -704,6 +670,31 @@
         }
     },
     "$defs": {
+        "probeProperties": {
+            "type": "object",
+            "properties": {
+                "initialDelaySeconds": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Number of seconds after the container starts before the probe is initiated"
+                },
+                "periodSeconds": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "How often (in seconds) to perform the probe"
+                },
+                "timeoutSeconds": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Number of seconds after which the probe times out"
+                },
+                "failureThreshold": {
+                    "type": "integer",
+                    "default": 3,
+                    "description": "Number of consecutive failures required to determine the container is not alive"
+                }
+            }
+        },
         "httpProbe": {
             "type": "object",
             "required": [

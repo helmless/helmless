@@ -16,6 +16,30 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
     md = []
     prefix = '#' * level
 
+    # Handle allOf by merging properties
+    if 'allOf' in prop:
+        # Create a copy of the original property without allOf
+        merged_prop = {k: v for k, v in prop.items() if k != 'allOf'}
+
+        # Initialize properties dict if it doesn't exist
+        if 'properties' not in merged_prop:
+            merged_prop['properties'] = {}
+
+        # Merge all referenced properties
+        for ref_prop in prop['allOf']:
+            if '$ref' in ref_prop:
+                # Skip rendering the allOf reference directly
+                continue
+            if 'properties' in ref_prop:
+                merged_prop['properties'].update(ref_prop['properties'])
+            # Merge other fields if needed
+            for key, value in ref_prop.items():
+                if key != 'properties' and key not in merged_prop:
+                    merged_prop[key] = value
+
+        # Use the merged properties for rendering
+        prop = merged_prop
+
     # Handle property type
     prop_type = prop.get('type', [])
     if isinstance(prop_type, list):
@@ -76,30 +100,32 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
             ))
 
     if 'oneOf' in prop:
-        md.append("")
-        md.append("---")
-        md.append(f"???+ abstract \"The `{name}` setting requires **exactly one** of the following configurations:\"")
-        md.append("")
-        for i, option in enumerate(prop['oneOf'], 1):
-            # Determine the option title based on the properties
-            option_title = next(iter(option.get('properties', {}).keys()), f'Option {i}')
-            md.append(f"    === \"{option_title}\"")
+        # Only proceed if any of the oneOf options have properties
+        if any('properties' in option for option in prop['oneOf']):
             md.append("")
+            md.append("---")
+            md.append(f"???+ abstract \"The `{name}` setting requires **exactly one** of the following configurations:\"")
+            md.append("")
+            for i, option in enumerate(prop['oneOf'], 1):
+                if 'properties' in option:
+                    # Determine the option title based on the properties
+                    option_title = next(iter(option.get('properties', {}).keys()), f'Option {i}')
+                    md.append(f"    === \"{option_title}\"")
+                    md.append("")
 
-            # Render the option's properties
-            if 'properties' in option:
-                for sub_name, sub_prop in option['properties'].items():
-                    sub_content = _render_property(
-                        f"{name}.{sub_name}",
-                        sub_prop,
-                        option.get('required', []),
-                        level=level + 1,
-                        changelog_path=changelog_path
-                    )
-                    # Indent each line of the sub-content with 4 spaces
-                    indented_content = '\n'.join(f"        {line}" for line in sub_content.split('\n'))
-                    md.append(indented_content)
-            md.append("")
+                    # Render the option's properties
+                    for sub_name, sub_prop in option['properties'].items():
+                        sub_content = _render_property(
+                            f"{name}.{sub_name}",
+                            sub_prop,
+                            option.get('required', []),
+                            level=level + 1,
+                            changelog_path=changelog_path
+                        )
+                        # Indent each line of the sub-content with 4 spaces
+                        indented_content = '\n'.join(f"        {line}" for line in sub_content.split('\n'))
+                        md.append(indented_content)
+                    md.append("")
 
     return f"\n".join(md)
 

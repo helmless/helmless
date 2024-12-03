@@ -43,3 +43,19 @@ secrets:
     secret: 'other-secret'
     project: 'other-project'
     version: 'latest'
+startupProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  timeoutSeconds: 1
+  periodSeconds: 10
+  failureThreshold: 3
+  initialDelaySeconds: 5
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  timeoutSeconds: 1
+  periodSeconds: 10
+  failureThreshold: 3
+  initialDelaySeconds: 5

@@ -44,3 +44,12 @@ Get CPU throttling value with proper defaults
 {{- end -}}
 {{- $cpuThrottling -}}
 {{- end -}}
+
+{{/*
+Build network interfaces configuration for Cloud Run
+*/}}
+{{- define "helmless.cloudrun.networkInterfaces" -}}
+{{- if and .vpc .subnetwork -}}
+{{ dict "network" .vpc "subnetwork" .subnetwork "tags" (.tags | default list) | toJson }}
+{{- end -}}
+{{- end -}}

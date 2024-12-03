@@ -185,9 +185,8 @@ should render with network configuration:
             autoscaling.knative.dev/minScale: "0"
             run.googleapis.com/cpu-throttling: "true"
             run.googleapis.com/execution-environment: gen2
+            run.googleapis.com/network-interfaces: '{"network":"projects/my-project/global/networks/my-vpc","subnetwork":"projects/my-project/regions/us-central1/subnetworks/my-subnet","tags":[]}'
             run.googleapis.com/startup-cpu-boost: "false"
-            run.googleapis.com/subnetwork: projects/my-project/regions/us-central1/subnetworks/my-subnet
-            run.googleapis.com/vpc: projects/my-project/global/networks/my-vpc
             run.googleapis.com/vpc-access-egress: all-traffic
         spec:
           containerConcurrency: 80

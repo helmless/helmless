@@ -566,46 +566,64 @@
                     "examples": [
                         "all-traffic"
                     ]
-                },
-                "connector": {
-                    "type": "string",
-                    "description": "Name of the VPC connector to use for the CloudRun container. Uses a serverless VPC access connector. Cannot be used with network.",
-                    "pattern": "^(projects/[^/]+/locations/[^/]+/connectors/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
-                    "examples": [
-                        "projects/my-project/locations/us-central1/connectors/my-connector",
-                        "my-connector"
-                    ]
-                },
-                "vpc": {
-                    "type": "string",
-                    "description": "Name of the VPC network to use to create a direct VPC connection. Must be used with subnetwork. Cannot be used with connector.",
-                    "pattern": "^(projects/[^/]+/global/networks/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
-                    "examples": [
-                        "projects/my-project/global/networks/my-vpc",
-                        "my-vpc"
-                    ]
-                },
-                "subnetwork": {
-                    "type": "string",
-                    "description": "Name of the VPC subnetwork to use to create a direct VPC connection. Must be used with vpc. Cannot be used with connector.",
-                    "pattern": "^(projects/[^/]+/regions/[^/]+/subnetworks/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
-                    "examples": [
-                        "projects/my-project/regions/us-central1/subnetworks/my-subnet",
-                        "my-subnet"
-                    ]
                 }
             },
             "oneOf": [
                 {
                     "required": [
                         "connector"
-                    ]
+                    ],
+                    "properties": {
+                        "connector": {
+                            "type": "string",
+                            "description": "Name of the VPC connector to use for the CloudRun container. Uses a serverless VPC access connector. Cannot be used with network.",
+                            "pattern": "^(projects/[^/]+/locations/[^/]+/connectors/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
+                            "examples": [
+                                "projects/my-project/locations/us-central1/connectors/my-connector",
+                                "my-connector"
+                            ]
+                        }
+                    }
                 },
                 {
                     "required": [
                         "vpc",
                         "subnetwork"
-                    ]
+                    ],
+                    "properties": {
+                        "vpc": {
+                            "type": "string",
+                            "description": "Name of the VPC network to use to create a direct VPC connection. Must be used with subnetwork. Cannot be used with connector.",
+                            "pattern": "^(projects/[^/]+/global/networks/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
+                            "examples": [
+                                "projects/my-project/global/networks/my-vpc",
+                                "my-vpc"
+                            ]
+                        },
+                        "subnetwork": {
+                            "type": "string",
+                            "description": "Name of the VPC subnetwork to use to create a direct VPC connection. Must be used with vpc. Cannot be used with connector.",
+                            "pattern": "^(projects/[^/]+/regions/[^/]+/subnetworks/[^/]+|[a-z][-a-z0-9]*[a-z0-9])$",
+                            "examples": [
+                                "projects/my-project/regions/us-central1/subnetworks/my-subnet",
+                                "my-subnet"
+                            ]
+                        },
+                        "tags": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [],
+                            "examples": [
+                                [
+                                    "tag1",
+                                    "tag2"
+                                ]
+                            ],
+                            "description": "Tags to apply to the network interfaces created for the Cloud Run container. Use the [network tags](https://cloud.google.com/vpc/docs/add-remove-network-tags#restrictions) feature of VPC access connectors to control traffic to and from the service."
+                        }
+                    }
                 }
             ]
         },

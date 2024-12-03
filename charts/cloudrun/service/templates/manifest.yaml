@@ -44,13 +44,10 @@ spec:
         {{- with .Values.network.connector }}
         run.googleapis.com/vpc-access-connector: {{ . | quote }}
         {{- end }}
-        {{- with .Values.network.vpc }}
-        run.googleapis.com/vpc: {{ . | quote }}
-        {{- end }}
-        {{- with .Values.network.subnetwork }}
-        run.googleapis.com/subnetwork: {{ . | quote }}
-        {{- end }}
         run.googleapis.com/vpc-access-egress: {{ .Values.network.egress | default "private-ranges-only" | quote }}
+        {{- if and .Values.network.vpc .Values.network.subnetwork }}
+        run.googleapis.com/network-interfaces: {{ include "helmless.cloudrun.networkInterfaces" .Values.network | quote }}
+        {{- end }}
         {{- end }}
         run.googleapis.com/cpu-throttling: {{ include "helmless.cloudrun.cpuThrottling" . | quote }}
         run.googleapis.com/startup-cpu-boost: {{ (.Values.resources).startupBoost | default false | quote }}

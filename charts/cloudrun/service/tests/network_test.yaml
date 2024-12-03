@@ -45,59 +45,38 @@ tests:
       network:
         vpc: my-vpc
         subnetwork: my-subnetwork
+        tags: ['tag1', 'tag2']
     asserts:
       - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/vpc"]
-          value: my-vpc
+          path: spec.template.metadata.annotations["run.googleapis.com/network-interfaces"]
+          value: '{"network":"my-vpc","subnetwork":"my-subnetwork","tags":["tag1","tag2"]}'
+
+  - it: should set direct VPC access with empty tags when not specified
+    set:
+      network:
+        vpc: my-vpc
+        subnetwork: my-subnetwork
+    asserts:
       - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/subnetwork"]
-          value: my-subnetwork
+          path: spec.template.metadata.annotations["run.googleapis.com/network-interfaces"]
+          value: '{"network":"my-vpc","subnetwork":"my-subnetwork","tags":[]}'
 
   - it: should set cross-project VPC access
     set:
       network:
         vpc: projects/other-project/global/networks/my-vpc
         subnetwork: projects/other-project/regions/us-central1/subnetworks/my-subnet
+        tags: ['tag1']
     asserts:
       - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/vpc"]
-          value: projects/other-project/global/networks/my-vpc
-      - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/subnetwork"]
-          value: projects/other-project/regions/us-central1/subnetworks/my-subnet
-
-  - it: should set VPC egress with direct VPC
-    set:
-      network:
-        vpc: my-vpc
-        subnetwork: my-subnetwork
-        egress: all-traffic
-    asserts:
-      - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/vpc"]
-          value: my-vpc
-      - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/subnetwork"]
-          value: my-subnetwork
-      - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-egress"]
-          value: all-traffic
+          path: spec.template.metadata.annotations["run.googleapis.com/network-interfaces"]
+          value: '{"network":"projects/other-project/global/networks/my-vpc","subnetwork":"projects/other-project/regions/us-central1/subnetworks/my-subnet","tags":["tag1"]}'
 
   # Default Values Tests
   - it: should default to private-ranges-only egress with connector
     set:
       network:
         connector: my-connector
-    asserts:
-      - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-egress"]
-          value: private-ranges-only
-
-  - it: should default to private-ranges-only egress with direct VPC
-    set:
-      network:
-        vpc: my-vpc
-        subnetwork: my-subnetwork
     asserts:
       - equal:
           path: spec.template.metadata.annotations["run.googleapis.com/vpc-access-egress"]

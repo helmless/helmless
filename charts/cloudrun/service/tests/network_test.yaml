@@ -5,6 +5,7 @@ templates:
 set:
   name: my-service
   image: gcr.io/my-project/my-app:v1
+  project: my-project
 
 tests:
   # VPC Connector Tests

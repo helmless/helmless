@@ -6,6 +6,16 @@ Get the region from the values or use the default.
 {{- end -}}
 
 {{/*
+Compute common labels
+*/}}
+{{- define "helmless.labels" -}}
+project: {{ .Values.project | quote }}
+helmless-chart: {{ .Chart.Name | quote }}
+helmless-chart-version: {{ .Chart.Version | quote }}
+managed-by: helmless
+{{- end }}
+
+{{/*
 Create the fully qualified image name.
 */}}
 {{- define "helmless.image" -}}

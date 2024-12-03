@@ -1,6 +1,10 @@
 suite: CloudSQL Configuration Tests
 templates:
   - manifest.yaml
+set:
+  name: my-service
+  project: my-project
+
 tests:
   - it: should not set cloudsql-instances annotation when cloudsql is not configured
     asserts:

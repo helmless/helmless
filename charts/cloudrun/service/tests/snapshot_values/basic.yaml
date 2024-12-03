@@ -1,4 +1,5 @@
 name: basic-service
+project: my-project
 image:
   repository: gcr.io/project
   name: image

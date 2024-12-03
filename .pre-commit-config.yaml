@@ -16,7 +16,7 @@ repos:
     rev: 0.29.4
     hooks:
       - id: check-jsonschema
-        files: ^charts/cloudrun/service/values.schema.json$
+        files: ^charts/.*$
         args:
           ['--check-metaschema', 'charts/cloudrun/service/values.schema.json']
 
@@ -24,8 +24,15 @@ repos:
     hooks:
       - id: helm-unittest
         name: Helm-unittest
-        files: ^charts/cloudrun/service/values.schema.json$
+        files: ^charts/.*$
         entry: bin/pre-commit-hooks/helm-unittest.sh
+        language: script
+        pass_filenames: false
+        always_run: true
+      - id: helm-lint
+        name: Helm-lint
+        files: ^charts/.*$
+        entry: bin/pre-commit-hooks/helm-lint.sh
         language: script
         pass_filenames: false
         always_run: true

@@ -6,7 +6,8 @@
     "description": "A Helm chart to template the manifest of a Cloud Run service or job.",
     "required": [
         "name",
-        "image"
+        "image",
+        "project"
     ],
     "type": "object",
     "examples": [
@@ -46,6 +47,29 @@
                 "my-service"
             ]
         },
+        "project": {
+            "description": "The google cloud project to deploy the Cloud Run service to.",
+            "type": "string",
+            "examples": [
+                "my-project"
+            ]
+        },
+        "region": {
+            "description": "The region to deploy the CloudRun service to. Uses the default region if not provided.",
+            "type": [
+                "string"
+            ],
+            "default": "us-central1",
+            "pattern": "^(asia|europe|me|us|africa|australia|northamerica|southamerica)-[a-z]+(\\d+)$",
+            "examples": [
+                "us-central1",
+                "europe-west1",
+                "asia-east1"
+            ]
+        },
+        "image": {
+            "$ref": "#/$defs/imageProperties"
+        },
         "revisionName": {
             "description": "The name of the Cloud Run revision to deploy. If not provided, a random name will be generated.",
             "type": "string",
@@ -66,22 +90,6 @@
             "examples": [
                 "My service does xyz."
             ]
-        },
-        "region": {
-            "description": "The region to deploy the CloudRun service to. Uses the default region if not provided.",
-            "type": [
-                "string"
-            ],
-            "default": "us-central1",
-            "pattern": "^(asia|europe|me|us|africa|australia|northamerica|southamerica)-[a-z]+(\\d+)$",
-            "examples": [
-                "us-central1",
-                "europe-west1",
-                "asia-east1"
-            ]
-        },
-        "image": {
-            "$ref": "#/$defs/imageProperties"
         },
         "env": {
             "description": "Environment variables to set in the CloudRun container. Using an object allows merging of multiple values, e.g. `env.staging` and `env.production`.",
@@ -525,9 +533,11 @@
             ],
             "patternProperties": {
                 "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$": {
+                    "$id": "label",
                     "type": "string",
                     "maxLength": 63,
-                    "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+                    "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+                    "description": "Label key and value must conform to the Cloud Run label schema of lowercase alphanumeric characters, hyphens, and underscores and be 63 characters or less."
                 }
             },
             "propertyNames": {
@@ -536,11 +546,268 @@
             },
             "additionalProperties": false
         },
-        "volumeMounts": {
-            "type": "array"
-        },
         "volumes": {
-            "type": "array"
+            "type": "object",
+            "description": "Volume configurations for the Cloud Run container. Each key is the volume name and must be a valid k8s name (lowercase alphanumeric with dashes).",
+            "examples": [
+                {
+                    "$title": "Secret",
+                    "config": {
+                        "mountPath": "/etc/config",
+                        "secret": {
+                            "name": "my-secret",
+                            "items": [
+                                {
+                                    "version": "1",
+                                    "path": "config.json"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "$title": "EmptyDir",
+                    "cache": {
+                        "mountPath": "/cache",
+                        "readOnly": false,
+                        "emptyDir": {
+                            "sizeLimit": "256Mi",
+                            "medium": "Memory"
+                        }
+                    }
+                },
+                {
+                    "$title": "GCS",
+                    "data": {
+                        "mountPath": "/data",
+                        "gcs": {
+                            "bucket": "my-data-bucket",
+                            "mountOptions": {
+                                "file-mode": "0644",
+                                "dir-mode": "0755"
+                            }
+                        }
+                    }
+                },
+                {
+                    "$title": "NFS",
+                    "shared": {
+                        "mountPath": "/shared",
+                        "nfs": {
+                            "server": "10.0.0.1",
+                            "path": "/exports/data"
+                        }
+                    }
+                }
+            ],
+            "patternProperties": {
+                "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$": {
+                    "type": "object",
+                    "$id": "volume",
+                    "required": [
+                        "mountPath"
+                    ],
+                    "properties": {
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path where the volume should be mounted in the container",
+                            "pattern": "^/.*",
+                            "examples": [
+                                "/data"
+                            ]
+                        },
+                        "readOnly": {
+                            "type": "boolean",
+                            "description": "Whether the volume should be mounted read-only",
+                            "default": false,
+                            "examples": [
+                                true
+                            ]
+                        }
+                    },
+                    "oneOf": [
+                        {
+                            "required": [
+                                "secret"
+                            ],
+                            "properties": {
+                                "secret": {
+                                    "type": "object",
+                                    "description": "Mount a Secret Manager secret as a volume",
+                                    "examples": [
+                                        {
+                                            "$title": "Latest Secret Version Mount",
+                                            "name": "my-secret",
+                                            "items": [
+                                                {
+                                                    "path": "config.json"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "$title": "Multiple Secret Versions Mount",
+                                            "name": "my-secret",
+                                            "items": [
+                                                {
+                                                    "version": "1",
+                                                    "path": "old_key.pem"
+                                                },
+                                                {
+                                                    "version": "2",
+                                                    "path": "new_key.pem"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "$title": "Cross-Project Secret Mount",
+                                            "name": "my-secret",
+                                            "project": "my-project",
+                                            "items": [
+                                                {
+                                                    "version": "1",
+                                                    "path": "config.json"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "required": [
+                                        "name"
+                                    ],
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Name of the secret in Secret Manager"
+                                        },
+                                        "project": {
+                                            "type": "string",
+                                            "description": "Project ID for cross-project secrets. If not provided, the project of the Cloud Run service is used."
+                                        },
+                                        "items": {
+                                            "type": "array",
+                                            "description": "List of specific secret versions to mount",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "path"
+                                                ],
+                                                "properties": {
+                                                    "version": {
+                                                        "type": "string",
+                                                        "description": "Version of the secret to mount",
+                                                        "default": "latest"
+                                                    },
+                                                    "path": {
+                                                        "type": "string",
+                                                        "description": "Path where the secret will be mounted"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "required": [
+                                "emptyDir"
+                            ],
+                            "properties": {
+                                "emptyDir": {
+                                    "type": "object",
+                                    "description": "Create an ephemeral in memory volume that exists for the lifetime of the container",
+                                    "required": [
+                                        "size"
+                                    ],
+                                    "examples": [
+                                        {
+                                            "size": "256Mi"
+                                        }
+                                    ],
+                                    "properties": {
+                                        "size": {
+                                            "type": "string",
+                                            "description": "Maximum size of the volume. Must not exceed the memory limit of the container.",
+                                            "pattern": "^\\d+(\\.\\d+)?(Mi|Gi)$"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "required": [
+                                "gcs"
+                            ],
+                            "properties": {
+                                "gcs": {
+                                    "type": "object",
+                                    "description": "Mounts a Google Cloud Storage bucket.",
+                                    "examples": [
+                                        {
+                                            "$title": "GCS Bucket",
+                                            "bucket": "my-bucket"
+                                        },
+                                        {
+                                            "$title": "Bucket with Mount Options",
+                                            "bucket": "my-bucket",
+                                            "mountOptions": {
+                                                "file-mode": "0644",
+                                                "dir-mode": "0755"
+                                            }
+                                        }
+                                    ],
+                                    "required": [
+                                        "bucket"
+                                    ],
+                                    "properties": {
+                                        "bucket": {
+                                            "type": "string",
+                                            "description": "Name of the GCS bucket to mount"
+                                        },
+                                        "mountOptions": {
+                                            "type": "object",
+                                            "description": "Additional [mount options](https://cloud.google.com/run/docs/configuring/services/cloud-storage-volume-mounts#common-mount-options) for gcsfuse",
+                                            "additionalProperties": true
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "required": [
+                                "nfs"
+                            ],
+                            "properties": {
+                                "nfs": {
+                                    "type": "object",
+                                    "description": "Mount an NFS share. The Cloud Run container must be connected via a VPC connector or direct VPC connection to the subnet where the NFS server is located.",
+                                    "required": [
+                                        "server",
+                                        "path"
+                                    ],
+                                    "examples": [
+                                        {
+                                            "server": "10.0.0.1",
+                                            "path": "/exports/data"
+                                        }
+                                    ],
+                                    "properties": {
+                                        "server": {
+                                            "type": "string",
+                                            "description": "IP address or hostname of the NFS server",
+                                            "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}$|^[a-zA-Z0-9][-a-zA-Z0-9.]*[a-zA-Z0-9]$"
+                                        },
+                                        "path": {
+                                            "type": "string",
+                                            "description": "Path that is exported by the NFS server",
+                                            "pattern": "^/.*"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
         },
         "network": {
             "type": "object",

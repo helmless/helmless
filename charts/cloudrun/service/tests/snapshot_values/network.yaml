@@ -1,4 +1,5 @@
 name: networked-service
+project: my-project
 image: gcr.io/project/image@sha256:abc123
 network:
   vpc: projects/my-project/global/networks/my-vpc

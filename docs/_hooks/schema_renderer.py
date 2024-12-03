@@ -99,6 +99,23 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
                 changelog_path=changelog_path
             ))
 
+    # Render pattern properties if present
+    if 'patternProperties' in prop:
+        md.append("")
+        md.append("---")
+        for pattern, pattern_prop in prop['patternProperties'].items():
+            # Use $id if present, otherwise use the pattern
+            pattern_name = pattern_prop.get('$id', pattern)
+            pattern_prop["pattern"] = pattern
+            md.append("")
+            md.append(_render_property(
+                f"{name}.{pattern_name}",
+                pattern_prop,
+                pattern_prop.get('required', []),
+                level=level + 1,
+                changelog_path=changelog_path
+            ))
+
     if 'oneOf' in prop:
         # Only proceed if any of the oneOf options have properties
         if any('properties' in option for option in prop['oneOf']):

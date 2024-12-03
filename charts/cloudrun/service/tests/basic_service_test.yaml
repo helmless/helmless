@@ -5,6 +5,7 @@ templates:
 set:
   name: my-service
   image: gcr.io/my-project/my-app:v1
+  project: my-project
 
 tests:
   # Required fields
@@ -135,3 +136,19 @@ tests:
       executionEnvironment: invalid
     asserts:
       - failedTemplate: {}
+
+  # Project
+  - it: should set helmless labels
+    asserts:
+      - equal:
+          path: metadata.labels["project"]
+          value: my-project
+      - equal:
+          path: metadata.labels["helmless-chart"]
+          value: google-cloudrun-service
+      - equal:
+          path: metadata.labels["helmless-chart-version"]
+          value: 0.1.0 # x-release-please-version
+      - equal:
+          path: metadata.labels["managed-by"]
+          value: helmless

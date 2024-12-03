@@ -27,7 +27,7 @@ jobs:
         run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
       - name: 🧹 Run Helm Lint
-        run: helm lint ${{ matrix.chart }}
+        run: helm lint ${{ matrix.chart }} --strict --set-string name=my-name --set-string project=my-project
 
       - name: 🧪 Run Helm Test
         run: helm unittest ${{ matrix.chart }}

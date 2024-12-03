@@ -4,6 +4,7 @@ should render minimal configuration:
     kind: Service
     metadata:
       annotations:
+        run.googleapis.com/ingress: all
         run.googleapis.com/launch-stage: BETA
       labels:
         cloud.googleapis.com/location: us-central1
@@ -43,6 +44,7 @@ should render with basic configuration:
     metadata:
       annotations:
         run.googleapis.com/description: A basic service
+        run.googleapis.com/ingress: all
         run.googleapis.com/launch-stage: BETA
       labels:
         cloud.googleapis.com/location: us-central1
@@ -87,6 +89,7 @@ should render with full configuration:
       annotations:
         run.googleapis.com/binary-authorization: "true"
         run.googleapis.com/description: A fully configured service
+        run.googleapis.com/ingress: all
         run.googleapis.com/invoker-iam-disabled: "true"
         run.googleapis.com/launch-stage: GA
         run.googleapis.com/minScale: "1"
@@ -169,6 +172,7 @@ should render with network configuration:
     kind: Service
     metadata:
       annotations:
+        run.googleapis.com/ingress: all
         run.googleapis.com/launch-stage: BETA
       labels:
         cloud.googleapis.com/location: us-central1

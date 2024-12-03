@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: VPC Configuration Tests
+suite: Network Configuration Tests
 templates:
   - manifest.yaml
 set:
@@ -148,5 +148,34 @@ tests:
       network:
         vpc: my-vpc
         subnetwork: invalid/subnetwork/name
+    asserts:
+      - failedTemplate: {}
+
+  # Ingress Tests
+  - it: should set ingress to all by default
+    asserts:
+      - equal:
+          path: metadata.annotations["run.googleapis.com/ingress"]
+          value: all
+
+  - it: should set ingress to internal
+    set:
+      ingress: internal
+    asserts:
+      - equal:
+          path: metadata.annotations["run.googleapis.com/ingress"]
+          value: internal
+
+  - it: should set ingress to internal-and-cloud-load-balancing
+    set:
+      ingress: internal-and-cloud-load-balancing
+    asserts:
+      - equal:
+          path: metadata.annotations["run.googleapis.com/ingress"]
+          value: internal-and-cloud-load-balancing
+
+  - it: should fail when invalid ingress type specified
+    set:
+      ingress: invalid-type
     asserts:
       - failedTemplate: {}

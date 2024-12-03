@@ -20,6 +20,7 @@ metadata:
     {{- with (.Values.autoscaling).minScale }}
     run.googleapis.com/minScale: {{ . | quote }}
     {{- end }}
+    run.googleapis.com/ingress: {{ .Values.ingress | default "all" | quote }}
 spec:
   template:
     metadata:

@@ -1,4 +1,4 @@
 helm 3.14.3
 helm-docs 1.13.1
 pre-commit 3.8.0
-nodejs 22.11.0
+python 3.13.0

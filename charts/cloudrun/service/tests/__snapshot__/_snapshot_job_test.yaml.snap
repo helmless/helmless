@@ -1,4 +1,0 @@
-should render default manifest without errors:
-  1: |
-    apiVersion: run.googleapis.com/v1
-    kind: Job

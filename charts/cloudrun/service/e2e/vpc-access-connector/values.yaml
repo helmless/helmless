@@ -1,0 +1,7 @@
+name: connector-service
+region: europe-west1
+project: helmless
+image: gcr.io/helmless/hello-world:latest
+network:
+  connector: projects/helmless/locations/europe-west1/connectors/default
+  egress: private-ranges-only

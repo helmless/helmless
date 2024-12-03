@@ -1,0 +1,27 @@
+suite: Test Cloud Run service template with different configurations
+templates:
+  - manifest.yaml
+tests:
+  - it: should render minimal configuration
+    values:
+      - snapshot_values/minimal.yaml
+    asserts:
+      - matchSnapshot: {}
+
+  - it: should render with basic configuration
+    values:
+      - snapshot_values/basic.yaml
+    asserts:
+      - matchSnapshot: {}
+
+  - it: should render with network configuration
+    values:
+      - snapshot_values/network.yaml
+    asserts:
+      - matchSnapshot: {}
+
+  - it: should render with full configuration
+    values:
+      - snapshot_values/full.yaml
+    asserts:
+      - matchSnapshot: {}

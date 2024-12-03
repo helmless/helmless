@@ -3,8 +3,13 @@
     "release-type": "helm",
     "packages": {
         "charts/cloudrun/service": {
-            "release-as": "0.1.0",
-            "package-name": "google-cloudrun-service"
+            "release-type": "helm",
+            "package-name": "google-cloudrun-service",
+            "extra-files": [
+                "Chart.yaml",
+                "README.md",
+                "tests/basic_service_test.yaml"
+            ]
         }
     },
     "bump-minor-pre-major": true,

@@ -1,0 +1,78 @@
+suite: CloudSQL Configuration Tests
+templates:
+  - manifest.yaml
+set:
+  name: my-service
+  project: my-project
+
+tests:
+  - it: should not set cloudsql-instances annotation when cloudsql is not configured
+    asserts:
+      - notContains:
+          path: spec.template.metadata.annotations["run.googleapis.com/cloudsql-instances"]
+
+  - it: should configure cloudsql instance in same region
+    set:
+      name: test-service
+      region: us-central1
+      cloudsql:
+        instance: my-instance
+        project: my-project
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/cloudsql-instances"]
+          value: my-project:us-central1:my-instance
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: CLOUD_SQL_CONNECTION
+            value: /cloudsql/my-project:us-central1:my-instance
+
+  - it: should configure cloudsql instance with no region
+    set:
+      name: test-service
+      cloudsql:
+        instance: my-instance
+        project: my-project
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/cloudsql-instances"]
+          value: my-project:us-central1:my-instance
+
+  - it: should configure cloudsql instance in different region
+    set:
+      name: test-service
+      region: us-central1
+      cloudsql:
+        instance: my-instance
+        project: my-project
+        region: europe-west1
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/cloudsql-instances"]
+          value: my-project:europe-west1:my-instance
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: CLOUD_SQL_CONNECTION
+            value: /cloudsql/my-project:europe-west1:my-instance
+
+  - it: should use service region when cloudsql region is not specified
+    set:
+      name: test-service
+      region: asia-east1
+      cloudsql:
+        instance: my-instance
+        project: my-project
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/cloudsql-instances"]
+          value: my-project:asia-east1:my-instance
+      - contains:
+          path: spec.template.spec.containers[0].env
+          any: true
+          content:
+            name: CLOUD_SQL_CONNECTION
+            value: /cloudsql/my-project:asia-east1:my-instance

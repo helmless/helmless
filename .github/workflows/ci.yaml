@@ -10,12 +10,12 @@ on:
 
 jobs:
   lint:
-    name: 🧹 Lint & Test
+    name: 🧹 Lint & Test Charts
     runs-on: ubuntu-latest
     strategy:
       matrix:
         chart:
-          - "charts/cloudrun/service"
+          - 'charts/cloudrun/service'
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
@@ -39,14 +39,14 @@ jobs:
         run: helm template ${{ matrix.chart }}
 
   formatting:
-    name: 🎨 Code Format
+    name: 👀 Static Code Checks
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Helm
-        uses: azure/setup-helm@v4
+      - name: ⚙️ Setup asdf
+        uses: asdf-vm/actions/install@v3
 
       - name: ⚙️ Setup pre-commit
         uses: pre-commit/action@v3.0.1

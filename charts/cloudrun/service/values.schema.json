@@ -637,6 +637,51 @@
                 }
             ]
         },
+        "cloudsql": {
+            "type": "object",
+            "description": "CloudSQL configuration for the Cloud Run service. If not provided, the service will not be connected to any CloudSQL instances.\n\n!!! info\n    Defining this will automatically inject a `CLOUD_SQL_CONNECTION` environment variable with the format `/cloudsql/project:region:instance`. Some libraries will automatically append the required `/.s.PGSQL.5432` suffix to connect to the [correct unix socket](https://cloud.google.com/sql/docs/postgres/connect-run#connect-unix-socket), while others do not. The environment variable is provided without the socket suffix.\n\n",
+            "examples": [
+                {
+                    "$title": "Direct CloudSQL Connection in same region",
+                    "instance": "my-instance",
+                    "project": "my-project"
+                },
+                {
+                    "$title": "Direct CloudSQL Connection in different region",
+                    "instance": "my-instance",
+                    "project": "my-project",
+                    "region": "europe-west1"
+                }
+            ],
+            "required": [
+                "instance",
+                "project"
+            ],
+            "properties": {
+                "instance": {
+                    "type": "string",
+                    "description": "CloudSQL instance name.",
+                    "examples": [
+                        "my-instance"
+                    ]
+                },
+                "project": {
+                    "type": "string",
+                    "description": "CloudSQL project name.",
+                    "examples": [
+                        "my-project"
+                    ]
+                },
+                "region": {
+                    "type": "string",
+                    "description": "CloudSQL region. Defaults to the region of the Cloud Run service.",
+                    "default": ".region",
+                    "examples": [
+                        "us-central1"
+                    ]
+                }
+            }
+        },
         "disableInvokerIamPolicy": {
             "description": "Whether to [disable the invoker IAM policy](https://cloud.google.com/run/docs/securing/managing-access#disable_invoker) for the Cloud Run service. This is useful when using a VPC connector or direct VPC connection to avoid conflicts with the invoker IAM policy.",
             "type": "boolean",

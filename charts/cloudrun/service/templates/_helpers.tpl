@@ -1,4 +1,11 @@
 {{/*
+Get the region from the values or use the default.
+*/}}
+{{- define "helmless.cloudrun.region" -}}
+{{- .Values.region | default "us-central1" }}
+{{- end -}}
+
+{{/*
 Create the fully qualified image name.
 */}}
 {{- define "helmless.image" -}}
@@ -53,3 +60,41 @@ Build network interfaces configuration for Cloud Run
 {{ dict "network" .vpc "subnetwork" .subnetwork "tags" (.tags | default list) | toJson }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Constructs the CloudSQL connection string in the format project:region:instance
+*/}}
+{{- define "helmless.cloudrun.cloudsql" -}}
+{{- if .Values.cloudsql -}}
+{{- printf "%s:%s:%s" .Values.cloudsql.project (.Values.cloudsql.region | default (include "helmless.cloudrun.region" .)) .Values.cloudsql.instance -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Set environment variables for Cloud Run
+*/}}
+{{- define "helmless.cloudrun.env" -}}
+{{- range $key, $value := .Values.env }}
+- name: {{ $key | quote }}
+  value: {{ $value | quote }}
+{{- end }}
+{{- range $key, $value := .Values.secrets }}
+- name: {{ $key | quote }}
+  valueFrom:
+    secretKeyRef:
+      {{- if typeIs "string" $value }}
+      name: {{ $value | quote }}
+      key: "latest"
+      {{- else if $value.project }}
+      name: {{ $key | quote }}
+      key: {{ $value.version | default "latest" | quote }}
+      {{- else }}
+      name: {{ $value.secret | quote }}
+      key: {{ $value.version | default "latest" | quote }}
+      {{- end }}
+{{- end }}
+{{- with include "helmless.cloudrun.cloudsql" . }}
+- name: CLOUD_SQL_CONNECTION
+  value: /cloudsql/{{ . }}
+{{- end }}
+{{- end }}

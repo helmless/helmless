@@ -5,7 +5,7 @@ kind: Service
 metadata:
   name: {{ .Values.name | quote }}
   labels:
-    cloud.googleapis.com/location: {{ .Values.region | default "us-central1" | quote }}
+    cloud.googleapis.com/location: {{ include "helmless.cloudrun.region" . | quote }}
   annotations:
     {{- with .Values.description }}
     run.googleapis.com/description: {{ . | quote }}
@@ -54,6 +54,9 @@ spec:
         {{- with .Values.sessionAffinity }}
         run.googleapis.com/session-affinity: {{ . | quote }}
         {{- end }}
+        {{- with include "helmless.cloudrun.cloudsql" . }}
+        run.googleapis.com/cloudsql-instances: {{ . }}
+        {{- end }}
     spec:
       {{- with .Values.serviceAccountName }}
       serviceAccountName: {{ . }}
@@ -89,25 +92,6 @@ spec:
           nodeSelector:
             run.googleapis.com/accelerator: "nvidia-l4"
           {{- end }}
-          {{- if or .Values.env .Values.secrets }}
-          env:
-          {{- range $key, $value := .Values.env }}
-          - name: {{ $key | quote }}
-            value: {{ $value | quote }}
-          {{- end }}
-          {{- range $key, $value := .Values.secrets }}
-          - name: {{ $key | quote }}
-            valueFrom:
-              secretKeyRef:
-                {{- if typeIs "string" $value }}
-                name: {{ $value | quote }}
-                key: "latest"
-                {{- else if $value.project }}
-                name: {{ $key | quote }}
-                key: {{ $value.version | default "latest" | quote }}
-                {{- else }}
-                name: {{ $value.secret | quote }}
-                key: {{ $value.version | default "latest" | quote }}
-                {{- end }}
-          {{- end }}
+          {{- if or .Values.env .Values.secrets .Values.cloudsql }}
+          env: {{- include "helmless.cloudrun.env" . | nindent 10 }}
           {{- end }}

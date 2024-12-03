@@ -176,8 +176,44 @@ should render with full configuration:
                 initialDelaySeconds: 5
                 periodSeconds: 10
                 timeoutSeconds: 1
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+                  readOnly: false
+                - mountPath: /etc/config
+                  name: config
+                  readOnly: false
+                - mountPath: /data
+                  name: data
+                  readOnly: true
+                - mountPath: /shared
+                  name: shared
+                  readOnly: false
           serviceAccountName: my-service-account
           timeoutSeconds: 60
+          volumes:
+            - emptyDir:
+                medium: Memory
+                sizeLimit: 512Mi
+              name: cache
+            - name: config
+              secret:
+                items:
+                  - key: latest
+                    path: config.json
+                  - key: "2"
+                    path: config.v2.json
+                secretName: app-config
+            - csi:
+                driver: gcsfuse.run.googleapis.com
+                volumeAttributes:
+                  bucketName: my-data-bucket
+                  mountOptions: dir-mode=0755,file-mode=0644,gid=1000,uid=1000
+              name: data
+            - name: shared
+              nfs:
+                path: /exports/data
+                server: 10.0.0.1
 should render with network configuration:
   1: |
     apiVersion: serving.knative.dev/v1

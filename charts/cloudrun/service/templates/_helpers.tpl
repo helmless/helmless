@@ -108,3 +108,39 @@ Set environment variables for Cloud Run
   value: /cloudsql/{{ . }}
 {{- end }}
 {{- end }}
+
+{{/*
+Render volume configuration based on type
+*/}}
+{{- define "helmless.cloudrun.volume" -}}
+{{- $volume := .volume -}}
+{{- if $volume.secret -}}
+secret:
+  secretName: {{ $volume.secret.name | quote }}
+  items:
+    {{- range $volume.secret.items }}
+    - key: {{ .version | default "latest" | quote }}
+      path: {{ .path | quote }}
+    {{- end }}
+{{- else if $volume.emptyDir -}}
+emptyDir:
+  medium: Memory
+  sizeLimit: {{ $volume.emptyDir.size | quote }}
+{{- else if $volume.gcs -}}
+csi:
+  driver: "gcsfuse.run.googleapis.com"
+  volumeAttributes:
+    bucketName: {{ $volume.gcs.bucket | quote }}
+    {{- with $volume.gcs.mountOptions }}
+    {{- $options := "" -}}
+    {{- range $key, $value := . -}}
+    {{- $options = printf "%s%s=%s," $options $key $value -}}
+    {{- end }}
+    mountOptions: {{ $options | trimSuffix "," | quote }}
+    {{- end }}
+{{- else if $volume.nfs -}}
+nfs:
+  server: {{ $volume.nfs.server | quote }}
+  path: {{ $volume.nfs.path | quote }}
+{{- end -}}
+{{- end -}}

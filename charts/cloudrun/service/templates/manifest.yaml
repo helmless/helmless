@@ -1,5 +1,6 @@
 {{- include "helmless.cloudrun.validateCPU" . }}
 {{- include "helmless.cloudrun.validateProbes" . }}
+{{- include "helmless.cloudrun.validateVolumes" . }}
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -96,3 +97,18 @@ spec:
           {{- if or .Values.env .Values.secrets .Values.cloudsql }}
           env: {{- include "helmless.cloudrun.env" . | nindent 10 }}
           {{- end }}
+          {{- with .Values.volumes }}
+          volumeMounts:
+            {{- range $name, $volume := . }}
+            - name: {{ $name | quote }}
+              mountPath: {{ $volume.mountPath | quote }}
+              readOnly: {{ $volume.readOnly | default false }}
+            {{- end }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- range $name, $volume := . }}
+        - name: {{ $name | quote }}
+          {{- include "helmless.cloudrun.volume" (dict "volume" $volume "name" $name) | nindent 10 }}
+        {{- end }}
+      {{- end }}

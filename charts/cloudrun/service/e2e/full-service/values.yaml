@@ -1,0 +1,85 @@
+name: full-service
+project: helmless
+image:
+  name: hello-world
+  tag: latest
+  repository: helmless
+  registry: gcr.io
+description: 'A fully configured service'
+revisionName: full-v1
+region: europe-west1
+launchStage: GA
+binaryAuthorization: true
+disableInvokerIamPolicy: true
+encryptionKey: projects/helmless/locations/global/keyRings/cloudrun/cryptoKeys/service-key
+customAudiences: ['audience1', 'audience2']
+serviceAccountName: full-service@helmless.iam.gserviceaccount.com
+containerPort: 8080
+containerName: main-container
+command: ['/bin/sh']
+args: ['-c', 'echo hello']
+resources:
+  limits:
+    cpu: 4
+    memory: '2Gi'
+  startupBoost: true
+autoscaling:
+  minScale: 1
+  maxScale: 10
+  maxConcurrentRequests: 50
+  timeoutSeconds: 60
+network:
+  vpc: projects/helmless/global/networks/default
+  subnetwork: projects/helmless/regions/europe-west1/subnetworks/default
+  egress: all-traffic
+env:
+  ENV_VAR1: 'value1'
+  ENV_VAR2: 'value2'
+secrets:
+  SECRET1: 'app-secret'
+  SECRET2:
+    secret: 'another-secret'
+    version: '1'
+  SECRET3:
+    secret: 'other-secret'
+    project: 'other-project'
+    version: 'latest'
+volumes:
+  config:
+    mountPath: /etc/config
+    secret:
+      name: app-config
+      items:
+        - path: config.json
+        - version: '2'
+          path: config.v2.json
+  cache:
+    mountPath: /cache
+    emptyDir:
+      size: 512Mi
+  data:
+    mountPath: /data
+    readOnly: true
+    gcs:
+      bucket: helmless-data
+      mountOptions:
+        file-mode: '0644'
+        dir-mode: '0755'
+        uid: '1000'
+        gid: '1000'
+startupProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  timeoutSeconds: 1
+  periodSeconds: 10
+  failureThreshold: 3
+  initialDelaySeconds: 5
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  timeoutSeconds: 1
+  periodSeconds: 10
+  failureThreshold: 3
+  initialDelaySeconds: 5

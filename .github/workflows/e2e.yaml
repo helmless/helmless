@@ -59,10 +59,10 @@ jobs:
         id: deploy
         with:
           gcp_project: ${{ secrets.GCP_PROJECT_ID }}
-          dry_run: ${{ env.DRY_RUN }}
+          dry_run: ${{ !(matrix.service == 'minimal-service') || false }}
 
       - name: 💣 Cleanup Service
-        if: always() && ${{ env.DRY_RUN == 'false' }}
+        if: always() && ${{ matrix.service == 'minimal-service' }}
         shell: bash
         run: |
           # Extract service name from values.yaml

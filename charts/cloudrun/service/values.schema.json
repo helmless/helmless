@@ -6,7 +6,6 @@
     "description": "A Helm chart to template the manifest of a Cloud Run service or job.",
     "required": [
         "name",
-        "image",
         "project"
     ],
     "type": "object",

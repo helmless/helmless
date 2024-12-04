@@ -1,10 +1,10 @@
 name: full-service
 project: helmless
 image:
-  name: hello-world
+  name: hello
   tag: latest
-  repository: helmless
-  registry: gcr.io
+  repository: cloudrun/container
+  registry: us-docker.pkg.dev
 description: 'A fully configured service'
 revisionName: full-v1
 region: europe-west1

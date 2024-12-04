@@ -1,7 +1,7 @@
 name: volumes-service
 region: europe-west1
 project: helmless
-image: gcr.io/helmless/hello-world:latest
+image: 'us-docker.pkg.dev/cloudrun/container/hello:latest'
 volumes:
   config:
     mountPath: /etc/config

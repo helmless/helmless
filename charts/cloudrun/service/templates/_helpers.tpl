@@ -11,7 +11,7 @@ Compute common labels
 {{- define "helmless.labels" -}}
 project: {{ .Values.project | quote }}
 helmless-chart: {{ .Chart.Name | quote }}
-helmless-chart-version: {{ .Chart.Version | quote }}
+helmless-chart-version: {{ .Chart.Version | replace "." "_" | quote }}
 managed-by: helmless
 {{- end }}
 

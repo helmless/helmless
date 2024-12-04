@@ -9,7 +9,7 @@ should render minimal configuration:
       labels:
         cloud.googleapis.com/location: us-central1
         helmless-chart: google-cloudrun-service
-        helmless-chart-version: 0.1.0
+        helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
       name: minimal-service
@@ -53,7 +53,7 @@ should render with basic configuration:
       labels:
         cloud.googleapis.com/location: us-central1
         helmless-chart: google-cloudrun-service
-        helmless-chart-version: 0.1.0
+        helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
       name: basic-service
@@ -104,7 +104,7 @@ should render with full configuration:
       labels:
         cloud.googleapis.com/location: us-west1
         helmless-chart: google-cloudrun-service
-        helmless-chart-version: 0.1.0
+        helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
       name: full-service
@@ -225,7 +225,7 @@ should render with network configuration:
       labels:
         cloud.googleapis.com/location: us-central1
         helmless-chart: google-cloudrun-service
-        helmless-chart-version: 0.1.0
+        helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
       name: networked-service

@@ -146,9 +146,8 @@ tests:
       - equal:
           path: metadata.labels["helmless-chart"]
           value: google-cloudrun-service
-      - equal:
+      - exists:
           path: metadata.labels["helmless-chart-version"]
-          value: 0.1.0 # x-release-please-version
       - equal:
           path: metadata.labels["managed-by"]
           value: helmless

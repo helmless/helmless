@@ -33,4 +33,4 @@ jobs:
 
       # this is required because the version changes on every release
       - name: 🧪 Update Snapshots
-        run: helm unittest charts/cloudrun/service --update-snapshots
+        run: helm unittest charts/cloudrun/service --update-snapshot

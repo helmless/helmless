@@ -50,6 +50,7 @@ jobs:
 
       - name: 📜 Template Helmless Chart
         uses: helmless/action@main
+        id: template
         with:
           files: ${{ matrix.service }}/values.yaml
           chart: ./charts/cloudrun/service
@@ -58,7 +59,7 @@ jobs:
         uses: helmless/google-cloudrun-deploy-action@main
         id: deploy
         with:
-          gcp_project: ${{ secrets.GCP_PROJECT_ID }}
+          gcp_project: ${{ vars.GCP_PROJECT_ID }}
           dry_run: ${{ !(matrix.service == 'minimal-service') || false }}
 
       - name: 💣 Cleanup Service
@@ -66,10 +67,10 @@ jobs:
         shell: bash
         run: |
           # Extract service name from values.yaml
-          SERVICE_NAME=$(yq eval '.name' ${{ matrix.service }}/values.yaml)
+          SERVICE_NAME=$(yq eval '.metadata.name' ${{ steps.template.outputs.manifest_path }})
 
           echo "Deleting service: $SERVICE_NAME in region: $REGION"
           gcloud run services delete $SERVICE_NAME \
-            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --project=${{ vars.GCP_PROJECT_ID }} \
             --region=${{ steps.deploy.outputs.region }} \
             --quiet

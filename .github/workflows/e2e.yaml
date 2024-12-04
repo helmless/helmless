@@ -36,10 +36,6 @@ jobs:
     strategy:
       matrix:
         service: ${{ fromJson(needs.discover.outputs.services) }}
-        dry_run: [true]
-        include:
-          - service: charts/cloudrun/service/e2e/minimal-service
-            dry_run: false
       fail-fast: false
 
     steps:
@@ -64,18 +60,4 @@ jobs:
         id: deploy
         with:
           gcp_project: ${{ vars.GCP_PROJECT_ID }}
-          dry_run: ${{ matrix.dry_run }}
-
-      - name: 💣 Cleanup Service
-        if: always() && matrix.dry_run == false
-        shell: bash
-        run: |
-          # Extract service name from values.yaml
-          SERVICE_NAME=$(yq eval '.metadata.name' ${{ steps.template.outputs.manifest_path }})
-
-          echo "Deleting service: $SERVICE_NAME in region: $REGION"
-          gcloud run services delete $SERVICE_NAME \
-            --project=${{ vars.GCP_PROJECT_ID }} \
-            --region=${{ steps.deploy.outputs.region }} \
-            --quiet \
-            --async
+          dry_run: true

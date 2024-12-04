@@ -7,8 +7,7 @@
             "package-name": "google-cloudrun-service",
             "extra-files": [
                 "Chart.yaml",
-                "README.md",
-                "tests/basic_service_test.yaml"
+                "README.md"
             ]
         }
     },

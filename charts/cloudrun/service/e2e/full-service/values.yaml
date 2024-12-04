@@ -10,7 +10,6 @@ revisionName: full-v1
 region: europe-west1
 launchStage: GA
 binaryAuthorization: true
-disableInvokerIamPolicy: true
 encryption:
   key: service-key
   keyring: cloudrun

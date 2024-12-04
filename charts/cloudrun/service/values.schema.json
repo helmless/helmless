@@ -949,7 +949,7 @@
             }
         },
         "disableInvokerIamPolicy": {
-            "description": "Whether to [disable the invoker IAM policy](https://cloud.google.com/run/docs/securing/managing-access#disable_invoker) for the Cloud Run service. This is useful when using a VPC connector or direct VPC connection to avoid conflicts with the invoker IAM policy.",
+            "description": "Whether to [disable the invoker IAM policy](https://cloud.google.com/run/docs/securing/managing-access#disable_invoker) for the Cloud Run service. This is useful when using a VPC connector or direct VPC connection to avoid conflicts with the invoker IAM policy. Must be first requested via invite and is not generally available.",
             "type": "boolean",
             "default": false
         },

@@ -14,7 +14,7 @@ metadata:
     {{- end }}
     run.googleapis.com/launch-stage: {{ .Values.launchStage | default "BETA" | quote }}
     {{- if .Values.binaryAuthorization }}
-    run.googleapis.com/binary-authorization: "true"
+    run.googleapis.com/binary-authorization: "default"
     {{- end }}
     {{- if .Values.disableInvokerIamPolicy }}
     run.googleapis.com/invoker-iam-disabled: "true"

@@ -95,7 +95,7 @@ should render with full configuration:
     kind: Service
     metadata:
       annotations:
-        run.googleapis.com/binary-authorization: "true"
+        run.googleapis.com/binary-authorization: default
         run.googleapis.com/custom-audiences: '["audience1","audience2"]'
         run.googleapis.com/description: A fully configured service
         run.googleapis.com/ingress: all

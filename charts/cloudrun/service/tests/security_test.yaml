@@ -28,13 +28,13 @@ tests:
       - notExists:
           path: metadata.annotations["run.googleapis.com/binary-authorization"]
 
-  - it: should set binary authorization when enabled
+  - it: should set binary authorization to default when enabled
     set:
       binaryAuthorization: true
     asserts:
       - equal:
           path: metadata.annotations["run.googleapis.com/binary-authorization"]
-          value: 'true'
+          value: 'default'
 
   - it: should not set binary authorization when disabled
     set:

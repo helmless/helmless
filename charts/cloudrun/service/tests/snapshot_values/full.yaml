@@ -11,7 +11,9 @@ region: us-west1
 launchStage: GA
 binaryAuthorization: true
 disableInvokerIamPolicy: true
-encryptionKey: projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
+encryption:
+  key: my-key
+  keyring: my-keyring
 customAudiences: ['audience1', 'audience2']
 serviceAccountName: my-service-account
 containerPort: 8080

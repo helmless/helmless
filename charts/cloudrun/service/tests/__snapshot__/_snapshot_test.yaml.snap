@@ -116,7 +116,7 @@ should render with full configuration:
             autoscaling.knative.dev/minScale: "1"
             run.googleapis.com/cpu-throttling: "true"
             run.googleapis.com/custom-audiences: '["audience1","audience2"]'
-            run.googleapis.com/encryption-key: projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
+            run.googleapis.com/encryption-key: projects/my-project/locations/us-west1/keyRings/my-keyring/cryptoKeys/my-key
             run.googleapis.com/execution-environment: gen2
             run.googleapis.com/secrets: SECRET3:projects/other-project/secrets/other-secret
             run.googleapis.com/startup-cpu-boost: "true"

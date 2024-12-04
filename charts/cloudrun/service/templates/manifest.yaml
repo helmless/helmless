@@ -30,8 +30,8 @@ spec:
       name: {{ printf "%s-%s" .Values.name .Values.revisionName | quote }}
       {{- end }}
       annotations:
-        {{- with .Values.encryptionKey }}
-        run.googleapis.com/encryption-key: {{ . | quote }}
+        {{- if .Values.encryption }}
+        run.googleapis.com/encryption-key: {{ printf "projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s" .Values.project (include "helmless.cloudrun.region" .) .Values.encryption.keyring .Values.encryption.key | quote }}
         {{- end }}
         {{- with .Values.customAudiences }}
         run.googleapis.com/custom-audiences: {{ . | toJson | quote }}

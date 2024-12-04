@@ -49,17 +49,49 @@ tests:
       - notExists:
           path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
 
-  - it: should set encryption key when specified
+  - it: should set encryption key using service project and default region
     set:
-      encryptionKey: projects/my-project/locations/global/keyRings/my-keyring/cryptoKeys/my-key
+      encryption:
+        key: my-key
+        keyring: my-keyring
     asserts:
       - equal:
           path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
-          value: projects/my-project/locations/global/keyRings/my-keyring/cryptoKeys/my-key
+          value: projects/my-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key
 
-  - it: should fail when encryption key format is invalid
+  - it: should use specified region for encryption key
     set:
-      encryptionKey: invalid-key-format
+      region: europe-west1
+      encryption:
+        key: my-key
+        keyring: my-keyring
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
+          value: projects/my-project/locations/europe-west1/keyRings/my-keyring/cryptoKeys/my-key
+
+  - it: should use different project for encryption key
+    set:
+      project: different-project
+      encryption:
+        key: my-key
+        keyring: my-keyring
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
+          value: projects/different-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key
+
+  - it: should fail when encryption key is missing keyring
+    set:
+      encryption:
+        key: my-key
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when encryption key is missing key name
+    set:
+      encryption:
+        keyring: my-keyring
     asserts:
       - failedTemplate: {}
 

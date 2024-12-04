@@ -11,7 +11,9 @@ region: europe-west1
 launchStage: GA
 binaryAuthorization: true
 disableInvokerIamPolicy: true
-encryptionKey: projects/helmless/locations/global/keyRings/cloudrun/cryptoKeys/service-key
+encryption:
+  key: service-key
+  keyring: cloudrun
 customAudiences: ['audience1', 'audience2']
 serviceAccountName: full-service@helmless.iam.gserviceaccount.com
 containerPort: 8080

@@ -67,7 +67,7 @@ jobs:
           dry_run: ${{ matrix.dry_run }}
 
       - name: 💣 Cleanup Service
-        if: always() && !matrix.dry_run
+        if: always()
         shell: bash
         run: |
           # Extract service name from values.yaml
@@ -77,4 +77,5 @@ jobs:
           gcloud run services delete $SERVICE_NAME \
             --project=${{ vars.GCP_PROJECT_ID }} \
             --region=${{ steps.deploy.outputs.region }} \
-            --quiet
+            --quiet \
+            --async

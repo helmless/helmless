@@ -29,13 +29,14 @@ tests:
       - failedTemplate: {}
 
   # RevisionName
-  - it: should set revision name when specified
+  - it: should set revision name when specified and prefix it with service name
     set:
-      revisionName: my-custom-revision
+      name: my-service
+      revisionName: rev-v1
     asserts:
       - equal:
           path: spec.template.metadata.name
-          value: my-custom-revision
+          value: my-service-rev-v1
 
   # ContainerName
   - it: should set container name when specified

@@ -26,8 +26,8 @@ metadata:
 spec:
   template:
     metadata:
-      {{- with .Values.revisionName }}
-      name: {{ . | quote }}
+      {{- if .Values.revisionName }}
+      name: {{ printf "%s-%s" .Values.name .Values.revisionName | quote }}
       {{- end }}
       annotations:
         {{- with .Values.encryptionKey }}

@@ -70,7 +70,7 @@
             "$ref": "#/$defs/imageProperties"
         },
         "revisionName": {
-            "description": "The name of the Cloud Run revision to deploy. If not provided, a random name will be generated.",
+            "description": "The name of the Cloud Run revision to deploy. If not provided, a random name will be generated. The revision will always be prefixed with the service name.",
             "type": "string",
             "examples": [
                 "my-revision"

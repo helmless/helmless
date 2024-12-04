@@ -43,7 +43,7 @@ jobs:
     if: ${{ needs.release.outputs.releases_created }}
     strategy:
       matrix:
-        path: ${{ fromJson(needs.release.outputs.paths_released) }}
+        path: ${{ fromJson(needs.release.outputs.paths_released || '[]') }}
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
       - name: ☁️ Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: "*.tgz"
+          files: '*.tgz'
           tag_name: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

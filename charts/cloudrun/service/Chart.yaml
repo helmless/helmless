@@ -1,11 +1,12 @@
 apiVersion: v2
 name: google-cloudrun-service
-description: Templates a Google Cloud Run Service YAML manifest that can be
-  deployed using the Google Cloud CLI.
+description: >-
+  Templates a Google Cloud Run Service YAML manifest that can be deployed using
+  the Google Cloud CLI.
 type: application
 icon: https://www.svgrepo.com/show/375383/cloud-run.svg
 version: 0.1.0
 maintainers:
-  - name: 'Michael Reichenbach (Silthus)'
-    email: 'me@silthus.net'
-    url: 'https://github.com/silthus'
+  - name: Michael Reichenbach (Silthus)
+    email: me@silthus.net
+    url: https://github.com/silthus

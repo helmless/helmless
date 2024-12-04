@@ -99,14 +99,14 @@ tests:
   - it: should not set custom audiences when not specified
     asserts:
       - notExists:
-          path: spec.template.metadata.annotations["run.googleapis.com/custom-audiences"]
+          path: metadata.annotations["run.googleapis.com/custom-audiences"]
 
   - it: should set custom audiences when specified
     set:
       customAudiences: ['https://example.com', 'my-audience']
     asserts:
       - equal:
-          path: spec.template.metadata.annotations["run.googleapis.com/custom-audiences"]
+          path: metadata.annotations["run.googleapis.com/custom-audiences"]
           value: '["https://example.com","my-audience"]'
 
   # Disable Invoker IAM Policy (Service-level annotation)

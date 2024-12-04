@@ -67,7 +67,7 @@ jobs:
           dry_run: ${{ matrix.dry_run }}
 
       - name: 💣 Cleanup Service
-        if: always()
+        if: always() && matrix.dry_run == false
         shell: bash
         run: |
           # Extract service name from values.yaml

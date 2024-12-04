@@ -23,6 +23,9 @@ metadata:
     run.googleapis.com/minScale: {{ . | quote }}
     {{- end }}
     run.googleapis.com/ingress: {{ .Values.ingress | default "all" | quote }}
+    {{- with .Values.customAudiences }}
+    run.googleapis.com/custom-audiences: {{ . | toJson | quote }}
+    {{- end }}
 spec:
   template:
     metadata:
@@ -32,9 +35,6 @@ spec:
       annotations:
         {{- if .Values.encryption }}
         run.googleapis.com/encryption-key: {{ printf "projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s" .Values.project (include "helmless.cloudrun.region" .) .Values.encryption.keyring .Values.encryption.key | quote }}
-        {{- end }}
-        {{- with .Values.customAudiences }}
-        run.googleapis.com/custom-audiences: {{ . | toJson | quote }}
         {{- end }}
         {{- with include "helmless.crossProjectSecrets" .Values.secrets }}
         run.googleapis.com/secrets: {{ . | quote }}

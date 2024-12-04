@@ -1,0 +1,114 @@
+{{- include "helmless.cloudrun.validateCPU" . }}
+{{- include "helmless.cloudrun.validateProbes" . }}
+{{- include "helmless.cloudrun.validateVolumes" . }}
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {{ .Values.name | quote }}
+  labels:
+    cloud.googleapis.com/location: {{ include "helmless.cloudrun.region" . | quote }}
+    {{- include "helmless.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.description }}
+    run.googleapis.com/description: {{ . | quote }}
+    {{- end }}
+    run.googleapis.com/launch-stage: {{ .Values.launchStage | default "BETA" | quote }}
+    {{- if .Values.binaryAuthorization }}
+    run.googleapis.com/binary-authorization: "default"
+    {{- end }}
+    {{- if .Values.disableInvokerIamPolicy }}
+    run.googleapis.com/invoker-iam-disabled: "true"
+    {{- end }}
+    {{- with (.Values.autoscaling).minScale }}
+    run.googleapis.com/minScale: {{ . | quote }}
+    {{- end }}
+    run.googleapis.com/ingress: {{ .Values.ingress | default "all" | quote }}
+    {{- with .Values.customAudiences }}
+    run.googleapis.com/custom-audiences: {{ . | toJson | quote }}
+    {{- end }}
+spec:
+  template:
+    metadata:
+      {{- if .Values.revisionName }}
+      name: {{ printf "%s-%s" .Values.name .Values.revisionName | quote }}
+      {{- end }}
+      annotations:
+        {{- if .Values.encryption }}
+        run.googleapis.com/encryption-key: {{ printf "projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s" .Values.project (include "helmless.cloudrun.region" .) .Values.encryption.keyring .Values.encryption.key | quote }}
+        {{- end }}
+        {{- with include "helmless.crossProjectSecrets" .Values.secrets }}
+        run.googleapis.com/secrets: {{ . | quote }}
+        {{- end }}
+        autoscaling.knative.dev/minScale: {{ (.Values.autoscaling).minScale | default 0 | quote }}
+        autoscaling.knative.dev/maxScale: {{ (.Values.autoscaling).maxScale | default 100 | quote }}
+        run.googleapis.com/execution-environment: {{ .Values.executionEnvironment | default "gen2" | quote }}
+        {{- if .Values.network }}
+        {{- with .Values.network.connector }}
+        run.googleapis.com/vpc-access-connector: {{ . | quote }}
+        {{- end }}
+        run.googleapis.com/vpc-access-egress: {{ .Values.network.egress | default "private-ranges-only" | quote }}
+        {{- if and .Values.network.vpc .Values.network.subnetwork }}
+        run.googleapis.com/network-interfaces: {{ include "helmless.cloudrun.networkInterfaces" .Values.network | quote }}
+        {{- end }}
+        {{- end }}
+        run.googleapis.com/cpu-throttling: {{ include "helmless.cloudrun.cpuThrottling" . | quote }}
+        run.googleapis.com/startup-cpu-boost: {{ (.Values.resources).startupBoost | default false | quote }}
+        {{- with .Values.sessionAffinity }}
+        run.googleapis.com/session-affinity: {{ . | quote }}
+        {{- end }}
+        {{- with include "helmless.cloudrun.cloudsql" . }}
+        run.googleapis.com/cloudsql-instances: {{ . }}
+        {{- end }}
+    spec:
+      {{- with .Values.serviceAccountName }}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      containerConcurrency: {{ (.Values.autoscaling).maxConcurrentRequests | default 80 }}
+      timeoutSeconds: {{ (.Values.autoscaling).timeoutSeconds | default 300 }}
+      containers:
+        - image: {{ include "helmless.image" . | quote }}
+          {{- with .Values.containerName }}
+          name: {{ . | quote }}
+          {{- end }}
+          {{- with .Values.command }}
+          command:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.args }}
+          args:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: {{ .Values.http2 | default false | ternary "h2c" "http1" }}
+              containerPort: {{ .Values.containerPort | default 8080 }}
+          {{- include "helmless.cloudrun.startupProbe" . | nindent 10 }}
+          {{- include "helmless.cloudrun.livenessProbe" . | nindent 10 }}
+          resources:
+            limits:
+              cpu: {{ ((.Values.resources).limits).cpu | default 1 | quote }}
+              memory: {{ ((.Values.resources).limits).memory | default "512Mi" | quote }}
+              {{- if (.Values.resources).gpu }}
+              nvidia.com/gpu: "1"
+              {{- end }}
+          {{- if (.Values.resources).gpu }}
+          nodeSelector:
+            run.googleapis.com/accelerator: "nvidia-l4"
+          {{- end }}
+          {{- if or .Values.env .Values.secrets .Values.cloudsql }}
+          env: {{- include "helmless.cloudrun.env" . | nindent 10 }}
+          {{- end }}
+          {{- with .Values.volumes }}
+          volumeMounts:
+            {{- range $name, $volume := . }}
+            - name: {{ $name | quote }}
+              mountPath: {{ $volume.mountPath | quote }}
+              readOnly: {{ $volume.readOnly | default false }}
+            {{- end }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- range $name, $volume := . }}
+        - name: {{ $name | quote }}
+          {{- include "helmless.cloudrun.volume" (dict "volume" $volume "name" $name) | nindent 10 }}
+        {{- end }}
+      {{- end }}

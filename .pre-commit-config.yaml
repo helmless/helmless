@@ -7,15 +7,19 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.15
+  - repo: local
     hooks:
-      - id: helmlint
-
-  - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.29.4
-    hooks:
-      - id: check-jsonschema
-        files: ^charts/cloudrun/service/values.schema.json$
-        args:
-          ['--check-metaschema', 'charts/cloudrun/service/values.schema.json']
+      - id: helm-unittest
+        name: Helm-unittest
+        files: ^charts/.*$
+        entry: bin/pre-commit-hooks/helm-unittest.sh
+        language: script
+        pass_filenames: false
+        always_run: true
+      - id: helm-lint
+        name: Helm-lint
+        files: ^charts/.*$
+        entry: bin/pre-commit-hooks/helm-lint.sh
+        language: script
+        pass_filenames: false
+        always_run: true

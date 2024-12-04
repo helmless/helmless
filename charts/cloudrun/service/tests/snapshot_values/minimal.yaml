@@ -1,0 +1,3 @@
+name: minimal-service
+project: my-project
+image: gcr.io/project/image

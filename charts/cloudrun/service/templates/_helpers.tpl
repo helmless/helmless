@@ -1,14 +1,24 @@
 {{/*
-Expand the name of the chart.
+Get the region from the values or use the default.
 */}}
-{{- define "serverless-helm.cloudrun.name" -}}
-{{- default .Values.name | trunc 63 | trimSuffix "-" }}
+{{- define "helmless.cloudrun.region" -}}
+{{- .Values.region | default "us-central1" }}
+{{- end -}}
+
+{{/*
+Compute common labels
+*/}}
+{{- define "helmless.labels" -}}
+project: {{ .Values.project | quote }}
+helmless-chart: {{ .Chart.Name | quote }}
+helmless-chart-version: {{ .Chart.Version | replace "." "_" | quote }}
+managed-by: helmless
 {{- end }}
 
 {{/*
 Create the fully qualified image name.
 */}}
-{{- define "serverless-helm.cloudrun.image" -}}
+{{- define "helmless.image" -}}
 {{- if typeIs "string" .Values.image }}
 {{- .Values.image }}
 {{- else }}
@@ -27,82 +37,110 @@ Create the fully qualified image name.
 {{- end }}
 
 {{/*
-The container port.
+Generate the cross-project secrets annotation value.
 */}}
-{{- define "serverless-helm.cloudrun.containerPort" -}}
-{{- default 8080 .Values.containerPort | int }}
+{{- define "helmless.crossProjectSecrets" -}}
+{{- $crossProjectSecrets := list }}
+{{- range $key, $value := . }}
+{{- if and (not (typeIs "string" $value)) $value.project }}
+{{- $crossProjectSecrets = append $crossProjectSecrets (printf "%s:projects/%s/secrets/%s" $key $value.project $value.secret) }}
+{{- end }}
+{{- end }}
+{{- join "," $crossProjectSecrets }}
 {{- end }}
 
 {{/*
-Sanitizes and formats an env variable to conform with the CloudRun spec.
+Get CPU throttling value with proper defaults
 */}}
-{{- define "serverless-helm.cloudrun.env" -}}
+{{- define "helmless.cloudrun.cpuThrottling" -}}
+{{- $cpuThrottling := "true" -}}
+{{- if hasKey .Values "resources" -}}
+  {{- if hasKey .Values.resources "cpuThrottling" -}}
+    {{- $cpuThrottling = .Values.resources.cpuThrottling | toString -}}
+  {{- end -}}
+{{- end -}}
+{{- $cpuThrottling -}}
+{{- end -}}
+
 {{/*
-Helper to map environment variables and secrets to a envVars list.
+Build network interfaces configuration for Cloud Run
 */}}
-{{- with .Values.env }}
-{{- range $key, $value := . }}
-{{- if $value }}
+{{- define "helmless.cloudrun.networkInterfaces" -}}
+{{- if and .vpc .subnetwork -}}
+{{ list (dict "network" .vpc "subnetwork" .subnetwork "tags" (.tags | default list)) | toJson }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Constructs the CloudSQL connection string in the format project:region:instance
+*/}}
+{{- define "helmless.cloudrun.cloudsql" -}}
+{{- if .Values.cloudsql -}}
+{{- printf "%s:%s:%s" .Values.cloudsql.project (.Values.cloudsql.region | default (include "helmless.cloudrun.region" .)) .Values.cloudsql.instance -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Set environment variables for Cloud Run
+*/}}
+{{- define "helmless.cloudrun.env" -}}
+{{- range $key, $value := .Values.env }}
 - name: {{ $key | quote }}
   value: {{ $value | quote }}
 {{- end }}
+{{- range $key, $value := .Values.secrets }}
+- name: {{ $key | quote }}
+  valueFrom:
+    secretKeyRef:
+      {{- if typeIs "string" $value }}
+      name: {{ $value | quote }}
+      key: "latest"
+      {{- else if $value.project }}
+      name: {{ $key | quote }}
+      key: {{ $value.version | default "latest" | quote }}
+      {{- else }}
+      name: {{ $value.secret | quote }}
+      key: {{ $value.version | default "latest" | quote }}
+      {{- end }}
 {{- end }}
-{{- end }}
-{{- end }}
-
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "serverless-helm.cloudrun.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- with include "helmless.cloudrun.cloudsql" . }}
+- name: CLOUD_SQL_CONNECTION
+  value: /cloudsql/{{ . }}
 {{- end }}
 {{- end }}
 
 {{/*
-Create chart name and version as used by the chart label.
+Render volume configuration based on type
 */}}
-{{- define "serverless-helm.cloudrun.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "serverless-helm.cloudrun.labels" -}}
-helm.sh/chart: {{ include "serverless-helm.cloudrun.chart" . }}
-{{ include "serverless-helm.cloudrun.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "serverless-helm.cloudrun.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "serverless-helm.cloudrun.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "serverless-helm.cloudrun.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "serverless-helm.cloudrun.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
+{{- define "helmless.cloudrun.volume" -}}
+{{- $volume := .volume -}}
+{{- if $volume.secret -}}
+secret:
+  secretName: {{ $volume.secret.name | quote }}
+  items:
+    {{- range $volume.secret.items }}
+    - key: {{ .version | default "latest" | quote }}
+      path: {{ .path | quote }}
+    {{- end }}
+{{- else if $volume.emptyDir -}}
+emptyDir:
+  medium: Memory
+  sizeLimit: {{ $volume.emptyDir.size | quote }}
+{{- else if $volume.gcs -}}
+csi:
+  driver: "gcsfuse.run.googleapis.com"
+  volumeAttributes:
+    bucketName: {{ $volume.gcs.bucket | quote }}
+    {{- with $volume.gcs.mountOptions }}
+    {{- $options := "" -}}
+    {{- range $key, $value := . -}}
+    {{- $options = printf "%s%s=%s," $options $key $value -}}
+    {{- end }}
+    mountOptions: {{ $options | trimSuffix "," | quote }}
+    {{- end }}
+{{- else if $volume.nfs -}}
+nfs:
+  server: {{ $volume.nfs.server | quote }}
+  path: {{ $volume.nfs.path | quote }}
+{{- end -}}
+{{- end -}}

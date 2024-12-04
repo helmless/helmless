@@ -10,12 +10,12 @@ on:
 
 jobs:
   lint:
-    name: 🧹 Lint & Test
+    name: 🧹 Lint & Test Charts
     runs-on: ubuntu-latest
     strategy:
       matrix:
         chart:
-          - "charts/cloudrun/service"
+          - 'charts/cloudrun/service'
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
         run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
       - name: 🧹 Run Helm Lint
-        run: helm lint ${{ matrix.chart }}
+        run: helm lint ${{ matrix.chart }} --strict --set-string name=my-name --set-string project=my-project
 
       - name: 🧪 Run Helm Test
         run: helm unittest ${{ matrix.chart }}
@@ -36,17 +36,20 @@ jobs:
         run: helm package ${{ matrix.chart }} --debug
 
       - name: 🔍 Verify Chart Schema
-        run: helm template ${{ matrix.chart }}
+        run: helm template ${{ matrix.chart }} --set-string name=my-name --set-string project=my-project
 
   formatting:
-    name: 🎨 Code Format
+    name: 👀 Static Code Checks
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Helm
-        uses: azure/setup-helm@v4
+      - name: ⚙️ Setup asdf
+        uses: asdf-vm/actions/install@v3
+
+      - name: 🧩 Install Helm Plugins
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
       - name: ⚙️ Setup pre-commit
         uses: pre-commit/action@v3.0.1

@@ -1,0 +1,154 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Basic Service Configuration Tests
+templates:
+  - manifest.yaml
+set:
+  name: my-service
+  image: gcr.io/my-project/my-app:v1
+  project: my-project
+
+tests:
+  # Required fields
+  - it: should set basic required fields
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-service
+
+  # Name validation
+  - it: should fail when name exceeds 63 characters
+    set:
+      name: this-name-is-way-too-long-and-should-fail-because-it-exceeds-63-characters-limit
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when name contains uppercase
+    set:
+      name: My-Service
+    asserts:
+      - failedTemplate: {}
+
+  # RevisionName
+  - it: should set revision name when specified and prefix it with service name
+    set:
+      name: my-service
+      revisionName: rev-v1
+    asserts:
+      - equal:
+          path: spec.template.metadata.name
+          value: my-service-rev-v1
+
+  # ContainerName
+  - it: should set container name when specified
+    set:
+      containerName: my-custom-container
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: my-custom-container
+
+  - it: should not set container name when not specified
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].name
+
+  # Description
+  - it: should set description when provided
+    set:
+      description: My awesome service
+    asserts:
+      - equal:
+          path: metadata.annotations["run.googleapis.com/description"]
+          value: My awesome service
+
+  # Region
+  - it: should set default region when not specified
+    asserts:
+      - equal:
+          path: metadata.labels["cloud.googleapis.com/location"]
+          value: us-central1
+
+  - it: should override region when specified
+    set:
+      region: europe-west1
+    asserts:
+      - equal:
+          path: metadata.labels["cloud.googleapis.com/location"]
+          value: europe-west1
+
+  - it: should fail on invalid region format
+    set:
+      region: invalid-region
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail on invalid region prefix
+    set:
+      region: asia1-central1
+    asserts:
+      - failedTemplate: {}
+
+  # LaunchStage
+  - it: should set default launch stage when not specified
+    asserts:
+      - equal:
+          path: metadata.annotations["run.googleapis.com/launch-stage"]
+          value: BETA
+
+  - it: should override launch stage when specified
+    set:
+      launchStage: GA
+    asserts:
+      - equal:
+          path: metadata.annotations["run.googleapis.com/launch-stage"]
+          value: GA
+
+  - it: should fail when launch stage is invalid
+    set:
+      launchStage: PROD
+    asserts:
+      - failedTemplate: {}
+
+  # Execution Environment
+  - it: should set default execution environment when not specified
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
+          value: gen2
+
+  - it: should set gen1 execution environment when specified
+    set:
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
+          value: gen1
+
+  - it: should set gen2 execution environment when specified
+    set:
+      executionEnvironment: gen2
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/execution-environment"]
+          value: gen2
+
+  - it: should fail when invalid execution environment is specified
+    set:
+      executionEnvironment: invalid
+    asserts:
+      - failedTemplate: {}
+
+  # Project
+  - it: should set helmless labels
+    asserts:
+      - equal:
+          path: metadata.labels["project"]
+          value: my-project
+      - equal:
+          path: metadata.labels["helmless-chart"]
+          value: google-cloudrun-service
+      - exists:
+          path: metadata.labels["helmless-chart-version"]
+      - equal:
+          path: metadata.labels["managed-by"]
+          value: helmless

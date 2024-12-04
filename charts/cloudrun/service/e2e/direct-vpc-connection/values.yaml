@@ -1,0 +1,9 @@
+name: direct-vpc-service
+region: europe-west1
+project: helmless
+image: 'us-docker.pkg.dev/cloudrun/container/hello:latest'
+network:
+  vpc: projects/helmless/global/networks/default
+  subnetwork: projects/helmless/regions/europe-west1/subnetworks/default
+  tags: ['internal']
+  egress: all-traffic

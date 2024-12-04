@@ -1,24 +1,23 @@
-# yaml-language-server: $schema=values.schema.json
-
-name: 'helmless-cloudrun-service'
 image: 'us-docker.pkg.dev/cloudrun/container/hello'
-command: []
-args: []
+# name: 'helmless-cloudrun-service'
+# project: 'my-project'
+# command: []
+# args: []
 
-env: {}
-secrets: {}
+# env: {}
+# secrets: {}
 
-autoscaling:
-  minScale: 0 # scale to zero by default
-  maxScale: 100
-  maxConcurrentRequests: 80
-  timeoutSeconds: 300
-sessionAffinity: false
+# autoscaling:
+#   minScale: 0 # scale to zero by default
+#   maxScale: 100
+#   maxConcurrentRequests: 80
+#   timeoutSeconds: 300
+# sessionAffinity: false
 
-launchStage: 'BETA'
-executionEnvironment: gen2
+# launchStage: 'BETA'
+# executionEnvironment: gen2
 
-ingress: 'all'
+# ingress: 'all'
 # network:
 #   egress: 'private-ranges-only'
 #   # vpc + subnetwork and connector are mutually exclusive
@@ -27,7 +26,9 @@ ingress: 'all'
 #   connector: 'my-connector'
 
 # serviceAccountName: 'my-service-account@my-project.iam.gserviceaccount.com'
-labels: {}
+
+# labels: {}
+
 # startupProbe:
 #   # httpGet:
 #   #   path: /
@@ -47,3 +48,27 @@ labels: {}
 #   periodSeconds: 10
 #   failureThreshold: 3
 #   timeoutSeconds: 1
+
+# volumes:
+#   config:
+#     mountPath: /etc/config
+#     secret:
+#       name: my-secret
+#       items:
+#         - path: config.json
+#   cache:
+#     mountPath: /cache
+#     emptyDir:
+#       size: 256Mi
+#   data:
+#     mountPath: /data
+#     gcs:
+#       bucket: my-bucket
+#       mountOptions:
+#         file-mode: "0644"
+#         dir-mode: "0755"
+#   shared:
+#     mountPath: /shared
+#     nfs:
+#       server: 10.0.0.1
+#       path: /exports/data

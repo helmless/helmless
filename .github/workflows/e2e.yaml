@@ -36,6 +36,10 @@ jobs:
     strategy:
       matrix:
         service: ${{ fromJson(needs.discover.outputs.services) }}
+        dry_run: [true]
+        include:
+          - service: charts/cloudrun/service/e2e/minimal-service
+            dry_run: false
       fail-fast: false
 
     steps:
@@ -60,10 +64,10 @@ jobs:
         id: deploy
         with:
           gcp_project: ${{ vars.GCP_PROJECT_ID }}
-          dry_run: ${{ !(matrix.service == 'minimal-service') || false }}
+          dry_run: ${{ matrix.dry_run }}
 
       - name: 💣 Cleanup Service
-        if: always() && ${{ matrix.service == 'minimal-service' }}
+        if: always() && ${{ matrix.dry_run == false }}
         shell: bash
         run: |
           # Extract service name from values.yaml

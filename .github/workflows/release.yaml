@@ -19,7 +19,7 @@ jobs:
     name: 🏷️ Release Please
     runs-on: ubuntu-latest
     outputs:
-      paths_released: ${{ steps.release.outputs.paths_released }}
+      paths_released: ${{ steps.release.outputs.paths_released || '["dummy"]' }}
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
       # Required so that a release triggers follow up workflows
@@ -43,7 +43,7 @@ jobs:
     if: ${{ needs.release.outputs.releases_created }}
     strategy:
       matrix:
-        path: ${{ fromJson(needs.release.outputs.paths_released || '["dummy"]') }}
+        path: ${{ fromJson(needs.release.outputs.paths_released) }}
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4

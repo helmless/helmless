@@ -10,7 +10,7 @@ schema_renderer:
   write_output: false
   schemas:
     - schema_path: charts/cloudrun/service/values.schema.json
-      changelog_path: charts/cloudrun/CHANGELOG.md
+      changelog_path: charts/cloudrun/service/CHANGELOG.md
       nav_path: docs/cloudrun/schema.md
 
 nav:

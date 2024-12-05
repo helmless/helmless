@@ -40,10 +40,10 @@ jobs:
     name: 📦 Publish Helm Chart ${{ matrix.path }}
     runs-on: ubuntu-latest
     needs: release
-    if: ${{ needs.release.outputs.releases_created && needs.release.outputs.paths_released != '' }}
+    if: ${{ needs.release.outputs.releases_created }}
     strategy:
       matrix:
-        path: ${{ fromJson(needs.release.outputs.paths_released) }}
+        path: ${{ fromJson(needs.release.outputs.paths_released || '["dummy"]') }}
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4

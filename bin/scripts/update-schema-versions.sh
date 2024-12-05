@@ -19,12 +19,23 @@ fi
 # Create a temporary file
 TMP_FILE=$(mktemp)
 
-# Add $since field to properties that don't have it
+# Add $since field to properties and patternProperties that don't have it
 jq --arg version "$VERSION" '
   def process:
     if type == "object" then
+      # Handle regular properties
       if .properties then
         .properties |= with_entries(
+          if .value | type == "object" and (has("$since") | not) then
+            .value += {"$since": $version}
+          else
+            .
+          end
+        )
+      end |
+      # Handle pattern properties
+      if .patternProperties then
+        .patternProperties |= with_entries(
           if .value | type == "object" and (has("$since") | not) then
             .value += {"$since": $version}
           else
@@ -46,7 +57,7 @@ jq --arg version "$VERSION" '
 # Check if jq command was successful
 if [ $? -eq 0 ]; then
     mv "$TMP_FILE" "$SCHEMA_FILE"
-    echo "Successfully added \$since field to schema properties"
+    echo "Successfully added \$since field to schema properties and patternProperties"
 else
     rm "$TMP_FILE"
     echo "Error: Failed to process JSON schema"

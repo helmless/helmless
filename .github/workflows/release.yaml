@@ -19,7 +19,7 @@ jobs:
     name: 🏷️ Release Please
     runs-on: ubuntu-latest
     outputs:
-      paths_released: ${{ steps.release.outputs.paths_released || '["dummy"]' }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
       # Required so that a release triggers follow up workflows
@@ -40,7 +40,7 @@ jobs:
     name: 📦 Publish Helm Chart ${{ matrix.path }}
     runs-on: ubuntu-latest
     needs: release
-    if: ${{ needs.release.outputs.releases_created }}
+    if: ${{ needs.release.outputs.releases_created && needs.release.outputs.paths_released != '' && needs.release.outputs.paths_released != '[]' }}
     strategy:
       matrix:
         path: ${{ fromJson(needs.release.outputs.paths_released) }}

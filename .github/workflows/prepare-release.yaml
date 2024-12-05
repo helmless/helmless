@@ -31,6 +31,9 @@ jobs:
       - name: 🧩 Install Helm Plugins
         run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
+      - name: 📝 Update Schema Version
+        run: ./bin/scripts/update-schema-versions.sh
+
       # this is required because the version changes on every release
       - name: 🧪 Update Snapshots
         run: helm unittest charts/cloudrun/service --update-snapshot

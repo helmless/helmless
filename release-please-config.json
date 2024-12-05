@@ -7,7 +7,12 @@
             "package-name": "google-cloudrun-service",
             "extra-files": [
                 "Chart.yaml",
-                "README.md"
+                "README.md",
+                {
+                    "type": "json",
+                    "path": "values.schema.json",
+                    "jsonpath": "$.version"
+                }
             ]
         }
     },
@@ -15,5 +20,5 @@
     "include-component-in-tag": true,
     "include-v-in-tag": true,
     "separate-pull-requests": true,
-    "group-pull-request-title-pattern": "chore: release ${component} v${version}"
+    "group-pull-request-title-pattern": "chore: release ${component} ${version}"
 }

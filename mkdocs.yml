@@ -9,8 +9,8 @@ conventions_path: docs/conventions.md
 schema_renderer:
   write_output: false
   schemas:
-    - schema_path: charts/cloudrun/service/values.schema.json
-      changelog_path: charts/cloudrun/service/CHANGELOG.md
+    - schema_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json
+      changelog_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/CHANGELOG.md
       nav_path: docs/cloudrun/schema.md
 
 nav:

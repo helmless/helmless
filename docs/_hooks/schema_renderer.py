@@ -5,6 +5,7 @@ from mkdocs.structure.files import Files, File
 from mkdocs.structure.pages import Page
 import os
 import re
+import requests
 
 log = logging.getLogger('mkdocs')
 
@@ -317,11 +318,16 @@ def on_files(files: Files, config, **kwargs) -> Files:
             log.info(f"Processing schema: {schema_path} -> {nav_path}")
 
             # Load and parse the schema
-            abs_schema_path = os.path.join(config['docs_dir'], '..', schema_path)
-            log.info(f"Loading schema from: {abs_schema_path}")
-
-            with open(abs_schema_path) as f:
-                schema = jsonref.load(f)
+            if schema_path.startswith('http://') or schema_path.startswith('https://'):
+                log.info(f"Loading schema from URL: {schema_path}")
+                response = requests.get(schema_path)
+                response.raise_for_status()
+                schema = jsonref.loads(response.text)
+            else:
+                abs_schema_path = os.path.join(config['docs_dir'], '..', schema_path)
+                log.info(f"Loading schema from: {abs_schema_path}")
+                with open(abs_schema_path) as f:
+                    schema = jsonref.load(f)
 
             # Convert schema to markdown
             markdown_output = _render_schema(schema, changelog_path=changelog_path)
@@ -341,15 +347,30 @@ def on_files(files: Files, config, **kwargs) -> Files:
 
             # Handle changelog if provided
             if changelog_path:
-                # Load changelog from project root
-                abs_changelog_path = os.path.join(config['docs_dir'], '..', changelog_path)
-                if os.path.exists(abs_changelog_path):
+                # Determine if changelog is a URL or a local path
+                if changelog_path.startswith('http://') or changelog_path.startswith('https://'):
+                    log.info(f"Loading changelog from URL: {changelog_path}")
+                    try:
+                        response = requests.get(changelog_path)
+                        response.raise_for_status()
+                        changelog_content = response.text
+                    except requests.RequestException as e:
+                        log.warning(f"Failed to load changelog from URL {changelog_path}: {e}")
+                        changelog_content = None
+                else:
+                    # Load changelog from project root
+                    abs_changelog_path = os.path.join(config['docs_dir'], '..', changelog_path)
+                    if os.path.exists(abs_changelog_path):
+                        log.info(f"Loading changelog from: {abs_changelog_path}")
+                        with open(abs_changelog_path, 'r') as f:
+                            changelog_content = f.read()
+                    else:
+                        log.warning(f"Changelog file not found at {abs_changelog_path}")
+                        changelog_content = None
+
+                if changelog_content:
                     # Create path for virtual changelog file in same directory as nav_path
                     changelog_nav_path = os.path.join(os.path.dirname(nav_path), 'CHANGELOG.md')
-
-                    # Read changelog content
-                    with open(abs_changelog_path, 'r') as f:
-                        changelog_content = f.read()
 
                     # Add IDs to version headers
                     changelog_content = re.sub(
@@ -372,8 +393,6 @@ def on_files(files: Files, config, **kwargs) -> Files:
                     # Add changelog virtual file to files collection
                     files.append(changelog_file)
                     log.info(f"Added changelog virtual file at {changelog_nav_path}")
-                else:
-                    log.warning(f"Changelog file not found at {abs_changelog_path}")
 
             # Optionally write the markdown output to disk
             if write_output:

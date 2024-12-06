@@ -31,10 +31,12 @@ gcloud config set run/region <your-region> # e.g. europe-west1
 After that create a `helmless/values.yaml` file, with the following content: (2)
 
 ```bash
+mkdir -p helmless
 cat <<EOF > helmless/values.yaml
-# yaml-language-server: $schema=https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json
+# yaml-language-server: \$schema=https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json
 name: helmless-service
-region: europe-west1
+region: $(gcloud config get run/region)
+project: $(gcloud config get project)
 image: 'us-docker.pkg.dev/cloudrun/container/hello'
 env:
   COLOR: 'blue'
@@ -63,6 +65,8 @@ gcloud run services replace helmless/google-cloudrun-service.manifest.yaml
     ```bash
     gcloud run services proxy helmless-service
     ```
+
+Now to see something change, update the `env.COLOR` value in your `helmless/values.yaml` file and re-run the `helm template` and `gcloud run services replace` commands.
 </div>
 
 1.   Setting the project and region is only required when deploying locally. When deploying from a CI/CD pipeline the project and region are automatically extracted from the rendered manifest.

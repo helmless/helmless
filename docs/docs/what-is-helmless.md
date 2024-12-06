@@ -14,13 +14,7 @@ It takes a container specification in the form of a Helm chart and a values file
 
 --8<-- "docs/_partials/architectur-diagram.md"
 
-Helmless gives you a powerful serverless deployment workflow that is:
-
-- 🎯 **Simple but powerful** - Helm-based workflows without Kubernetes complexity
-- ⚡ **Fast and efficient** - Direct serverless deployments with minimal overhead
-- 🔒 **Secure by default** - Built-in security best practices and workload identity
-- 🌐 **Cloud agnostic** - Works across major cloud providers
-- 🤝 **Open Source** - Community-driven and built to evolve
+Helmless gives you a powerful serverless deployment workflow that is very simple to use, yet flexible and extensible.
 
 ## Getting Started
 
@@ -52,8 +46,8 @@ This is where Helmless comes in. It decouples the container deployment from the 
 Helmless is open source and welcomes contributions! The project consists of several focused repositories:
 
 - [helmless](https://github.com/helmless/helmless): _The home of [helmless.io](https://helmless.io)_
-- [google-cloudrun-chart](https://github.com/helmless/google-cloudrun-chart): _Helm chart for Google Cloud Run_
-- [template-action](https://github.com/helmless/template-action): _GitHub Action for templating_
+- [helmless/charts/cloudrun/service](https://github.com/helmless/helmless/tree/main/charts/cloudrun/service): _Helmless chart for a Google Cloud Run Service_
 - [google-cloudrun-deploy-action](https://github.com/helmless/google-cloudrun-deploy-action): _Deployment action_
 - [google-cloudrun-tf-module](https://github.com/helmless/google-cloudrun-tf-module): _Supporting infrastructure module_
 - [google-workload-identity-tf-module](https://github.com/helmless/google-workload-identity-tf-module): _Identity and security module_
+- [template-action](https://github.com/helmless/template-action): _GitHub Action for templating_

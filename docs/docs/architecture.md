@@ -5,8 +5,6 @@ description: Learn how Helmless works under the hood.
 
 # Helmless Architecture
 
---8<-- "docs/_partials/wip.md"
-
 In a nutshell, Helmless is a workflow for templating a custom [Helm chart](https://helm.sh/) into the cloud provider's specific configuration, and then deploying it using the cloud provider's CLI.
 
 Simple but very powerful and adoptable to every cloud provider and CI/CD platform.

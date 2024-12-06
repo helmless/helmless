@@ -1,7 +1,5 @@
 # CI/CD
 
---8<-- "docs/_partials/wip.md"
-
 Helmless is designed to be used in any CI/CD pipeline to deploy your container to the cloud provider of your choice. Since we use Github Actions as our CI/CD platform of choice, this guide will show you how to deploy your container to Google Cloud Run using Github Actions.
 
 Helmless provides a [Github Action][github-action] that you can use in your workflow to deploy your container to Google Cloud Run.
@@ -13,7 +11,7 @@ Helmless provides a [Github Action][github-action] that you can use in your work
 
 Before you can start using Github Actions to deploy your container to Google Cloud Run, you need to allow your Github repository access to your GCP project.
 
-### Github Workload Identity Federation
+### Workload Identity Federation
 
 To allow your Github repository to access your GCP project, you need to setup [Github Workload Identity Federation](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions). To make this as easy as possible, we created a small [Terraform module](https://github.com/helmless/google-workload-identity-federation-terraform-module) that can be used to setup the necessary resources in your GCP project.
 
@@ -34,7 +32,7 @@ Applying this module you will get:
 2. A workload identity provider is a reference to the Github OIDC identity provider. It uses the [`google_iam_workload_identity_pool_provider` Terraform resource](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/iam_workload_identity_pool_provider) and is scoped to only allow tokens issued by Github and from repositories in your specified organization.
 
 
-### Grant the Github Repository the necessary permissions
+### Github Repository Permissions
 
 After setting up the workload identity federation, you need to grant the Github repository the necessary permissions to access your GCP project. You do this by giving the `principalSet` scoped to the repository the `roles/iam.workloadIdentityUser` role on the GCP projects default service account that is used by Cloud Run. And it will need `roles/run.admin` permissions on the Cloud Run project where you want to deploy your container.
 <div class="annotate" markdown>
@@ -86,12 +84,63 @@ projects/YOUR_PROJECT_ID/locations/global/workloadIdentityPools/github/providers
 !!! success "Success"
     You have now setup the necessary resources to allow your Github repository to access your GCP project and to deploy your container to Google Cloud Run.
 
-## Github Actions
+## Github Deployment Action
 
-Helmless provides a custom [Github Action][github-action] that you can use in your workflow to deploy your container to Google Cloud Run. But before you can use it you need to setup the correct permissions for the Github Action to access your Google Cloud Run project.
+You can find a full example of a Github Actions workflow in the [GitHub repository](https://github.com/helmless/helmless/blob/main/.github/workflows/e2e.yaml).
 
+Here is a simplified version of the workflow with matrix deployment for multiple services:
+
+<div class="annotate" markdown>
 ```yaml title="deploy.yml"
---8<-- "examples/github-cicd/deploy-cloudrun.yaml"
+name: 🚀 Deploy Cloud Run Service
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: 🚀 helmless-service
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: helmless-service
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔑 Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL }} (1)
+
+      - name: 📜 Template Helmless Chart
+        uses: helmless/action@v0.1.0
+        id: template
+        with:
+          files: |
+            helmless/values.yaml (2)
+          chart: oci://ghcr.io/helmless/google-cloudrun-service (3)
+          chart_version: "latest" (4)
+
+      - name: 🚀 Deploy Service
+        uses: helmless/google-cloudrun-deploy-action@v0.1.0
+        id: deploy
+        with:
+          dry_run: false (5)
 ```
+</div>
+
+1. The `GCP_WORKLOAD_IDENTITY_POOL` is the workload identity pool you created in the [Github Workload Identity Federation](#github-workload-identity-federation) section.
+2. The `files` argument takes one or more `values.yaml` files. In this example we use a single `helmless/values.yaml` file that was created in the [Getting Started](./getting-started.md) guide.
+3. The Helmless chart to use for the templating. Defaults to `oci://ghcr.io/helmless/google-cloudrun-service`. See [packages](https://github.com/orgs/helmless/packages) for a list of available charts.
+4. The version of the Helm chart to deploy. `latest` and all valid Helm chart version ranges are supported.
+5. If true the template will only be validated against the GCP Cloud Run API but not deployed.
+
 
 [github-action]: https://github.com/helmless/google-cloudrun-deploy-action

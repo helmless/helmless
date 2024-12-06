@@ -26,8 +26,8 @@ nav:
           - CI/CD: docs/cloudrun/ci-cd.md
           # - Examples: docs/cloudrun/examples.md
           # - Advanced Infrastructure: docs/cloudrun/advanced.md
-          - Schema: docs/cloudrun/schema.md
-          - Changelog: docs/cloudrun/CHANGELOG.md
+          - Chart Schema: docs/cloudrun/schema.md
+          - Chart Changelog: docs/cloudrun/CHANGELOG.md
   - Discord: discord/index.md # required to display the icon
 
 plugins:
@@ -54,6 +54,7 @@ plugins:
       redirect_maps:
         'discord.md': 'https://discord.gg/A5cjzfyAN5'
         'cloudrun/index.md': 'docs/cloudrun/getting-started.md'
+        'docs/index.md': 'docs/what-is-helmless.md'
         'docs/cloudrun/index.md': 'docs/cloudrun/getting-started.md'
         'cloudrun/getting-started/index.md': 'docs/cloudrun/getting-started.md'
         'getting-started/index.md': 'docs/cloudrun/getting-started.md'

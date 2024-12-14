@@ -147,6 +147,7 @@ body {
   transform: translateY(-1px);
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.3);
+  color: var(--cloud-white);
 }
 
 /* Feature section layout */
@@ -419,6 +420,7 @@ body {
 .workflow-content {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .workflow-heading {
@@ -435,20 +437,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
 }
 
 .workflow-step {
   text-align: center;
-  flex: 1;
-  min-width: 200px;
-  max-width: 250px;
+  flex: 0 0 auto;
+  width: 160px;
 }
 
 .workflow-icon {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   margin: 0 auto 1.5rem;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
@@ -459,8 +460,8 @@ body {
 }
 
 .workflow-icon img {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   filter: brightness(0) invert(1);
   opacity: 0.9;
 }
@@ -488,7 +489,7 @@ body {
   color: rgba(255, 255, 255, 0.3);
   font-size: 2rem;
   font-weight: 300;
-  margin: 0 1rem;
+  margin: 0 0.5rem;
 }
 
 
@@ -620,20 +621,6 @@ body {
   color: var(--cloud-white);
 }
 
-.github-icon {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-right: 0.5rem;
-  opacity: 0.9;
-  filter: brightness(0) invert(1); /* Makes the GitHub icon white */
-}
-
-.github-icon svg {
-  fill: currentColor;
-}
-
 /* Make feature-top-content responsive */
 @media (max-width: 768px) {
   .feature-top-content {
@@ -660,10 +647,17 @@ body {
   .workflow-steps {
     flex-direction: column;
     gap: 2rem;
+    align-items: center;
+  }
+
+  .workflow-step {
+    width: 100%; /* Full width on mobile */
+    max-width: 250px; /* Limit maximum width on mobile */
   }
 
   .workflow-arrow {
     transform: rotate(90deg);
+    margin: 0; /* Reset horizontal margins */
   }
 }
 

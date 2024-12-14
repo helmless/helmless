@@ -25,7 +25,7 @@ Helmless gives you a powerful serverless deployment workflow that is very simple
 Helm is a great tool for managing containerized applications, and its templating feature offers a great developer experience. It allows you to define your application container specification in a very simple YAML file and gives the platform teams an easy way to add abstraction and customization on top of it, making container-based deployments a breeze.
 
 ```yaml title=".hemless/values.yaml"
---8<-- "examples/minimal-service/values.yaml"
+--8<-- "charts/cloudrun/service/e2e/minimal-service/values.yaml"
 ```
 
 ## Why **no** Kubernetes?

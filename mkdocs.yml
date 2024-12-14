@@ -17,6 +17,9 @@ nav:
   - Home: index.md
   - Documentation:
       - docs/index.md
+      - Getting Started:
+          - Introduction: docs/getting-started/introduction.md
+          - Quick Start Tutorial: docs/getting-started/quickstart.md
       - What is Helmless?: docs/what-is-helmless.md
       - Architecture: docs/architecture.md
       - Conventions: docs/conventions.md

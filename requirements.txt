@@ -1,0 +1,6 @@
+mkdocs-material
+mkdocs-multirepo-plugin
+mkdocs-minify-plugin
+mkdocs-redirects
+jsonref
+requests

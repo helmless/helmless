@@ -213,10 +213,17 @@ body {
   flex: 1;
   min-width: 300px;
   max-width: 50%;
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on iOS */
 }
 
 .feature-image img {
-  width: 100%;
+  width: auto;
+  /* Change from 100% to auto */
+  min-width: 100%;
+  /* Ensure minimum width */
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -636,6 +643,18 @@ body {
 
   .feature-image {
     max-width: 100%;
+    /* Allow full width on mobile */
+    margin: 0 -1.5rem;
+    /* Negative margin to allow full-width scrolling */
+    padding: 0 1.5rem;
+    /* Add padding back to maintain spacing */
+  }
+
+  .feature-image img {
+    min-width: 600px;
+    /* Set a minimum width to ensure scrollability */
+    max-width: none;
+    /* Remove max-width constraint */
   }
 
   .workflow-steps {

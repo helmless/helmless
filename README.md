@@ -21,8 +21,8 @@ Helmless gives you the power of GitOps workflows for serverless deployments with
 
 Visit [helmless.io](https://helmless.io) for comprehensive documentation, or jump right in:
 
-1. [What is Helmless?](https://helmless.io/docs/what-is-helmless/)
-2. [Architecture Overview](https://helmless.io/docs/architecture/)
+1. [What is Helmless?](https://helmless.io/docs/getting-started)
+2. [Architecture Overview](https://helmless.io/docs/helmless/architecture/)
 3. [Deploy to Google Cloud Run](https://helmless.io/docs/cloudrun/)
 
 ## 🏗️ Project Components
@@ -32,8 +32,8 @@ Helmless is organized into focused repositories:
 - **[helmless](https://github.com/helmless/helmless)** - Charts Monorepo and Documentation
 - **[template-action](https://github.com/helmless/template-action)** - GitHub Action for templating Helmless charts into cloud provider specific manifests
 - **[google-cloudrun-deploy-action](https://github.com/helmless/google-cloudrun-deploy-action)** - Deployment action for Google Cloud Run
-- **[google-cloudrun-tf-module](https://github.com/helmless/google-cloudrun-tf-module)** - Supporting Terraform module for Google Cloud Run
-- **[google-workload-identity-tf-module](https://github.com/helmless/google-workload-identity-tf-module)** - Supporting Terraform module for Google Workload Identity setting up GitHub Actions to deploy to Google Cloud Run
+- **[google-cloudrun-service-terraform-module](https://github.com/helmless/google-cloudrun-service-terraform-module)** - Supporting Terraform module for Google Cloud Run
+- **[google-workload-identity-federation-terraform-module](https://github.com/helmless/google-workload-identity-federation-terraform-module)** - Supporting Terraform module for Google Workload Identity setting up GitHub Actions to deploy to Google Cloud Run
 
 ## 🤝 Contributing
 

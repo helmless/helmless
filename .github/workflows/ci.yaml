@@ -51,8 +51,5 @@ jobs:
       - name: 🧩 Install Helm Plugins
         run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
-      - name: ⚙️ Setup pre-commit
+      - name: 🔍 Run Checks
         uses: pre-commit/action@v3.0.1
-
-      - name: 🔍 Run Format Checks
-        run: pre-commit run --all-files

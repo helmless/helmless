@@ -17,7 +17,7 @@ permissions:
 jobs:
   release:
     name: 🏷️ Release Please
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       paths_released: ${{ steps.release.outputs.paths_released }}
       releases_created: ${{ steps.release.outputs.releases_created }}
@@ -38,7 +38,7 @@ jobs:
 
   publish:
     name: 📦 Publish Helm Chart ${{ matrix.path }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: release
     if: ${{ needs.release.outputs.releases_created && needs.release.outputs.paths_released != '' && needs.release.outputs.paths_released != '[]' }}
     strategy:

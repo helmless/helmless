@@ -48,3 +48,19 @@ All properties have a type, for example `string`, `boolean`, `object`, etc.
 ### <!-- md:enum --> – Enumeration { #enum data-toc-label="Enumeration" }
 
 Some properties have a set of allowed values, which are listed in the `enum` property.
+
+### <!-- md:deprecated --> – Deprecated { data-toc-label="Deprecated" }
+
+Some features or properties are deprecated, which means they are no longer recommended for use and may be removed in future versions. It is advised to avoid using deprecated features and to update your configuration to use the recommended alternatives.
+
+### <!-- md:minLength --> – Minimum Length { #min-length data-toc-label="Minimum Length" }
+
+Some properties have a minimum length constraint. This means that the value of the property must be at least the specified length.
+
+### <!-- md:maxLength --> – Maximum Length { #max-length data-toc-label="Maximum Length" }
+
+Some properties have a maximum length constraint. This means that the value of the property must not exceed the specified length.
+
+### <!-- md:pattern --> – Pattern { #pattern data-toc-label="Pattern" }
+
+Some properties have a pattern constraint. This means that the value of the property must match the specified pattern.

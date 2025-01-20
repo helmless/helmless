@@ -5,7 +5,7 @@ repo_url: https://github.com/helmless/helmless
 repo_name: helmless/helmless
 edit_uri: edit/main/docs/
 
-conventions_path: docs/conventions.md
+conventions_path: docs/helmless/conventions.md
 schema_renderer:
   write_output: false
   schemas:
@@ -17,24 +17,27 @@ nav:
   - Home: index.md
   - Documentation:
       - docs/index.md
-      - What is Helmless?: docs/what-is-helmless.md
-      - Architecture: docs/architecture.md
-      - Conventions: docs/conventions.md
+      - Getting Started:
+          - docs/getting-started/index.md
+          - 5min Quick Start: docs/getting-started/quickstart.md
+          - Core Concepts: docs/getting-started/core-concepts.md
+          - Examples: docs/getting-started/examples.md
       - Google Cloud Run:
           - docs/cloudrun/index.md
-          - Getting Started: docs/cloudrun/getting-started.md
           - CI/CD: docs/cloudrun/ci-cd.md
           # - Examples: docs/cloudrun/examples.md
           # - Advanced Infrastructure: docs/cloudrun/advanced.md
           - Chart Schema: docs/cloudrun/schema.md
           - Chart Changelog: docs/cloudrun/CHANGELOG.md
+      - Helmless Explained:
+          - What is Helmless?: docs/helmless/what-is-helmless.md
+          - Architecture: docs/helmless/architecture.md
+          - Conventions: docs/helmless/conventions.md
   - Discord: discord/index.md # required to display the icon
 
 plugins:
   - privacy
   - search
-  - minify:
-      minify_html: true
   # - awesome-pages:
   #     filename: .pages
   #     collapse_single_pages: true
@@ -53,11 +56,7 @@ plugins:
   - redirects:
       redirect_maps:
         'discord.md': 'https://discord.gg/A5cjzfyAN5'
-        'cloudrun/index.md': 'docs/cloudrun/getting-started.md'
-        'docs/index.md': 'docs/what-is-helmless.md'
-        'docs/cloudrun/index.md': 'docs/cloudrun/getting-started.md'
-        'cloudrun/getting-started/index.md': 'docs/cloudrun/getting-started.md'
-        'getting-started/index.md': 'docs/cloudrun/getting-started.md'
+        'docs/index.md': 'docs/getting-started/index.md'
 theme:
   name: material
   custom_dir: docs/_overrides/
@@ -108,13 +107,13 @@ extra:
       find what they're searching for. With your consent, you're helping us to
       make our documentation better.
   social:
-    - icon: material/github
+    - icon: fontawesome/brands/github
       name: GitHub
       link: https://github.com/helmless/helmless
-    - icon: simple/linkedin
+    - icon: fontawesome/brands/linkedin
       name: LinkedIn
       link: https://www.linkedin.com/in/michael-reichenbach/
-    - icon: simple/discord
+    - icon: fontawesome/brands/discord
       name: Discord
       link: https://discord.gg/A5cjzfyAN5
   analytics:

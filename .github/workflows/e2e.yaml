@@ -12,7 +12,7 @@ on:
 jobs:
   discover:
     name: 🔍 Discover Services
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       services: ${{ steps.set-matrix.outputs.services }}
     steps:
@@ -26,7 +26,7 @@ jobs:
   e2e:
     name: 🚀 ${{ matrix.service }}
     needs: discover
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write

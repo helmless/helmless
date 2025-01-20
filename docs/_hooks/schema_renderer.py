@@ -288,9 +288,9 @@ def _render_examples(examples: list, name: str = None, indent: str = "") -> list
                 md.append(f"{indent}=== \"{title}\"")
             else:
                 md.append(f"{indent}=== \"Example {examples.index(example) + 1}\"")
-            md.append(f"{indent + "    "}```yaml")
+            md.append(f"{indent}    ```yaml")
             md.extend(_render_example(name, example, indent=indent + "    "))
-            md.append(f"{indent + "    "}```")
+            md.append(f"{indent}    ```")
     return md
 
 def on_files(files: Files, config, **kwargs) -> Files:

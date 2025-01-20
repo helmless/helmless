@@ -1,9 +1,9 @@
 ---
-title: Quickstart Tutorial
+title: 5min Quick Start
 description: Deploy your first service to Google Cloud Run with Helmless in 5 minutes
 ---
 
-# Quickstart: Deploy to Cloud Run
+# Quickstart: Deploy to Google Cloud Run
 
 This tutorial will get you up and running with Helmless by deploying a simple "Hello World" container to Google Cloud Run.
 
@@ -51,6 +51,11 @@ You'll need:
    EOF
    ```
 
+This is your service configuration. It defines everything about your service that would normally be defined via the GCP Console or Terraform.
+
+!!! note "Helmless Chart Schema"
+    You can find the full schema for the Google Cloud Run Service Helmless chart [here](/docs/cloudrun/schema).
+
 ## Step 3: Generate the Cloud Run Configuration
 
 Run this command to template your service:
@@ -61,6 +66,8 @@ helm template oci://ghcr.io/helmless/google-cloudrun-service \
   > helmless/service.yaml
 ```
 
+This will generate a `service.yaml` manifest in the GCP native format and will be used to deploy your service using the CLI.
+
 ## Step 4: Deploy Your Service
 
 Deploy to Cloud Run:
@@ -68,6 +75,8 @@ Deploy to Cloud Run:
 ```bash
 gcloud run services replace helmless/service.yaml
 ```
+
+That's it! Your service is now deployed to Google Cloud Run.
 
 ## Step 5: Test Your Service
 
@@ -111,6 +120,7 @@ gcloud run services delete hello-helmless
 
 ## What's Next?
 
-- [Deploy from GitHub Actions](../guides/ci-cd.md)
-- [Explore the full configuration options](../reference/schema.md)
-- [See more examples](https://github.com/helmless/helmless/tree/main/examples)
+- [Deploy from GitHub Actions](../cloudrun/ci-cd.md)
+- [Explore the full configuration options](../cloudrun/schema.md)
+- [See more examples](./examples.md)
+- [Learn more about Helmless](../helmless/what-is-helmless.md)

@@ -1,6 +1,5 @@
-mkdocs-material
-mkdocs-multirepo-plugin
-mkdocs-minify-plugin
-mkdocs-redirects
-jsonref
-requests
+mkdocs-material==9.5.50
+mkdocs-multirepo-plugin==0.8.3
+mkdocs-redirects==1.2.2
+jsonref==1.1.0
+requests==2.32.3

@@ -11,7 +11,7 @@ on:
 jobs:
   lint:
     name: 🧹 Lint & Test Charts
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         chart:
@@ -40,7 +40,7 @@ jobs:
 
   formatting:
     name: 👀 Static Code Checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4

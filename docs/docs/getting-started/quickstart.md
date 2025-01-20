@@ -54,7 +54,7 @@ You'll need:
 This is your service configuration. It defines everything about your service that would normally be defined via the GCP Console or Terraform.
 
 !!! note "Helmless Chart Schema"
-    You can find the full schema for the Google Cloud Run Service Helmless chart [here](/docs/cloudrun/schema).
+    You can find the full schema for the Google Cloud Run Service Helmless chart [here](/docs/cloudrun/schema). <!-- markdown-link-check-disable-line -->
 
 ## Step 3: Generate the Cloud Run Configuration
 
@@ -84,7 +84,7 @@ That's it! Your service is now deployed to Google Cloud Run.
    ```bash
    gcloud run services proxy hello-helmless
    ```
-
+<!-- markdown-link-check-disable-next-line -->
 2. Open [http://localhost:8080](http://localhost:8080) in your browser
 
 You should see a blue-themed "Hello World" page! 🎉
@@ -121,6 +121,6 @@ gcloud run services delete hello-helmless
 ## What's Next?
 
 - [Deploy from GitHub Actions](../cloudrun/ci-cd.md)
-- [Explore the full configuration options](../cloudrun/schema.md)
+- [Explore the full configuration options](/docs/cloudrun/schema) <!-- markdown-link-check-disable-line -->
 - [See more examples](./examples.md)
 - [Learn more about Helmless](../helmless/what-is-helmless.md)

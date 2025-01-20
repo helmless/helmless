@@ -8,7 +8,7 @@ description: Learn the core concepts and understand how Helmless simplifies serv
 Helmless is a workflow and collection of resources that allows you to deploy serverless containers to Google Cloud Run, and potentially other platforms (1), with Helm, bypassing the complexity of Kubernetes and Terraform.
 { .annotate }
 
-1.   :material-information-slab-circle: See the [extending to other platforms](./architecture.md#extending-to-other-platforms) page for more information.
+1.   :material-information-slab-circle: See the [extending to other platforms](./architecture.md) page for more information.
 
 It takes a container specification in the form of a Helm chart and a values file, and uses the templating feature of Helm to generate a Cloud Run configuration. This configuration is then deployed using the Cloud Run CLI.
 
@@ -50,6 +50,6 @@ Helmless is open source and welcomes contributions! The project consists of seve
 - [helmless](https://github.com/helmless/helmless): _The home of [helmless.io](https://helmless.io)_
 - [helmless/charts/cloudrun/service](https://github.com/helmless/helmless/tree/main/charts/cloudrun/service): _Helmless chart for a Google Cloud Run Service_
 - [google-cloudrun-deploy-action](https://github.com/helmless/google-cloudrun-deploy-action): _Deployment action_
-- [google-cloudrun-tf-module](https://github.com/helmless/google-cloudrun-tf-module): _Supporting infrastructure module_
-- [google-workload-identity-tf-module](https://github.com/helmless/google-workload-identity-tf-module): _Identity and security module_
+- [google-cloudrun-service-terraform-module](https://github.com/helmless/google-cloudrun-service-terraform-module): _Supporting infrastructure module_
+- [google-workload-identity-federation-terraform-module](https://github.com/helmless/google-workload-identity-federation-terraform-module): _Identity and security module_
 - [template-action](https://github.com/helmless/template-action): _GitHub Action for templating_

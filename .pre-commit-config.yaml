@@ -23,3 +23,11 @@ repos:
         language: script
         pass_filenames: false
         always_run: true
+
+  - repo: https://github.com/tcort/markdown-link-check
+    rev: v3.13.6
+    hooks:
+      - id: markdown-link-check
+        files: ^docs/.*$
+        args: [-q]
+        verbose: true

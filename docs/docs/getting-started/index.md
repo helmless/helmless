@@ -52,7 +52,7 @@ Ready to try Helmless? Choose your path:
 
     Learn more about Helmless and how it works
 
-    [:octicons-arrow-right-24: Learn More](../helmless/what-is-helmless)
+    [:octicons-arrow-right-24: Learn More](../helmless/what-is-helmless.md)
 
 -   :material-code-braces:{ .lg .middle } __Examples__
 

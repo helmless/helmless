@@ -1,3 +1,4 @@
+<!-- markdown-link-check-disable -->
 <div class="grid cards" markdown>
 
 -   :material-book-open-page-variant:{ .lg .middle } __What is Helmless?__

@@ -1,0 +1,27 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: my-run-demo-app-1
+description: main application pipeline
+serialPipeline:
+  stages:
+    - targetId: dev
+      profiles: [dev]
+    - targetId: prod
+      profiles: [prod]
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: dev
+description: Cloud Run development service
+run:
+  location: projects/helmless-dev/locations/europe-west1
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod
+description: Cloud Run production service
+run:
+  location: projects/helmless-prd/locations/europe-west1

@@ -12,6 +12,7 @@ should render minimal configuration:
         helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
+        release: RELEASE-NAME
       name: minimal-service
     spec:
       template:
@@ -56,6 +57,7 @@ should render with basic configuration:
         helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
+        release: RELEASE-NAME
       name: basic-service
     spec:
       template:
@@ -108,6 +110,7 @@ should render with full configuration:
         helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
+        release: RELEASE-NAME
       name: full-service
     spec:
       template:
@@ -228,6 +231,7 @@ should render with network configuration:
         helmless-chart-version: "0_1_0"
         managed-by: helmless
         project: my-project
+        release: RELEASE-NAME
       name: networked-service
     spec:
       template:

@@ -7,7 +7,11 @@ profiles:
     manifests:
       rawYaml:
         - service.dev.yaml
-  - name: prod
+  - name: stg
+    manifests:
+      rawYaml:
+        - service.stg.yaml
+  - name: prd
     manifests:
       rawYaml:
         - service.prd.yaml

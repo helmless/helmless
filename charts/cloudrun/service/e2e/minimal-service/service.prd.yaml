@@ -27,7 +27,7 @@ spec:
       containerConcurrency: 80
       timeoutSeconds: 300
       containers:
-        - image: 'cloud-deploy-image'
+        - image: 'my-app-image'
           ports:
             - name: http1
               containerPort: 8080

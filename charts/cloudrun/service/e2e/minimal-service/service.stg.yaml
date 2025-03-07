@@ -3,14 +3,14 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: 'minimal-service-dev'
+  name: 'minimal-service-stg'
   labels:
     cloud.googleapis.com/location: 'europe-west1'
     project: 'helmless'
     helmless-chart: 'google-cloudrun-service'
     helmless-chart-version: '0_1_0'
     managed-by: helmless
-    env: 'dev'
+    env: 'stg'
   annotations:
     run.googleapis.com/launch-stage: 'BETA'
     run.googleapis.com/ingress: 'all'

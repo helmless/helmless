@@ -7,8 +7,18 @@ serialPipeline:
   stages:
     - targetId: dev
       profiles: [dev]
-    - targetId: prod
-      profiles: [prod]
+    - targetId: stg
+      profiles: [stg]
+    - targetId: prd
+      profiles: [prd]
+      strategy:
+        canary:
+          runtimeConfig:
+            cloudRun:
+              automaticTrafficControl: true
+          canaryDeployment:
+            percentages: [25]
+            verify: false
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -16,12 +26,52 @@ metadata:
   name: dev
 description: Cloud Run development service
 run:
-  location: projects/helmless-dev/locations/europe-west1
+  location: projects/helmless/locations/europe-west1
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
-  name: prod
+  name: stg
+description: Cloud Run staging service
+run:
+  location: projects/helmless/locations/europe-west1
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prd
 description: Cloud Run production service
 run:
-  location: projects/helmless-prd/locations/europe-west1
+  location: projects/helmless/locations/europe-west1
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Automation
+metadata:
+  name: my-run-demo-app-1/promote
+description: Promotes a release to the next target
+serviceAccount: 752580666137-compute@developer.gserviceaccount.com
+suspended: false
+selector:
+  targets:
+  - id: dev
+  - id: stg
+rules:
+- promoteReleaseRule:
+    name: "promote-release"
+    toTargetId: "@next"
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Automation
+metadata:
+  name: my-run-demo-app-1/advance
+description: advances a rollout
+suspended: false
+serviceAccount: 752580666137-compute@developer.gserviceaccount.com
+selector:
+  targets:
+  - id: prd
+rules:
+- advanceRolloutRule:
+    name: "advance-rollout"
+    sourcePhases: ["canary-25"]
+    wait: 1m

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.1](https://github.com/helmless/helmless/compare/google-cloudrun-service-v0.1.0...google-cloudrun-service-v0.1.1) (2025-03-07)
+
+
+### Bug Fixes
+
+* add explicit global settings to the schema ([1dec277](https://github.com/helmless/helmless/commit/1dec27734d27032f73b739b002bd363b33dd1007))
+* **cloudrun-service:** allow additional properties, e.g. global ([ae5b74d](https://github.com/helmless/helmless/commit/ae5b74d7d5aac054ef254eab35a11f677e3edb24))
+* **test:** exclude volatile version from snapshot test ([d46096c](https://github.com/helmless/helmless/commit/d46096c4d219864e50c5bb51916981b310283329))
+
 ## 0.1.0 (2024-12-04)
 
 

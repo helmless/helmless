@@ -2,7 +2,7 @@
   "$id": "https://github.com/helmless/helmless/charts/cloudrun/service",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "0.1.0",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "title": "Cloud Run Service Chart",
   "description": "A Helm chart to template the manifest of a Cloud Run service or job.",
   "required": [

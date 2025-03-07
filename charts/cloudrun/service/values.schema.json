@@ -1,7 +1,7 @@
 {
   "$id": "https://github.com/helmless/helmless/charts/cloudrun/service",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "additionalProperties": false,
   "title": "Cloud Run Service Chart",
   "description": "A Helm chart to template the manifest of a Cloud Run service or job.",
@@ -38,7 +38,8 @@
     "global": {
       "type": "object",
       "additionalProperties": true,
-      "description": "Global settings of the Helm chart."
+      "description": "Global settings of the Helm chart.",
+      "$since": "0.1.1"
     },
     "name": {
       "description": "Name of the Cloud Run Service to deploy. Must be unique within the project region combination.",

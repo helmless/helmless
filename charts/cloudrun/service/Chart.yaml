@@ -5,7 +5,7 @@ description: >-
   the Google Cloud CLI.
 type: application
 icon: https://www.svgrepo.com/show/375383/cloud-run.svg
-version: 0.1.0
+version: 0.1.1
 maintainers:
   - name: Michael Reichenbach (Silthus)
     email: me@silthus.net

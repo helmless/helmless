@@ -1,0 +1,32 @@
+{{/* Test template for helper functions */}}
+
+{{/* Image helper test */}}
+image: {{ include "helmless.cloudrun.image" . }}
+
+{{/* Environment variables helper test */}}
+env: {{ include "helmless.cloudrun.env" . | nindent 2 }}
+
+{{/* Labels helper test */}}
+labels: {{ include "helmless.cloudrun.labels" . | nindent 2 }}
+
+{{/* Region helper test */}}
+region: {{ include "helmless.cloudrun.region" . }}
+
+{{/* Network interfaces helper test */}}
+networkInterfaces: {{ include "helmless.cloudrun.networkInterfaces" .Values.network | toJson }}
+
+{{/* CloudSQL helper test */}}
+cloudsql: {{ include "helmless.cloudrun.cloudsql" . }}
+
+{{/* Cross-project secrets helper test */}}
+crossProjectSecrets: {{ include "helmless.cloudrun.crossProjectSecrets" .Values.secrets }}
+
+{{/* Volume helper test */}}
+{{- if .Values.testVolume }}
+volume: {{ include "helmless.cloudrun.volume" (dict "volume" .Values.testVolume) | nindent 2 }}
+{{- end }}
+
+{{/* Volumes helper test */}}
+{{- if .Values.volumes }}
+volumes: {{ include "helmless.cloudrun.volumes" .Values.volumes | nindent 2 }}
+{{- end }}

@@ -1396,6 +1396,7 @@
         "object",
         "string"
       ],
+      "default": "us-docker.pkg.dev/cloudrun/container/hello",
       "examples": [
         {
           "$title": "Direct image reference",

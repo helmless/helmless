@@ -11,5 +11,5 @@ fi
 for chart in $(find . -name 'Chart.yaml'); do
     chart_dir=$(dirname "$chart")
     echo "Running tests in $chart_dir"
-    (cd "$chart_dir" && helm unittest .)
+    (cd "$chart_dir" && helm dependency build && helm unittest .)
 done

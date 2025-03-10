@@ -2,5 +2,5 @@ dependencies:
 - name: google-cloudrun-common
   repository: file://../common
   version: 0.1.0
-digest: sha256:59ff4a6dc090c8e72c3a5eefbb1f5d1377dde6394bcfec6db656478aa8b7b66e
-generated: "2025-03-07T06:43:09.515009+01:00"
+digest: sha256:af5fb154c606370ada10f84c7ead5fc5322dc3b4da3cb59aaf85cd4868f3d750
+generated: "2025-03-10T13:37:08.540995+01:00"

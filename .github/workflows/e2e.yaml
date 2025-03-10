@@ -48,16 +48,10 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL }}
 
-      - name: 📜 Template Helmless Chart
-        uses: helmless/action@main
-        id: template
-        with:
-          files: ${{ matrix.service }}/values.yaml
-          chart: ./charts/cloudrun/service
-
       - name: 🚀 Deploy Service
-        uses: helmless/google-cloudrun-deploy-action@main
+        uses: helmless/google-cloudrun-action@v0
         id: deploy
         with:
-          gcp_project: ${{ vars.GCP_PROJECT_ID }}
           dry_run: true
+          files: ${{ matrix.service }}/values.yaml
+          chart: ./charts/cloudrun/service

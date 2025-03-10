@@ -35,12 +35,6 @@
     }
   ],
   "properties": {
-    "global": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Global settings of the Helm chart.",
-      "$since": "0.1.1"
-    },
     "name": {
       "description": "Name of the Cloud Run Service to deploy. Must be unique within the project region combination.",
       "maxLength": 63,
@@ -1104,6 +1098,16 @@
         ]
       ],
       "$since": "0.1.0"
+    },
+    "global": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Global settings of the Helm chart."
+    },
+    "common": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Common settings of the Helm chart."
     }
   },
   "$defs": {

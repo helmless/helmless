@@ -32,6 +32,8 @@ jq --arg version "$VERSION" '
             .
           end
         )
+      else
+        .
       end |
       # Handle pattern properties
       if .patternProperties then
@@ -42,7 +44,10 @@ jq --arg version "$VERSION" '
             .
           end
         )
+      else
+        .
       end |
+      # Process nested objects
       with_entries(
         .value |= if type == "object" then process elif type == "array" then map(process) else . end
       )

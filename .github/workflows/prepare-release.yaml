@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   update_snapshots:
-    name: 📝 Update Snapshots
+    name: 📝 Update Schema Versions
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -33,10 +33,6 @@ jobs:
 
       - name: 📝 Update Schema Version
         run: ./bin/scripts/update-schema-versions.sh
-
-      # this is required because the version changes on every release
-      - name: 🧪 Update Snapshots
-        run: helm unittest charts/cloudrun/service --update-snapshot
 
       - name: ✅ Commit
         uses: stefanzweifel/git-auto-commit-action@v5

@@ -55,14 +55,6 @@ jobs:
         run: |
           helm package ${{ matrix.path }}
 
-      - name: ☁️ Upload to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: '*.tgz'
-          tag_name: ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: 🔐 Set up OCI Registry Authentication
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin

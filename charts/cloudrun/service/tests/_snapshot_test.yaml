@@ -7,22 +7,26 @@ tests:
     values:
       - snapshot_values/minimal.yaml
     asserts:
-      - matchSnapshot: {}
+      - matchSnapshot:
+          path: spec
 
   - it: should render with basic configuration
     values:
       - snapshot_values/basic.yaml
     asserts:
-      - matchSnapshot: {}
+      - matchSnapshot:
+          path: spec
 
   - it: should render with network configuration
     values:
       - snapshot_values/network.yaml
     asserts:
-      - matchSnapshot: {}
+      - matchSnapshot:
+          path: spec
 
   - it: should render with full configuration
     values:
       - snapshot_values/full.yaml
     asserts:
-      - matchSnapshot: {}
+      - matchSnapshot:
+          path: spec

@@ -7,7 +7,7 @@ metadata:
   name: {{ .Values.name | quote }}
   labels:
     cloud.googleapis.com/location: {{ include "helmless.cloudrun.region" . | quote }}
-    {{- include "helmless.labels" . | nindent 4 }}
+    {{- include "helmless.cloudrun.labels" . | nindent 4 }}
   annotations:
     {{- with .Values.description }}
     run.googleapis.com/description: {{ . | quote }}
@@ -36,7 +36,7 @@ spec:
         {{- if .Values.encryption }}
         run.googleapis.com/encryption-key: {{ printf "projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s" .Values.project (include "helmless.cloudrun.region" .) .Values.encryption.keyring .Values.encryption.key | quote }}
         {{- end }}
-        {{- with include "helmless.crossProjectSecrets" .Values.secrets }}
+        {{- with include "helmless.cloudrun.crossProjectSecrets" .Values.secrets }}
         run.googleapis.com/secrets: {{ . | quote }}
         {{- end }}
         autoscaling.knative.dev/minScale: {{ (.Values.autoscaling).minScale | default 0 | quote }}
@@ -66,7 +66,7 @@ spec:
       containerConcurrency: {{ (.Values.autoscaling).maxConcurrentRequests | default 80 }}
       timeoutSeconds: {{ (.Values.autoscaling).timeoutSeconds | default 300 }}
       containers:
-        - image: {{ include "helmless.image" . | quote }}
+        - image: {{ include "helmless.cloudrun.image" . | quote }}
           {{- with .Values.containerName }}
           name: {{ . | quote }}
           {{- end }}
@@ -106,9 +106,5 @@ spec:
             {{- end }}
           {{- end }}
       {{- with .Values.volumes }}
-      volumes:
-        {{- range $name, $volume := . }}
-        - name: {{ $name | quote }}
-          {{- include "helmless.cloudrun.volume" (dict "volume" $volume "name" $name) | nindent 10 }}
-        {{- end }}
+      volumes: {{- include "helmless.cloudrun.volumes" . | nindent 10 }}
       {{- end }}

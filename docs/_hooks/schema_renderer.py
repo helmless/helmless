@@ -322,12 +322,13 @@ def on_files(files: Files, config, **kwargs) -> Files:
                 log.info(f"Loading schema from URL: {schema_path}")
                 response = requests.get(schema_path)
                 response.raise_for_status()
-                schema = jsonref.loads(response.text)
+                base_uri = '/'.join(schema_path.split('/')[:-1])
+                schema = jsonref.loads(response.text, base_uri=base_uri)
             else:
                 abs_schema_path = os.path.join(config['docs_dir'], '..', schema_path)
                 log.info(f"Loading schema from: {abs_schema_path}")
                 with open(abs_schema_path) as f:
-                    schema = jsonref.load(f)
+                    schema = jsonref.load(f, base_uri=f"file://{os.path.dirname(abs_schema_path)}")
 
             # Convert schema to markdown
             markdown_output = _render_schema(schema, changelog_path=changelog_path)

@@ -54,5 +54,14 @@ jobs:
       - name: 🧩 Install Helm Plugins
         run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: 📦 Install Python Dependencies
+        run: pip install jsonref
+
       - name: 🔍 Run Checks
         uses: pre-commit/action@v3.0.1

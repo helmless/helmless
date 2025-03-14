@@ -10,17 +10,37 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 
-# Check if Python and jsonref are available
+# Check if Python is available
 if ! command -v python3 &> /dev/null; then
     echo "Error: python3 is required but not installed."
     exit 1
 fi
 
-# Check if jsonref is installed
+# Check if jsonref is installed, and install it if not
 if ! python3 -c "import jsonref" &> /dev/null; then
-    echo "Error: jsonref Python package is required but not installed."
-    echo "Install with: pip install jsonref"
-    exit 1
+    echo "jsonref Python package is required but not installed."
+    echo "Attempting to install jsonref..."
+
+    # Try to install with pip
+    if command -v pip3 &> /dev/null; then
+        pip3 install jsonref
+    # Fall back to python -m pip
+    elif python3 -m pip --version &> /dev/null; then
+        python3 -m pip install jsonref
+    else
+        echo "Error: Could not install jsonref. Please install it manually:"
+        echo "pip install jsonref"
+        exit 1
+    fi
+
+    # Verify installation
+    if ! python3 -c "import jsonref" &> /dev/null; then
+        echo "Error: Failed to install jsonref. Please install it manually:"
+        echo "pip install jsonref"
+        exit 1
+    fi
+
+    echo "Successfully installed jsonref."
 fi
 
 # Run the dereference script

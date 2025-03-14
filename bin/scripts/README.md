@@ -55,12 +55,20 @@ To prevent conflicts with the `end-of-file-fixer` pre-commit hook, this script e
 
 This script is designed to be used as a pre-commit hook. It is called by `bin/pre-commit-hooks/dereference-schema.sh`, which is configured in `.pre-commit-config.yaml`. The pre-commit hook:
 
-1. Verifies Python and the required dependencies are installed
-2. Runs the dereference script
-3. Adds any changed files to the commit
-4. Fails the commit if dereferencing encounters errors
+1. Verifies Python is installed
+2. Checks for the `jsonref` dependency and attempts to install it if missing
+3. Runs the dereference script
+4. Adds any changed files to the commit
+5. Fails the commit if dereferencing encounters errors
+
+### CI Integration
+
+The script and pre-commit hook are integrated with CI in two ways:
+
+1. The GitHub Actions workflow installs the required `jsonref` dependency before running pre-commit checks
+2. The pre-commit hook script attempts to automatically install missing dependencies when possible
 
 ### Dependencies
 
 - Python 3.6+
-- jsonref
+- jsonref (automatically installed by the pre-commit hook if missing)

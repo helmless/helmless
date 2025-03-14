@@ -56,19 +56,42 @@ To prevent conflicts with the `end-of-file-fixer` pre-commit hook, this script e
 This script is designed to be used as a pre-commit hook. It is called by `bin/pre-commit-hooks/dereference-schema.sh`, which is configured in `.pre-commit-config.yaml`. The pre-commit hook:
 
 1. Verifies Python is installed
-2. Checks for the `jsonref` dependency and attempts to install it if missing
+2. Checks for required dependencies and directs users to install from requirements.txt if missing
 3. Runs the dereference script
 4. Adds any changed files to the commit
 5. Fails the commit if dereferencing encounters errors
 
 ### CI Integration
 
-The script and pre-commit hook are integrated with CI in two ways:
+The script and pre-commit hook are integrated with CI in a streamlined way:
 
-1. The GitHub Actions workflow installs the required `jsonref` dependency before running pre-commit checks
-2. The pre-commit hook script attempts to automatically install missing dependencies when possible
+1. The project uses asdf to manage Python in both local and CI environments
+2. Dependencies are defined in `requirements.txt` (located in this directory) for consistency
+3. The GitHub Actions workflow installs dependencies directly from requirements.txt
+4. The same dependency management approach works for both local development and CI
 
 ### Dependencies
 
-- Python 3.6+
-- jsonref (automatically installed by the pre-commit hook if missing)
+- Python 3.6+ (managed by asdf)
+- Dependencies in `bin/scripts/requirements.txt`:
+  - jsonref>=1.0.0
+
+### Getting Started
+
+To set up your environment for running this script:
+
+1. Ensure Python is installed (preferably using asdf):
+   ```bash
+   asdf install python
+   asdf reshim python
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r bin/scripts/requirements.txt
+   ```
+
+3. Install pre-commit hooks:
+   ```bash
+   pre-commit install
+   ```

@@ -9,6 +9,7 @@ set -e
 # Get the directory of the current script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
+SCRIPTS_DIR="${REPO_ROOT}/bin/scripts"
 
 # Check if Python is available
 if ! command -v python3 &> /dev/null; then
@@ -16,36 +17,23 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Check if jsonref is installed, and install it if not
+# Check if jsonref is installed
 if ! python3 -c "import jsonref" &> /dev/null; then
-    echo "jsonref Python package is required but not installed."
-    echo "Attempting to install jsonref..."
-
-    # Try to install with pip
-    if command -v pip3 &> /dev/null; then
-        pip3 install jsonref
-    # Fall back to python -m pip
-    elif python3 -m pip --version &> /dev/null; then
-        python3 -m pip install jsonref
-    else
-        echo "Error: Could not install jsonref. Please install it manually:"
-        echo "pip install jsonref"
-        exit 1
-    fi
-
-    # Verify installation
-    if ! python3 -c "import jsonref" &> /dev/null; then
-        echo "Error: Failed to install jsonref. Please install it manually:"
-        echo "pip install jsonref"
-        exit 1
-    fi
-
-    echo "Successfully installed jsonref."
+    echo "Error: jsonref Python package is required but not installed."
+    echo ""
+    echo "To install dependencies, run:"
+    echo "  pip install -r ${SCRIPTS_DIR}/requirements.txt"
+    echo ""
+    echo "If you're using asdf, make sure Python is properly configured:"
+    echo "  asdf install python"
+    echo "  asdf reshim python"
+    echo "  pip install -r ${SCRIPTS_DIR}/requirements.txt"
+    exit 1
 fi
 
 # Run the dereference script
 echo "Dereferencing schema files..."
-if ! python3 "${REPO_ROOT}/bin/scripts/dereference-schema.py"; then
+if ! python3 "${SCRIPTS_DIR}/dereference-schema.py"; then
     echo "Error: Schema dereferencing failed. Check the logs above for details."
     exit 1
 fi

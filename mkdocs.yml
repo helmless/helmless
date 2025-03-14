@@ -1,5 +1,5 @@
 site_name: Helmless
-site_description: Deploy containers to Google Cloud Run with Helm's, avoiding the complexity of Kubernetes and Terraform.
+site_description: Serverless Deployments Without Compromise. Deploy serverless containers with Helm to Google Cloud Run, without the overhead of Kubernetes and Terraform.
 site_url: https://helmless.io
 repo_url: https://github.com/helmless/helmless
 repo_name: helmless/helmless
@@ -11,7 +11,10 @@ schema_renderer:
   schemas:
     - schema_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json
       changelog_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/CHANGELOG.md
-      nav_path: docs/cloudrun/schema.md
+      nav_path: docs/cloudrun/schemas/service.md
+    - schema_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/job/values.schema.json
+      changelog_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/job/CHANGELOG.md
+      nav_path: docs/cloudrun/schemas/job.md
 
 nav:
   - Home: index.md
@@ -27,7 +30,8 @@ nav:
           - CI/CD: docs/cloudrun/ci-cd.md
           # - Examples: docs/cloudrun/examples.md
           # - Advanced Infrastructure: docs/cloudrun/advanced.md
-          - Chart Schema: docs/cloudrun/schema.md
+          - Service Schema: docs/cloudrun/schemas/service.md
+          - Job Schema: docs/cloudrun/schemas/job.md
           - Chart Changelog: docs/cloudrun/CHANGELOG.md
       - Helmless Explained:
           - What is Helmless?: docs/helmless/what-is-helmless.md
@@ -60,12 +64,14 @@ plugins:
 theme:
   name: material
   custom_dir: docs/_overrides/
+  logo: assets/images/helmless.png
+  favicon: assets/images/helmless.png
   palette:
     scheme: slate
     primary: custom
     accent: light blue
   icon:
-    logo: material/rocket-launch
+    # logo: material/rocket-launch
     repo: material/github
     annotation: material/chevron-right-circle
   features:

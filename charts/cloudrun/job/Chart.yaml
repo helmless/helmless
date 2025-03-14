@@ -1,11 +1,11 @@
 apiVersion: v2
-name: google-cloudrun-service
+name: google-cloudrun-job
 description: >-
-  Templates a Google Cloud Run Service YAML manifest that can be deployed using
+  Templates a Google Cloud Run Job YAML manifest that can be deployed using
   the Google Cloud CLI.
 type: application
 icon: https://www.svgrepo.com/show/375383/cloud-run.svg
-version: 0.1.1
+version: 0.1.0
 maintainers:
   - name: Michael Reichenbach (Silthus)
     email: me@silthus.net

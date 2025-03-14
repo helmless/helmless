@@ -83,6 +83,55 @@ body {
   text-align: center;
 }
 
+/* Floating logo styling */
+.hero-logo {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 200px;
+  z-index: 2;
+}
+
+.floating-logo {
+  width: 100%;
+  height: auto;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Responsive adjustments for logo */
+@media (max-width: 1024px) {
+  .hero-logo {
+    width: 150px;
+    height: 150px;
+    right: 3%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-logo {
+    position: static;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    transform: none;
+  }
+}
+
 .tx-hero__content {
   max-width: 42rem;
   margin: 0 auto;

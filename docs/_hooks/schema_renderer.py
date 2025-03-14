@@ -12,7 +12,7 @@ log = logging.getLogger('mkdocs')
 # Add this at the top level of the file
 log.info("Schema renderer hook module loaded")
 
-def _render_property(name: str, prop: dict, required: list = None, level: int = 2, changelog_path: str = None) -> str:
+def _render_property(name: str, prop: dict, required: list = None, level: int = 1, changelog_path: str = None) -> str:
     """Render a single property from the schema into markdown."""
     md = []
     prefix = '#' * level
@@ -48,35 +48,36 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
     else:
         type_str = f'`{prop_type}`'
 
-    # Build markdown output
-    md.append(f"{prefix} <!-- md:setting values.{name} -->")
+    if name != "root":
+        # Build markdown output
+        md.append(f"{prefix} <!-- md:setting values.{name} -->")
 
-    md.append("")
-    if 'deprecated' in prop and prop['deprecated']:
-        md.append("<!-- md:deprecated -->")
+        md.append("")
+        if 'deprecated' in prop and prop['deprecated']:
+            md.append("<!-- md:deprecated -->")
 
-    md.append(f"<!-- md:version {prop.get('$since', 'next')} -->")
-    md.append(f"<!-- md:type {type_str} -->")
-    if 'enum' in prop:
-        enum_values = ' · '.join(f'`{v}`' for v in prop['enum'])
-        md.append(f"<!-- md:enum {enum_values} -->")
+        md.append(f"<!-- md:version {prop.get('$since', 'next')} -->")
+        md.append(f"<!-- md:type {type_str} -->")
+        if 'enum' in prop:
+            enum_values = ' · '.join(f'`{v}`' for v in prop['enum'])
+            md.append(f"<!-- md:enum {enum_values} -->")
 
-    if 'maxLength' in prop:
-        md.append(f"<!-- md:maxLength {prop['maxLength']} -->")
-    if 'minLength' in prop:
-        md.append(f"<!-- md:minLength {prop['minLength']} -->")
-    if 'pattern' in prop:
-        md.append(f"<!-- md:pattern `{prop['pattern']}` -->")
+        if 'maxLength' in prop:
+            md.append(f"<!-- md:maxLength {prop['maxLength']} -->")
+        if 'minLength' in prop:
+            md.append(f"<!-- md:minLength {prop['minLength']} -->")
+        if 'pattern' in prop:
+            md.append(f"<!-- md:pattern `{prop['pattern']}` -->")
 
-    default = prop.get('default', None)
-    if default is not None:
-        md.append(f"<!-- md:default `{default}` -->")
-    else:
-        md.append("<!-- md:default none -->")
+        default = prop.get('default', None)
+        if default is not None:
+            md.append(f"<!-- md:default `{default}` -->")
+        else:
+            md.append("<!-- md:default none -->")
 
 
-    if name.split('.')[-1] in (required or []):
-        md.append("<!-- md:flag required -->")
+        if name.split('.')[-1] in (required or []):
+            md.append("<!-- md:flag required -->")
 
     # Add description
     if 'description' in prop:
@@ -157,31 +158,21 @@ def _render_schema(schema: dict, changelog_path: str = None) -> str:
         f"title: {schema.get('title', 'Values Schema')}",
         f"description: {schema.get('description', '')}",
         "---",
-        "",
         f"# {schema.get('title', 'Values Schema')}",
-        "",
-        schema.get('description', ''),
-        ""
     ])
 
-    if 'examples' in schema:
-        md.extend(_render_examples(schema['examples']))
-        md.append("")
-
-    # Render each top-level property
-    for prop_name, prop in schema.get('properties', {}).items():
-        try:
-            md.append(_render_property(
-                prop_name,
-            prop,
+    try:
+        md.append(_render_property(
+            "root",
+            schema,
             schema.get('required', []),
-                changelog_path=changelog_path
-            ))
-            md.append("")
-            md.append("---")
-        except Exception as e:
-            log.error(f"Failed to render property `{prop_name}` {prop}: {e}")
-            log.exception("Full traceback:")
+            changelog_path=changelog_path
+        ))
+        md.append("")
+        md.append("---")
+    except Exception as e:
+        log.error(f"Failed to render schema: {e}")
+        log.exception("Full traceback:")
 
     return '\n'.join(md)
 

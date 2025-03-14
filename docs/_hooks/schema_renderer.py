@@ -17,6 +17,9 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
     md = []
     prefix = '#' * level
 
+    if prop.get('$hidden', False):
+        return ""
+
     # Handle allOf by merging properties
     if 'allOf' in prop:
         # Create a copy of the original property without allOf
@@ -26,13 +29,17 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
         if 'properties' not in merged_prop:
             merged_prop['properties'] = {}
 
-        # Merge all referenced properties
+        # First merge all referenced properties from allOf
         for ref_prop in prop['allOf']:
             if '$ref' in ref_prop:
                 # Skip rendering the allOf reference directly
                 continue
             if 'properties' in ref_prop:
-                merged_prop['properties'].update(ref_prop['properties'])
+                # Add allOf properties first
+                merged_prop['properties'] = {
+                    **ref_prop['properties'],
+                    **(merged_prop['properties'] or {})
+                }
             # Merge other fields if needed
             for key, value in ref_prop.items():
                 if key != 'properties' and key not in merged_prop:

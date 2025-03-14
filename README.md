@@ -1,4 +1,4 @@
-# ![Helmless Logo](docs/assets/images/helmless.png) helmless.io
+# helmless.io
 
 [![📜 Docs](https://github.com/helmless/helmless/actions/workflows/deploy-docs.yaml/badge.svg)](https://helmless.io)
 [![CloudRun Chart GitHub Release](https://img.shields.io/github/v/release/helmless/helmless?include_prereleases&label=google-cloudrun-service&color=blue)](https://github.com/helmless/google-cloudrun-chart/)

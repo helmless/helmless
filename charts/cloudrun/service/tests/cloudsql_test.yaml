@@ -1,6 +1,6 @@
 suite: CloudSQL Configuration Tests
 templates:
-  - manifest.yaml
+  - service.yaml
 set:
   name: my-service
   project: my-project

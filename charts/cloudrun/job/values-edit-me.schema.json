@@ -1,0 +1,108 @@
+{
+    "$id": "https://github.com/helmless/helmless/charts/cloudrun/job",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1.1",
+    "additionalProperties": false,
+    "title": "Cloud Run Job Chart",
+    "description": "A Helm chart to template the manifest of a Cloud Run Job.",
+    "required": [
+        "name",
+        "project"
+    ],
+    "type": "object",
+    "examples": [
+        {
+            "$title": "Minimal Job",
+            "name": "my-job",
+            "image": "ghcr.io/my-org/my-image@sha256:abc123",
+            "region": "us-central1",
+            "env": {
+                "MY_ENV_VAR": "my-value"
+            }
+        },
+        {
+            "$title": "Job with Direct VPC Connect",
+            "name": "my-job",
+            "image": "ghcr.io/my-org/my-image@sha256:abc123",
+            "region": "us-central1",
+            "vpc": {
+                "network": "my-network",
+                "subnetwork": "my-subnetwork"
+            }
+        }
+    ],
+    "properties": {
+        "name": {
+            "$ref": "../common/common.schema.json#/$defs/name"
+        },
+        "project": {
+            "$ref": "../common/common.schema.json#/$defs/project"
+        },
+        "region": {
+            "$ref": "../common/common.schema.json#/$defs/region"
+        },
+        "image": {
+            "$ref": "../common/common.schema.json#/$defs/image"
+        },
+        "revisionName": {
+            "$ref": "../common/common.schema.json#/$defs/revisionName"
+        },
+        "containerName": {
+            "$ref": "../common/common.schema.json#/$defs/containerName"
+        },
+        "serviceAccountName": {
+            "$ref": "../common/common.schema.json#/$defs/serviceAccountName"
+        },
+        "description": {
+            "$ref": "../common/common.schema.json#/$defs/description"
+        },
+        "env": {
+            "$ref": "../common/common.schema.json#/$defs/env"
+        },
+        "secrets": {
+            "$ref": "../common/common.schema.json#/$defs/secrets"
+        },
+        "command": {
+            "$ref": "../common/common.schema.json#/$defs/command"
+        },
+        "args": {
+            "$ref": "../common/common.schema.json#/$defs/args"
+        },
+        "resources": {
+            "$ref": "../common/common.schema.json#/$defs/resources"
+        },
+        "volumes": {
+            "$ref": "../common/common.schema.json#/$defs/volumes"
+        },
+        "network": {
+            "$ref": "../common/common.schema.json#/$defs/network"
+        },
+        "cloudsql": {
+            "$ref": "../common/common.schema.json#/$defs/cloudsql"
+        },
+        "executionEnvironment": {
+            "$ref": "../common/common.schema.json#/$defs/executionEnvironment"
+        },
+        "launchStage": {
+            "$ref": "../common/common.schema.json#/$defs/launchStage"
+        },
+        "binaryAuthorization": {
+            "$ref": "../common/common.schema.json#/$defs/binaryAuthorization"
+        },
+        "encryption": {
+            "$ref": "../common/common.schema.json#/$defs/encryption"
+        },
+        "global": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Global settings of the Helm chart.",
+            "$hidden": true
+        },
+        "common": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Common settings of the Helm chart.",
+            "$hidden": true
+        }
+    }
+}

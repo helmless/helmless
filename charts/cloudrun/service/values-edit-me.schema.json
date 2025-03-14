@@ -1,0 +1,520 @@
+{
+  "$id": "https://github.com/helmless/helmless/charts/cloudrun/service",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "0.1.1",
+  "additionalProperties": false,
+  "title": "Cloud Run Service Chart",
+  "description": "A Helm chart to template the manifest of a Cloud Run Service.",
+  "required": [
+    "name",
+    "project"
+  ],
+  "type": "object",
+  "examples": [
+    {
+      "$title": "Minimal Service",
+      "name": "my-service",
+      "image": "ghcr.io/my-org/my-image@sha256:abc123",
+      "region": "us-central1",
+      "env": {
+        "MY_ENV_VAR": "my-value"
+      },
+      "autoscaling": {
+        "minScale": "0 # scale to zero"
+      }
+    },
+    {
+      "$title": "Service with Direct VPC Connect",
+      "name": "my-service",
+      "image": "ghcr.io/my-org/my-image@sha256:abc123",
+      "region": "us-central1",
+      "vpc": {
+        "network": "my-network",
+        "subnetwork": "my-subnetwork"
+      }
+    }
+  ],
+  "properties": {
+    "name": {
+      "$ref": "../common/common.schema.json#/$defs/name"
+    },
+    "project": {
+      "$ref": "../common/common.schema.json#/$defs/project"
+    },
+    "region": {
+      "$ref": "../common/common.schema.json#/$defs/region"
+    },
+    "image": {
+      "$ref": "../common/common.schema.json#/$defs/image"
+    },
+    "revisionName": {
+      "$ref": "../common/common.schema.json#/$defs/revisionName"
+    },
+    "containerName": {
+      "$ref": "../common/common.schema.json#/$defs/containerName"
+    },
+    "serviceAccountName": {
+      "$ref": "../common/common.schema.json#/$defs/serviceAccountName"
+    },
+    "description": {
+      "$ref": "../common/common.schema.json#/$defs/description"
+    },
+    "env": {
+      "$ref": "../common/common.schema.json#/$defs/env"
+    },
+    "secrets": {
+      "$ref": "../common/common.schema.json#/$defs/secrets"
+    },
+    "command": {
+      "$ref": "../common/common.schema.json#/$defs/command"
+    },
+    "args": {
+      "$ref": "../common/common.schema.json#/$defs/args"
+    },
+    "resources": {
+      "$ref": "../common/common.schema.json#/$defs/resources"
+    },
+    "volumes": {
+      "$ref": "../common/common.schema.json#/$defs/volumes"
+    },
+    "network": {
+      "$ref": "../common/common.schema.json#/$defs/network"
+    },
+    "cloudsql": {
+      "$ref": "../common/common.schema.json#/$defs/cloudsql"
+    },
+    "executionEnvironment": {
+      "$ref": "../common/common.schema.json#/$defs/executionEnvironment"
+    },
+    "launchStage": {
+      "$ref": "../common/common.schema.json#/$defs/launchStage"
+    },
+    "autoscaling": {
+      "$ref": "#/$defs/autoscalingProperties",
+      "$since": "0.1.0"
+    },
+    "sessionAffinity": {
+      "default": false,
+      "description": "Whether to enable session affinity for the CloudRun service. When enabled, requests from the same client are routed to the same container instance.",
+      "type": [
+        "boolean"
+      ],
+      "examples": [
+        true
+      ],
+      "$since": "0.1.0"
+    },
+    "containerPort": {
+      "description": "Container port to expose. In CloudRun only a single port can be exposed and defaults to 8080.",
+      "type": [
+        "integer"
+      ],
+      "default": 8080,
+      "examples": [
+        8081
+      ],
+      "$since": "0.1.0"
+    },
+    "http2": {
+      "description": "Whether to use HTTP/2 for the container port. If enabled, the port name will be h2c instead of http1.",
+      "type": "boolean",
+      "default": false,
+      "examples": [
+        true
+      ],
+      "$since": "0.1.0"
+    },
+    "ingress": {
+      "description": "The ingress settings for the CloudRun service. Controls where the service can be accessed from.",
+      "enum": [
+        "all",
+        "internal",
+        "internal-and-cloud-load-balancing"
+      ],
+      "default": "all",
+      "type": "string",
+      "examples": [
+        "internal"
+      ],
+      "$since": "0.1.0"
+    },
+    "startupProbe": {
+      "description": "The startup probe controls how the Cloud Run service is monitored for readiness. And new revisions will only replace the running container if the startup probe succeeds.",
+      "examples": [
+        {
+          "$title": "HTTP",
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "timeoutSeconds": 1,
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/health",
+            "port": 8080,
+            "httpHeaders": [
+              {
+                "name": "X-Custom-Header",
+                "value": "my-value"
+              }
+            ]
+          }
+        },
+        {
+          "$title": "TCP",
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "timeoutSeconds": 1,
+          "failureThreshold": 3,
+          "tcpSocket": {
+            "port": 8080
+          }
+        },
+        {
+          "$title": "gRPC",
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "timeoutSeconds": 1,
+          "failureThreshold": 3,
+          "grpc": {
+            "port": 8080
+          }
+        }
+      ],
+      "oneOf": [
+        {
+          "$ref": "#/$defs/httpProbe"
+        },
+        {
+          "$ref": "#/$defs/tcpProbe"
+        },
+        {
+          "$ref": "#/$defs/grpcProbe"
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/probeProperties"
+        }
+      ],
+      "$since": "0.1.0"
+    },
+    "livenessProbe": {
+      "description": "The liveness probe controls how the Cloud Run service is monitored for health. If a liveness probe does not succeed within the specified time (failureThreshold * periodSeconds), the container is shut down using a SIGKILL signal. Any remaining requests that were still being served by the container are terminated with the HTTP status code 503. After the container is shut down, Cloud Run autoscaling starts up a new container instance.",
+      "examples": [
+        {
+          "$title": "HTTP",
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "timeoutSeconds": 1,
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/health",
+            "port": 8080
+          }
+        },
+        {
+          "$title": "gRPC",
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "timeoutSeconds": 1,
+          "failureThreshold": 3,
+          "grpc": {
+            "port": 8080
+          }
+        }
+      ],
+      "oneOf": [
+        {
+          "$ref": "#/$defs/httpProbe"
+        },
+        {
+          "$ref": "#/$defs/grpcProbe"
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/probeProperties"
+        }
+      ],
+      "$since": "0.1.0"
+    },
+    "disableInvokerIamPolicy": {
+      "description": "Whether to [disable the invoker IAM policy](https://cloud.google.com/run/docs/securing/managing-access#disable_invoker) for the Cloud Run service. This is useful when using a VPC connector or direct VPC connection to avoid conflicts with the invoker IAM policy. Must be first requested via invite and is not generally available.",
+      "type": "boolean",
+      "default": false,
+      "$since": "0.1.0"
+    },
+    "customAudiences": {
+      "description": "Custom audiences to set in the generated ID token when using Identity Platform.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "examples": [
+        [
+          "https://example.com",
+          "my-audience"
+        ]
+      ],
+      "$since": "0.1.0"
+    },
+    "binaryAuthorization": {
+      "$ref": "../common/common.schema.json#/$defs/binaryAuthorization"
+    },
+    "encryption": {
+      "$ref": "../common/common.schema.json#/$defs/encryption"
+    },
+    "global": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Global settings of the Helm chart.",
+      "$hidden": true
+    },
+    "common": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Common settings of the Helm chart.",
+      "$hidden": true
+    }
+  },
+  "$defs": {
+    "probeProperties": {
+      "type": "object",
+      "properties": {
+        "initialDelaySeconds": {
+          "type": "integer",
+          "default": 0,
+          "description": "Number of seconds after the container starts before the probe is initiated",
+          "$since": "0.1.0"
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "default": 10,
+          "description": "How often (in seconds) to perform the probe",
+          "$since": "0.1.0"
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "default": 1,
+          "description": "Number of seconds after which the probe times out",
+          "$since": "0.1.0"
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "default": 3,
+          "description": "Number of consecutive failures required to determine the container is not alive",
+          "$since": "0.1.0"
+        }
+      }
+    },
+    "httpProbe": {
+      "type": "object",
+      "required": [
+        "httpGet"
+      ],
+      "properties": {
+        "httpGet": {
+          "type": "object",
+          "description": "HTTP health check configuration. If you are configuring your Cloud Run service for HTTP probes, you must also [add an endpoint](https://cloud.google.com/run/docs/configuring/healthchecks#healthcheck-endpoint) in your service code to respond to the probe. *Any response between 200 and 400 is a success, everything else indicates failure.*",
+          "required": [
+            "path"
+          ],
+          "examples": [
+            {
+              "path": "/health",
+              "port": 8080,
+              "httpHeaders": [
+                {
+                  "name": "X-Custom-Header",
+                  "value": "my-value"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "path": {
+              "type": [
+                "string"
+              ],
+              "description": "Relative path to the HTTP endpoint, for example, /heatlh.",
+              "$since": "0.1.0"
+            },
+            "port": {
+              "type": [
+                "integer"
+              ],
+              "default": 8080,
+              "description": "Port to probe for HTTP health check. Should be set to the [container port](#containerPort) used for your service.",
+              "$since": "0.1.0"
+            },
+            "httpHeaders": {
+              "type": "array",
+              "description": "HTTP headers can be used to supply multiple or repeated custom headers.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "$since": "0.1.0"
+                  },
+                  "value": {
+                    "type": "string",
+                    "$since": "0.1.0"
+                  }
+                }
+              },
+              "$since": "0.1.0"
+            }
+          },
+          "$since": "0.1.0"
+        }
+      }
+    },
+    "tcpProbe": {
+      "type": "object",
+      "required": [
+        "tcpSocket"
+      ],
+      "examples": [
+        {
+          "tcpSocket": {
+            "port": 8080
+          }
+        }
+      ],
+      "properties": {
+        "tcpSocket": {
+          "type": "object",
+          "description": "Probes if the container is listening on the specified port. Use the other health check options for more control.",
+          "examples": [
+            {
+              "port": 8080
+            }
+          ],
+          "required": [
+            "port"
+          ],
+          "properties": {
+            "port": {
+              "type": "integer",
+              "default": 8080,
+              "description": "Port should be set to the [container port](#containerPort) used for your service.",
+              "$since": "0.1.0"
+            }
+          },
+          "$since": "0.1.0"
+        }
+      }
+    },
+    "grpcProbe": {
+      "type": "object",
+      "required": [
+        "grpc"
+      ],
+      "properties": {
+        "grpc": {
+          "type": "object",
+          "description": "If you are configuring a gRPC probe, you must also implement the [gRPC Health Checking protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md) in your Cloud Run service.",
+          "examples": [
+            {
+              "port": 8080,
+              "service": "my-service"
+            }
+          ],
+          "required": [
+            "port"
+          ],
+          "properties": {
+            "port": {
+              "type": "integer",
+              "default": 8080,
+              "description": "Port to probe for gRPC health check. Should be set to the [container port](#containerPort) used for your service.",
+              "$since": "0.1.0"
+            },
+            "service": {
+              "type": "string",
+              "description": "If set, this is used in the service field of the `grpc.health.v1.HealthCheckRequest` when the `grpc.health.v1.Health.Check` rpc is called.",
+              "$since": "0.1.0"
+            }
+          },
+          "$since": "0.1.0"
+        }
+      }
+    },
+    "autoscalingProperties": {
+      "type": "object",
+      "examples": [
+        {
+          "$title": "Default",
+          "minScale": 1,
+          "maxScale": 100,
+          "maxConcurrentRequests": 80,
+          "timeoutSeconds": 60
+        },
+        {
+          "$title": "Scale to zero",
+          "minScale": 0,
+          "maxScale": 100,
+          "maxConcurrentRequests": 80,
+          "timeoutSeconds": 120
+        }
+      ],
+      "properties": {
+        "minScale": {
+          "default": 1,
+          "description": "Minimum number of replicas to scale down to. 0 enables scale to zero.",
+          "type": [
+            "integer"
+          ],
+          "examples": [
+            {
+              "$title": "Default",
+              "$value": 1
+            },
+            {
+              "$title": "Scale to zero",
+              "$value": 0
+            }
+          ],
+          "$since": "0.1.0"
+        },
+        "maxScale": {
+          "default": 100,
+          "description": "Maximum number of replicas to scale up to.",
+          "type": [
+            "integer"
+          ],
+          "examples": [
+            1
+          ],
+          "$since": "0.1.0"
+        },
+        "maxConcurrentRequests": {
+          "default": 80,
+          "description": "The number of concurrent requests per instance. Controls how many requests are processed before the autoscaler scales up. Setting this to 1 means 1 request per instance at a time.",
+          "type": [
+            "integer"
+          ],
+          "examples": [
+            1
+          ],
+          "$since": "0.1.0"
+        },
+        "timeoutSeconds": {
+          "default": 60,
+          "description": "The maximum time the container will wait before responding with a 504 error. Especially important for startup times of newly spawned containers.",
+          "type": [
+            "integer"
+          ],
+          "examples": [
+            120
+          ],
+          "$since": "0.1.0"
+        }
+      }
+    }
+  }
+}

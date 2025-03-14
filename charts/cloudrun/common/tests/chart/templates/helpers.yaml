@@ -1,3 +1,6 @@
+metadata:
+  name: {{ .Release.Name }}
+
 {{/* Test template for helper functions */}}
 
 {{/* Image helper test */}}

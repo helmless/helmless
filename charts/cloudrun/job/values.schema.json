@@ -1,0 +1,42 @@
+{
+    "$id": "https://github.com/helmless/helmless/charts/cloudrun/job",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "0.1.1",
+    "additionalProperties": false,
+    "title": "Cloud Run Job Chart",
+    "description": "A Helm chart to template the manifest of a Cloud Run Job.",
+    "required": [
+        "name",
+        "project"
+    ],
+    "type": "object",
+    "examples": [
+        {
+            "$title": "Minimal Job",
+            "name": "my-job",
+            "image": "ghcr.io/my-org/my-image@sha256:abc123",
+            "region": "us-central1",
+            "env": {
+                "MY_ENV_VAR": "my-value"
+            }
+        },
+        {
+            "$title": "Job with Direct VPC Connect",
+            "name": "my-job",
+            "image": "ghcr.io/my-org/my-image@sha256:abc123",
+            "region": "us-central1",
+            "vpc": {
+                "network": "my-network",
+                "subnetwork": "my-subnetwork"
+            }
+        }
+    ],
+    "allOf": [
+        {
+            "$ref": "https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/common/common.schema.json#/properties/common"
+        }
+    ],
+    "properties": {
+
+    }
+}

@@ -10,3 +10,8 @@ maintainers:
   - name: Michael Reichenbach (Silthus)
     email: me@silthus.net
     url: https://github.com/silthus
+dependencies:
+  - name: google-cloudrun-common
+    repository: file://../common
+    version: "0.x.x"
+    alias: common

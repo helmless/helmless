@@ -14,6 +14,32 @@
                     "jsonpath": "$.version"
                 }
             ]
+        },
+        "charts/cloudrun/job": {
+            "release-type": "helm",
+            "package-name": "google-cloudrun-job",
+            "extra-files": [
+                "Chart.yaml",
+                "README.md",
+                {
+                    "type": "json",
+                    "path": "values.schema.json",
+                    "jsonpath": "$.version"
+                }
+            ]
+        },
+        "charts/cloudrun/common": {
+            "release-type": "helm",
+            "package-name": "google-cloudrun-common",
+            "extra-files": [
+                "Chart.yaml",
+                "README.md",
+                {
+                    "type": "json",
+                    "path": "common.schema.json",
+                    "jsonpath": "$.version"
+                }
+            ]
         }
     },
     "bump-minor-pre-major": true,

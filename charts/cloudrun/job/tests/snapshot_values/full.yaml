@@ -1,0 +1,66 @@
+name: full-job
+project: my-project
+image:
+  name: image
+  tag: v1.0.0
+  repository: project
+  registry: gcr.io
+description: 'A fully configured job'
+revisionName: full-v1
+region: us-west1
+launchStage: GA
+binaryAuthorization: true
+encryption:
+  key: my-key
+  keyring: my-keyring
+serviceAccountName: my-service-account
+containerName: main-container
+command: ['/bin/sh']
+args: ['-c', 'echo hello']
+resources:
+  limits:
+    cpu: 4
+    memory: '2Gi'
+network:
+  connector: projects/my-project/locations/us-central1/connectors/my-connector
+  egress: all-traffic
+env:
+  ENV_VAR1: 'value1'
+  ENV_VAR2: 'value2'
+secrets:
+  SECRET1: 'my-secret'
+  SECRET2:
+    secret: 'another-secret'
+    version: '1'
+  SECRET3:
+    secret: 'other-secret'
+    project: 'other-project'
+    version: 'latest'
+volumes:
+  config:
+    mountPath: /etc/config
+    secret:
+      name: app-config
+      items:
+        - path: config.json
+        - version: '2'
+          path: config.v2.json
+  cache:
+    mountPath: /cache
+    emptyDir:
+      size: 512Mi
+  data:
+    mountPath: /data
+    readOnly: true
+    gcs:
+      bucket: my-data-bucket
+      mountOptions:
+        file-mode: '0644'
+        dir-mode: '0755'
+        uid: '1000'
+        gid: '1000'
+  shared:
+    mountPath: /shared
+    nfs:
+      server: 10.0.0.1
+      path: /exports/data

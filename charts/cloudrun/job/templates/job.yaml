@@ -1,4 +1,3 @@
-{{- include "helmless.cloudrun.validateCPU" . }}
 {{- include "helmless.cloudrun.validateVolumes" . }}
 apiVersion: run.googleapis.com/v1
 kind: Job
@@ -6,10 +5,14 @@ metadata:
   name: {{ .Values.name | quote }}
   labels:
     cloud.googleapis.com/location: {{ include "helmless.cloudrun.region" . | quote }}
+    {{- include "helmless.cloudrun.labels" . | nindent 4 }}
   annotations:
     run.googleapis.com/launch-stage: {{ .Values.launchStage | default "BETA" | quote }}
     {{- if .Values.binaryAuthorization }}
     run.googleapis.com/binary-authorization: "default"
+    {{- end }}
+    {{- with .Values.description }}
+    run.googleapis.com/description: {{ . | quote }}
     {{- end }}
 spec:
   template:
@@ -32,6 +35,9 @@ spec:
         {{- end }}
         {{- if .Values.encryption }}
         run.googleapis.com/encryption-key: {{ printf "projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s" .Values.project (include "helmless.cloudrun.region" .) .Values.encryption.keyring .Values.encryption.key | quote }}
+        {{- end }}
+        {{- with include "helmless.cloudrun.crossProjectSecrets" .Values.secrets }}
+        run.googleapis.com/secrets: {{ . | quote }}
         {{- end }}
     spec:
       parallelism: PARALLELISM
@@ -57,7 +63,7 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
             {{- if or .Values.env .Values.secrets .Values.cloudsql }}
-            env: {{- include "helmless.cloudrun.env" . | nindent 10 }}
+            env: {{- include "helmless.cloudrun.env" . | nindent 12 }}
             {{- end }}
             resources:
               limits:

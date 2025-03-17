@@ -1,0 +1,212 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Volume Configuration Tests
+templates:
+  - job.yaml
+set:
+  name: my-job
+  image: gcr.io/my-project/my-app:v1
+  project: my-project
+
+tests:
+  # No Volumes
+  - it: should not set volumes when not specified
+    asserts:
+      - notExists:
+          path: spec.template.spec.template.spec.containers[0].volumeMounts
+      - notExists:
+          path: spec.template.spec.template.spec.volumes
+
+  # Secret Volume Tests
+  - it: should mount secret volume with latest version
+    set:
+      volumes:
+        config:
+          mountPath: /etc/config
+          readOnly: true
+          secret:
+            name: my-secret
+            items:
+              - path: config.json
+    asserts:
+      - contains:
+          path: spec.template.spec.template.spec.volumes
+          content:
+            name: config
+            secret:
+              secretName: 'my-secret'
+              items:
+                - key: 'latest'
+                  path: 'config.json'
+      - contains:
+          path: spec.template.spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: '/etc/config'
+            readOnly: true
+
+  - it: should mount secret volume with specific versions
+    set:
+      volumes:
+        keys:
+          mountPath: /etc/keys
+          readOnly: true
+          secret:
+            name: my-keys
+            items:
+              - version: '1'
+                path: old_key.pem
+              - version: '2'
+                path: new_key.pem
+    asserts:
+      - contains:
+          path: spec.template.spec.template.spec.volumes
+          content:
+            name: keys
+            secret:
+              secretName: 'my-keys'
+              items:
+                - key: '1'
+                  path: 'old_key.pem'
+                - key: '2'
+                  path: 'new_key.pem'
+      - contains:
+          path: spec.template.spec.template.spec.containers[0].volumeMounts
+          content:
+            name: keys
+            mountPath: '/etc/keys'
+            readOnly: true
+
+  # EmptyDir Volume Tests
+  - it: should mount emptyDir volume
+    set:
+      volumes:
+        cache:
+          mountPath: /cache
+          emptyDir:
+            size: 256Mi
+    asserts:
+      - contains:
+          path: spec.template.spec.template.spec.volumes
+          content:
+            name: cache
+            emptyDir:
+              sizeLimit: '256Mi'
+              medium: Memory
+      - contains:
+          path: spec.template.spec.template.spec.containers[0].volumeMounts
+          content:
+            name: cache
+            mountPath: '/cache'
+            readOnly: false
+
+  # GCS Volume Tests
+  - it: should mount GCS volume with default options
+    set:
+      volumes:
+        data:
+          mountPath: /data
+          gcs:
+            bucket: my-bucket
+    asserts:
+      - contains:
+          path: spec.template.spec.template.spec.volumes
+          content:
+            name: data
+            csi:
+              driver: gcsfuse.run.googleapis.com
+              volumeAttributes:
+                bucketName: 'my-bucket'
+      - contains:
+          path: spec.template.spec.template.spec.containers[0].volumeMounts
+          content:
+            name: data
+            mountPath: '/data'
+            readOnly: false
+
+  - it: should mount GCS volume with custom options as quoted comma-separated list
+    set:
+      volumes:
+        data:
+          mountPath: /data
+          readOnly: true
+          gcs:
+            bucket: my-bucket
+            mountOptions:
+              file-mode: '0644'
+              dir-mode: '0755'
+              uid: '1000'
+              gid: '1000'
+    asserts:
+      - contains:
+          path: spec.template.spec.template.spec.volumes
+          content:
+            name: data
+            csi:
+              driver: gcsfuse.run.googleapis.com
+              volumeAttributes:
+                bucketName: 'my-bucket'
+                mountOptions: 'dir-mode=0755,file-mode=0644,gid=1000,uid=1000'
+      - contains:
+          path: spec.template.spec.template.spec.containers[0].volumeMounts
+          content:
+            name: data
+            mountPath: '/data'
+            readOnly: true
+
+  # NFS Volume Tests
+  - it: should mount NFS volume
+    set:
+      volumes:
+        shared:
+          mountPath: /shared
+          nfs:
+            server: 10.0.0.1
+            path: /exports/data
+    asserts:
+      - contains:
+          path: spec.template.spec.template.spec.volumes
+          content:
+            name: shared
+            nfs:
+              server: '10.0.0.1'
+              path: '/exports/data'
+      - contains:
+          path: spec.template.spec.template.spec.containers[0].volumeMounts
+          content:
+            name: shared
+            mountPath: '/shared'
+            readOnly: false
+
+  # Volume Name Validation
+  - it: should fail when volume name contains uppercase
+    set:
+      volumes:
+        myVolume:
+          mountPath: /data
+          emptyDir:
+            size: 256Mi
+    asserts:
+      - failedTemplate:
+          errorMessage: 'Volume name "myVolume" must consist of lowercase alphanumeric characters or ''-'', and must start and end with an alphanumeric character'
+
+  - it: should fail when volume name contains invalid characters
+    set:
+      volumes:
+        my_volume:
+          mountPath: /data
+          emptyDir:
+            size: 256Mi
+    asserts:
+      - failedTemplate:
+          errorMessage: 'Volume name "my_volume" must consist of lowercase alphanumeric characters or ''-'', and must start and end with an alphanumeric character'
+
+  # Mount Path Validation
+  - it: should fail when mountPath doesn't start with /
+    set:
+      volumes:
+        data:
+          mountPath: data
+          emptyDir:
+            size: 256Mi
+    asserts:
+      - failedTemplate: {}

@@ -68,6 +68,42 @@
         "args": {
             "$ref": "../common/common.schema.json#/$defs/args"
         },
+        "parallelism": {
+            "type": "integer",
+            "description": "The number of instances of the job to run in parallel. The maximum number of instances is limited by the CPU and project quotas. It also highly depends on the consumed resources, e.g. database connections, etc.",
+            "default": 0,
+            "minimum": 0,
+            "examples": [
+                1
+            ]
+        },
+        "taskCount": {
+            "type": "integer",
+            "description": "Specifies the desired number of tasks the execution should run. Setting to 1 means that parallelism is limited to 1 and the success of that task signals the success of the execution. Defaults to 1.",
+            "default": 1,
+            "minimum": 1,
+            "examples": [
+                10
+            ]
+        },
+        "timeoutSeconds": {
+            "type": "integer",
+            "description": "The maximum duration in seconds to allow the job to run. If the job is still running after this time, it will be terminated.",
+            "default": 600,
+            "minimum": 1,
+            "examples": [
+                3600
+            ]
+        },
+        "maxRetries": {
+            "type": "integer",
+            "description": "The maximum number of retries for the job. If the job fails, it will be retried up to this number of times.",
+            "default": 3,
+            "minimum": 0,
+            "examples": [
+                0
+            ]
+        },
         "resources": {
             "$ref": "../common/common.schema.json#/$defs/resources"
         },

@@ -4,8 +4,8 @@ should render minimal configuration:
       metadata:
         annotations: null
       spec:
-        parallelism: PARALLELISM
-        taskCount: TASK_COUNT
+        parallelism: 0
+        taskCount: 1
         template:
           spec:
             containers:
@@ -14,8 +14,8 @@ should render minimal configuration:
                   limits:
                     cpu: "1"
                     memory: 512Mi
-            maxRetries: MAX_RETRIES
-            timeoutSeconds: TASK_TIMEOUT
+            maxRetries: 3
+            timeoutSeconds: 600
 should render with basic configuration:
   1: |
     template:
@@ -23,8 +23,8 @@ should render with basic configuration:
         annotations: null
         name: basic-job-basic-v1
       spec:
-        parallelism: PARALLELISM
-        taskCount: TASK_COUNT
+        parallelism: 0
+        taskCount: 1
         template:
           spec:
             containers:
@@ -36,8 +36,8 @@ should render with basic configuration:
                   limits:
                     cpu: "2"
                     memory: 1Gi
-            maxRetries: MAX_RETRIES
-            timeoutSeconds: TASK_TIMEOUT
+            maxRetries: 3
+            timeoutSeconds: 600
 should render with full configuration:
   1: |
     template:
@@ -49,8 +49,8 @@ should render with full configuration:
           run.googleapis.com/vpc-access-egress: all-traffic
         name: full-job-full-v1
       spec:
-        parallelism: PARALLELISM
-        taskCount: TASK_COUNT
+        parallelism: 0
+        taskCount: 1
         template:
           spec:
             containers:
@@ -98,9 +98,9 @@ should render with full configuration:
                   - mountPath: /shared
                     name: shared
                     readOnly: false
-            maxRetries: MAX_RETRIES
+            maxRetries: 3
             serviceAccountName: my-service-account
-            timeoutSeconds: TASK_TIMEOUT
+            timeoutSeconds: 600
             volumes:
               - emptyDir:
                   medium: Memory
@@ -132,8 +132,8 @@ should render with network configuration:
           run.googleapis.com/network-interfaces: '[{"network":"projects/my-project/global/networks/my-vpc","subnetwork":"projects/my-project/regions/us-central1/subnetworks/my-subnet","tags":[]}]'
           run.googleapis.com/vpc-access-egress: all-traffic
       spec:
-        parallelism: PARALLELISM
-        taskCount: TASK_COUNT
+        parallelism: 0
+        taskCount: 1
         template:
           spec:
             containers:
@@ -142,5 +142,5 @@ should render with network configuration:
                   limits:
                     cpu: "1"
                     memory: 512Mi
-            maxRetries: MAX_RETRIES
-            timeoutSeconds: TASK_TIMEOUT
+            maxRetries: 3
+            timeoutSeconds: 600

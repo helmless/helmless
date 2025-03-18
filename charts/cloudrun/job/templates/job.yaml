@@ -1,4 +1,4 @@
-{{- include "helmless.cloudrun.validateVolumes" . }}
+{{- include "helmless.cloudrun.job.validate" . }}
 apiVersion: run.googleapis.com/v1
 kind: Job
 metadata:
@@ -40,12 +40,16 @@ spec:
         run.googleapis.com/secrets: {{ . | quote }}
         {{- end }}
     spec:
-      parallelism: PARALLELISM
-      taskCount: TASK_COUNT
+      parallelism: {{ .Values.parallelism | default 0 }}
+      taskCount: {{ .Values.taskCount | default 1 }}
       template:
         spec:
-          maxRetries: MAX_RETRIES
-          timeoutSeconds: TASK_TIMEOUT
+          {{- if hasKey .Values "maxRetries" }}
+          maxRetries: {{ .Values.maxRetries }}
+          {{- else }}
+          maxRetries: 3
+          {{- end }}
+          timeoutSeconds: {{ .Values.timeoutSeconds | default 600 }}
           {{- with .Values.serviceAccountName }}
           serviceAccountName: {{ . }}
           {{- end }}

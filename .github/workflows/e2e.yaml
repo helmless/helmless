@@ -86,6 +86,6 @@ jobs:
         uses: helmless/google-cloudrun-action@v0
         id: deploy
         with:
-          dry_run: true
+          dry_run: false
           files: ${{ matrix.job }}/values.yaml
           chart: ./charts/cloudrun/job

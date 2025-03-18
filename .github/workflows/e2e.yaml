@@ -15,15 +15,18 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       services: ${{ steps.set-matrix.outputs.services }}
+      jobs: ${{ steps.set-matrix.outputs.jobs }}
     steps:
       - uses: actions/checkout@v4
       - id: set-matrix
         shell: bash
         run: |
           SERVICES=$(ls -d charts/cloudrun/service/e2e/*/ | jq -R -s -c 'split("\n")[:-1]')
+          JOBS=$(ls -d charts/cloudrun/job/e2e/*/ | jq -R -s -c 'split("\n")[:-1]')
           echo "services=$SERVICES" >> $GITHUB_OUTPUT
+          echo "jobs=$JOBS" >> $GITHUB_OUTPUT
 
-  e2e:
+  services:
     name: 🚀 ${{ matrix.service }}
     needs: discover
     runs-on: ubuntu-22.04
@@ -55,3 +58,34 @@ jobs:
           dry_run: true
           files: ${{ matrix.service }}/values.yaml
           chart: ./charts/cloudrun/service
+
+  jobs:
+    name: 🚀 ${{ matrix.job }}
+    needs: discover
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
+    environment: e2e
+    concurrency:
+      group: ${{ matrix.job }}
+    strategy:
+      matrix:
+        job: ${{ fromJson(needs.discover.outputs.jobs) }}
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔑 Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL }}
+
+      - name: 🚀 Deploy Job
+        uses: helmless/google-cloudrun-action@v0
+        id: deploy
+        with:
+          dry_run: true
+          files: ${{ matrix.job }}/values.yaml
+          chart: ./charts/cloudrun/job

@@ -45,6 +45,42 @@ tests:
           path: spec.template.spec.timeoutSeconds
           value: 120
 
+  # Zero timeout - should fail
+  - it: should fail when timeoutSeconds is set to 0
+    set:
+      autoscaling:
+        timeoutSeconds: 0
+    asserts:
+      - failedTemplate: {}
+
+  # Minimum timeout - should pass
+  - it: should allow minimum timeoutSeconds (1 second)
+    set:
+      autoscaling:
+        timeoutSeconds: 1
+    asserts:
+      - equal:
+          path: spec.template.spec.timeoutSeconds
+          value: 1
+
+  # Maximum timeout - should pass
+  - it: should allow maximum timeoutSeconds (3600 seconds / 60 minutes)
+    set:
+      autoscaling:
+        timeoutSeconds: 3600
+    asserts:
+      - equal:
+          path: spec.template.spec.timeoutSeconds
+          value: 3600
+
+  # Exceeds maximum timeout - should fail
+  - it: should fail when timeoutSeconds exceeds 3600 seconds
+    set:
+      autoscaling:
+        timeoutSeconds: 3601
+    asserts:
+      - failedTemplate: {}
+
   # Scale to Zero
   - it: should allow scale to zero
     set:

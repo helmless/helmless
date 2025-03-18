@@ -1,7 +1,13 @@
+{{- define "helmless.cloudrun.service.validate" -}}
+  {{- include "helmless.cloudrun.validateCPU" . }}
+  {{- include "helmless.cloudrun.validateVolumes" . }}
+  {{- include "helmless.cloudrun.service.validateProbes" . }}
+{{- end -}}
+
 {{/*
 Validate probe configuration
 */}}
-{{- define "helmless.cloudrun.validateProbes" -}}
+{{- define "helmless.cloudrun.service.validateProbes" -}}
   {{/* Validate startup probe */}}
   {{- if .Values.startupProbe }}
     {{- if and .Values.startupProbe.timeoutSeconds .Values.startupProbe.periodSeconds }}

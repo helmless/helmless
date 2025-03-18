@@ -1,0 +1,146 @@
+should render minimal configuration:
+  1: |
+    template:
+      metadata:
+        annotations: null
+      spec:
+        parallelism: 0
+        taskCount: 1
+        template:
+          spec:
+            containers:
+              - image: gcr.io/project/image
+                resources:
+                  limits:
+                    cpu: "1"
+                    memory: 512Mi
+            maxRetries: 3
+            timeoutSeconds: 600
+should render with basic configuration:
+  1: |
+    template:
+      metadata:
+        annotations: null
+        name: basic-job-basic-v1
+      spec:
+        parallelism: 0
+        taskCount: 1
+        template:
+          spec:
+            containers:
+              - env:
+                  - name: ENV_VAR
+                    value: value
+                image: gcr.io/project/image:v1.0.0
+                resources:
+                  limits:
+                    cpu: "2"
+                    memory: 1Gi
+            maxRetries: 3
+            timeoutSeconds: 600
+should render with full configuration:
+  1: |
+    template:
+      metadata:
+        annotations:
+          run.googleapis.com/encryption-key: projects/my-project/locations/us-west1/keyRings/my-keyring/cryptoKeys/my-key
+          run.googleapis.com/secrets: SECRET3:projects/other-project/secrets/other-secret
+          run.googleapis.com/vpc-access-connector: projects/my-project/locations/us-central1/connectors/my-connector
+          run.googleapis.com/vpc-access-egress: all-traffic
+        name: full-job-full-v1
+      spec:
+        parallelism: 0
+        taskCount: 1
+        template:
+          spec:
+            containers:
+              - args:
+                  - -c
+                  - echo hello
+                command:
+                  - /bin/sh
+                env:
+                  - name: ENV_VAR1
+                    value: value1
+                  - name: ENV_VAR2
+                    value: value2
+                  - name: SECRET1
+                    valueFrom:
+                      secretKeyRef:
+                        key: latest
+                        name: my-secret
+                  - name: SECRET2
+                    valueFrom:
+                      secretKeyRef:
+                        key: "1"
+                        name: another-secret
+                  - name: SECRET3
+                    valueFrom:
+                      secretKeyRef:
+                        key: latest
+                        name: SECRET3
+                image: gcr.io/project/image:v1.0.0
+                name: main-container
+                resources:
+                  limits:
+                    cpu: "4"
+                    memory: 2Gi
+                volumeMounts:
+                  - mountPath: /cache
+                    name: cache
+                    readOnly: false
+                  - mountPath: /etc/config
+                    name: config
+                    readOnly: false
+                  - mountPath: /data
+                    name: data
+                    readOnly: true
+                  - mountPath: /shared
+                    name: shared
+                    readOnly: false
+            maxRetries: 3
+            serviceAccountName: my-service-account
+            timeoutSeconds: 600
+            volumes:
+              - emptyDir:
+                  medium: Memory
+                  sizeLimit: 512Mi
+                name: cache
+              - name: config
+                secret:
+                  items:
+                    - key: latest
+                      path: config.json
+                    - key: "2"
+                      path: config.v2.json
+                  secretName: app-config
+              - csi:
+                  driver: gcsfuse.run.googleapis.com
+                  volumeAttributes:
+                    bucketName: my-data-bucket
+                    mountOptions: dir-mode=0755,file-mode=0644,gid=1000,uid=1000
+                name: data
+              - name: shared
+                nfs:
+                  path: /exports/data
+                  server: 10.0.0.1
+should render with network configuration:
+  1: |
+    template:
+      metadata:
+        annotations:
+          run.googleapis.com/network-interfaces: '[{"network":"projects/my-project/global/networks/my-vpc","subnetwork":"projects/my-project/regions/us-central1/subnetworks/my-subnet","tags":[]}]'
+          run.googleapis.com/vpc-access-egress: all-traffic
+      spec:
+        parallelism: 0
+        taskCount: 1
+        template:
+          spec:
+            containers:
+              - image: gcr.io/project/image@sha256:abc123
+                resources:
+                  limits:
+                    cpu: "1"
+                    memory: 512Mi
+            maxRetries: 3
+            timeoutSeconds: 600

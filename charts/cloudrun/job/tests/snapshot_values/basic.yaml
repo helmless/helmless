@@ -1,0 +1,14 @@
+name: basic-job
+project: my-project
+image:
+  repository: gcr.io/project
+  name: image
+  tag: v1.0.0
+description: 'A basic service'
+revisionName: basic-v1
+resources:
+  limits:
+    cpu: 2
+    memory: '1Gi'
+env:
+  ENV_VAR: 'value'

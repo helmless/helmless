@@ -1,0 +1,130 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Job Configuration Tests
+templates:
+  - job.yaml
+set:
+  name: my-job
+  image: gcr.io/my-project/my-app:v1
+  project: my-project
+
+tests:
+  # Default values
+  - it: should set default values for job configuration
+    asserts:
+      - equal:
+          path: spec.template.spec.parallelism
+          value: 0
+      - equal:
+          path: spec.template.spec.taskCount
+          value: 1
+      - equal:
+          path: spec.template.spec.template.spec.maxRetries
+          value: 3
+      - equal:
+          path: spec.template.spec.template.spec.timeoutSeconds
+          value: 600
+
+  # Parallelism tests
+  - it: should set parallelism when specified
+    set:
+      parallelism: 5
+    asserts:
+      - equal:
+          path: spec.template.spec.parallelism
+          value: 5
+
+  - it: should allow zero parallelism
+    set:
+      parallelism: 0
+    asserts:
+      - equal:
+          path: spec.template.spec.parallelism
+          value: 0
+
+  - it: should fail when parallelism is negative
+    set:
+      parallelism: -1
+    asserts:
+      - failedTemplate: {}
+
+  # Task Count tests
+  - it: should set taskCount when specified
+    set:
+      taskCount: 10
+    asserts:
+      - equal:
+          path: spec.template.spec.taskCount
+          value: 10
+
+  - it: should fail when taskCount is less than 1
+    set:
+      taskCount: 0
+    asserts:
+      - failedTemplate: {}
+
+  # Parallelism cannot exceed taskCount
+  - it: should fail when parallelism exceeds taskCount
+    set:
+      parallelism: 10
+      taskCount: 5
+    asserts:
+      - failedTemplate: {}
+
+  # Max Retries tests
+  - it: should set maxRetries when specified
+    set:
+      maxRetries: 5
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.maxRetries
+          value: 5
+
+  - it: should allow zero maxRetries
+    set:
+      maxRetries: 0
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.maxRetries
+          value: 0
+
+  - it: should fail when maxRetries is negative
+    set:
+      maxRetries: -1
+    asserts:
+      - failedTemplate: {}
+
+  # Timeout Seconds tests
+  - it: should set timeoutSeconds when specified
+    set:
+      timeoutSeconds: 3600
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.timeoutSeconds
+          value: 3600
+
+  - it: should fail when timeoutSeconds is less than 1
+    set:
+      timeoutSeconds: 0
+    asserts:
+      - failedTemplate: {}
+
+  # Combined configuration
+  - it: should correctly set all job configuration values together
+    set:
+      parallelism: 3
+      taskCount: 10
+      maxRetries: 2
+      timeoutSeconds: 1800
+    asserts:
+      - equal:
+          path: spec.template.spec.parallelism
+          value: 3
+      - equal:
+          path: spec.template.spec.taskCount
+          value: 10
+      - equal:
+          path: spec.template.spec.template.spec.maxRetries
+          value: 2
+      - equal:
+          path: spec.template.spec.template.spec.timeoutSeconds
+          value: 1800

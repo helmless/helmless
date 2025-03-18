@@ -1,0 +1,235 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Resource Management Tests
+templates:
+  - job.yaml
+set:
+  name: my-job
+  image: gcr.io/my-project/my-app:v1
+  project: my-project
+
+tests:
+  # Default Values
+  - it: should set default resource values when not specified
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '1'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '512Mi'
+
+  # CPU and Memory Requirements
+  - it: should allow 4 CPU with sufficient memory (2Gi)
+    set:
+      resources:
+        limits:
+          cpu: 4
+          memory: '2Gi'
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '4'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '2Gi'
+
+  - it: should fail when requesting 4 CPU with insufficient memory
+    set:
+      resources:
+        limits:
+          cpu: 4
+          memory: '1Gi'
+    asserts:
+      - failedTemplate: {}
+
+  - it: should allow 6 CPU with sufficient memory (4Gi)
+    set:
+      resources:
+        limits:
+          cpu: 6
+          memory: '4Gi'
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '6'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '4Gi'
+
+  - it: should fail when requesting 6 CPU with insufficient memory
+    set:
+      resources:
+        limits:
+          cpu: 6
+          memory: '2Gi'
+    asserts:
+      - failedTemplate: {}
+
+  - it: should allow 8 CPU with sufficient memory (4Gi)
+    set:
+      resources:
+        limits:
+          cpu: 8
+          memory: '4Gi'
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '8'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '4Gi'
+
+  - it: should fail when requesting 8 CPU with insufficient memory
+    set:
+      resources:
+        limits:
+          cpu: 8
+          memory: '2Gi'
+    asserts:
+      - failedTemplate: {}
+
+  # CPU Settings
+  - it: should allow fractional CPU with any valid memory
+    set:
+      resources:
+        limits:
+          cpu: 0.5
+          memory: '512Mi'
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '0.5'
+
+  - it: should allow minimum fractional CPU (0.08)
+    set:
+      resources:
+        limits:
+          cpu: 0.08
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '0.08'
+
+  - it: should fail when CPU limit is below minimum
+    set:
+      resources:
+        limits:
+          cpu: 0.07
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when CPU limit is invalid (3)
+    set:
+      resources:
+        limits:
+          cpu: 3
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when CPU limit is too high (9)
+    set:
+      resources:
+        limits:
+          cpu: 9
+    asserts:
+      - failedTemplate: {}
+
+  # Memory Format Tests
+  - it: should fail when memory unit is invalid
+    set:
+      resources:
+        limits:
+          memory: '512MB'
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when memory format is invalid
+    set:
+      resources:
+        limits:
+          memory: '1.5Gi'
+    asserts:
+      - failedTemplate: {}
+
+  # CPU < 1 Memory Restrictions
+  - it: should allow CPU < 0.5 with memory <= 512Mi
+    set:
+      resources:
+        limits:
+          cpu: 0.25
+          memory: '512Mi'
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '0.25'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '512Mi'
+
+  - it: should fail when CPU < 0.5 with memory > 512Mi
+    set:
+      resources:
+        limits:
+          cpu: 0.25
+          memory: '768Mi'
+      executionEnvironment: gen1
+    asserts:
+      - failedTemplate: {}
+
+  - it: should allow 0.5 <= CPU < 1 with memory <= 1024Mi
+    set:
+      resources:
+        limits:
+          cpu: 0.75
+          memory: '1024Mi'
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '0.75'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '1024Mi'
+
+  - it: should fail when 0.5 <= CPU < 1 with memory > 1024Mi
+    set:
+      resources:
+        limits:
+          cpu: 0.75
+          memory: '1536Mi'
+      executionEnvironment: gen1
+    asserts:
+      - failedTemplate: {}
+
+  - it: should allow minimum values for CPU < 0.5
+    set:
+      resources:
+        limits:
+          cpu: 0.08
+          memory: '128Mi'
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '0.08'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '128Mi'
+
+  - it: should allow edge case at CPU = 0.5
+    set:
+      resources:
+        limits:
+          cpu: 0.5
+          memory: '1024Mi'
+      executionEnvironment: gen1
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.cpu
+          value: '0.5'
+      - equal:
+          path: spec.template.spec.template.spec.containers[0].resources.limits.memory
+          value: '1024Mi'

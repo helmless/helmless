@@ -12,6 +12,11 @@
 # command: []
 # args: []
 
+# parallelism: 0
+# taskCount: 1
+# timeoutSeconds: 600
+# maxRetries: 3
+
 # env: {}
 # secrets: {}
 

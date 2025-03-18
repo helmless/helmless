@@ -995,8 +995,10 @@
           "$since": "0.1.0"
         },
         "timeoutSeconds": {
-          "default": 60,
+          "default": 300,
           "description": "The maximum time the container will wait before responding with a 504 error. Especially important for startup times of newly spawned containers.",
+          "minimum": 1,
+          "maximum": 3600,
           "type": [
             "integer"
           ],
@@ -1725,8 +1727,10 @@
           "$since": "0.1.0"
         },
         "timeoutSeconds": {
-          "default": 60,
+          "default": 300,
           "description": "The maximum time the container will wait before responding with a 504 error. Especially important for startup times of newly spawned containers.",
+          "minimum": 1,
+          "maximum": 3600,
           "type": [
             "integer"
           ],

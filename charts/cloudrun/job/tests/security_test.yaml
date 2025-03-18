@@ -1,0 +1,96 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Security and Identity Tests
+templates:
+  - job.yaml
+set:
+  name: my-job
+  image: gcr.io/my-project/my-app:v1
+  project: my-project
+
+tests:
+  # Service Account
+  - it: should not set service account when not specified
+    asserts:
+      - notExists:
+          path: spec.template.spec.template.spec.serviceAccountName
+
+  - it: should set service account when specified
+    set:
+      serviceAccountName: my-sa@project.iam.gserviceaccount.com
+    asserts:
+      - equal:
+          path: spec.template.spec.template.spec.serviceAccountName
+          value: my-sa@project.iam.gserviceaccount.com
+
+  # Binary Authorization (Service-level annotation)
+  - it: should not set binary authorization when not specified
+    asserts:
+      - notExists:
+          path: metadata.annotations["run.googleapis.com/binary-authorization"]
+
+  - it: should set binary authorization to default when enabled
+    set:
+      binaryAuthorization: true
+    asserts:
+      - equal:
+          path: metadata.annotations["run.googleapis.com/binary-authorization"]
+          value: 'default'
+
+  - it: should not set binary authorization when disabled
+    set:
+      binaryAuthorization: false
+    asserts:
+      - notExists:
+          path: metadata.annotations["run.googleapis.com/binary-authorization"]
+
+  # Encryption Key (Revision-level annotation)
+  - it: should not set encryption key when not specified
+    asserts:
+      - notExists:
+          path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
+
+  - it: should set encryption key using service project and default region
+    set:
+      encryption:
+        key: my-key
+        keyring: my-keyring
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
+          value: projects/my-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key
+
+  - it: should use specified region for encryption key
+    set:
+      region: europe-west1
+      encryption:
+        key: my-key
+        keyring: my-keyring
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
+          value: projects/my-project/locations/europe-west1/keyRings/my-keyring/cryptoKeys/my-key
+
+  - it: should use different project for encryption key
+    set:
+      project: different-project
+      encryption:
+        key: my-key
+        keyring: my-keyring
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["run.googleapis.com/encryption-key"]
+          value: projects/different-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key
+
+  - it: should fail when encryption key is missing keyring
+    set:
+      encryption:
+        key: my-key
+    asserts:
+      - failedTemplate: {}
+
+  - it: should fail when encryption key is missing key name
+    set:
+      encryption:
+        keyring: my-keyring
+    asserts:
+      - failedTemplate: {}

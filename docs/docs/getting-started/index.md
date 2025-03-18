@@ -13,7 +13,7 @@ Helmless is a workflow and collection of tools that lets you deploy serverless c
 - Simple and streamlined container configuration using Helm's familiar `values.yaml`
 - Fast deployment cycles without infrastructure bottlenecks
 - Flexible integration into existing CI/CD pipelines
-- A GitOps-friendly workflow
+- A GitOps-ready workflow
 
 ## How Does it Work?
 

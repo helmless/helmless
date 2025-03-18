@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Test Cloud Run service template with different configurations
+templates:
+  - job.yaml
+tests:
+  - it: should render minimal configuration
+    values:
+      - snapshot_values/minimal.yaml
+    asserts:
+      - matchSnapshot:
+          path: spec
+
+  - it: should render with basic configuration
+    values:
+      - snapshot_values/basic.yaml
+    asserts:
+      - matchSnapshot:
+          path: spec
+
+  - it: should render with network configuration
+    values:
+      - snapshot_values/network.yaml
+    asserts:
+      - matchSnapshot:
+          path: spec
+
+  - it: should render with full configuration
+    values:
+      - snapshot_values/full.yaml
+    asserts:
+      - matchSnapshot:
+          path: spec

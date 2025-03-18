@@ -1,6 +1,4 @@
-{{- include "helmless.cloudrun.validateCPU" . }}
-{{- include "helmless.cloudrun.validateProbes" . }}
-{{- include "helmless.cloudrun.validateVolumes" . }}
+{{- include "helmless.cloudrun.service.validate" . }}
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:

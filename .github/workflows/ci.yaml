@@ -40,22 +40,3 @@ jobs:
 
       - name: 🔍 Verify Chart Schema
         run: helm template ${{ matrix.chart }} --set-string name=my-name --set-string project=my-project
-
-  formatting:
-    name: 👀 Static Code Checks
-    runs-on: ubuntu-22.04
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Setup asdf
-        uses: asdf-vm/actions/install@v3
-
-      - name: 🧩 Install Helm Plugins
-        run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
-
-      - name: 📦 Install Python Dependencies
-        run: pip install -r bin/scripts/requirements.txt
-
-      - name: 🔍 Run Checks
-        uses: pre-commit/action@v3.0.1

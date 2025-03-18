@@ -9,10 +9,10 @@ description: 'A fully configured service'
 revisionName: full-v1
 region: europe-west1
 launchStage: GA
-binaryAuthorization: true
-encryption:
-  key: service-key
-  keyring: cloudrun
+# binaryAuthorization: true
+# encryption:
+#   key: service-key
+#   keyring: cloudrun
 serviceAccountName: full-service@helmless.iam.gserviceaccount.com
 containerName: main-container
 command: ['/bin/sh']
@@ -21,31 +21,31 @@ resources:
   limits:
     cpu: 4
     memory: '2Gi'
-network:
-  vpc: projects/helmless/global/networks/default
-  subnetwork: projects/helmless/regions/europe-west1/subnetworks/default
-  egress: all-traffic
+# network:
+#   vpc: projects/helmless/global/networks/default
+#   subnetwork: projects/helmless/regions/europe-west1/subnetworks/default
+#   egress: all-traffic
 env:
   ENV_VAR1: 'value1'
   ENV_VAR2: 'value2'
-secrets:
-  SECRET1: 'app-secret'
-  SECRET2:
-    secret: 'another-secret'
-    version: '1'
-  SECRET3:
-    secret: 'other-secret'
-    project: 'other-project'
-    version: 'latest'
+# secrets:
+#   SECRET1: 'app-secret'
+#   SECRET2:
+#     secret: 'another-secret'
+#     version: '1'
+#   SECRET3:
+#     secret: 'other-secret'
+#     project: 'other-project'
+#     version: 'latest'
 volumes:
-  config:
-    mountPath: /etc/config
-    secret:
-      name: app-config
-      items:
-        - path: config.json
-        - version: '2'
-          path: config.v2.json
+  # config:
+  #   mountPath: /etc/config
+  #   secret:
+  #     name: app-config
+  #     items:
+  #       - path: config.json
+  #       - version: '2'
+  #         path: config.v2.json
   cache:
     mountPath: /cache
     emptyDir:

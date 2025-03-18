@@ -3,14 +3,14 @@ region: europe-west1
 project: helmless
 image: 'us-docker.pkg.dev/cloudrun/container/hello:latest'
 volumes:
-  config:
-    mountPath: /etc/config
-    secret:
-      name: app-config
-      items:
-        - path: config.json
-        - version: '2'
-          path: config.v2.json
+  # config:
+  #   mountPath: /etc/config
+  #   secret:
+  #     name: app-config
+  #     items:
+  #       - path: config.json
+  #       - version: '2'
+  #         path: config.v2.json
   cache:
     mountPath: /cache
     emptyDir:

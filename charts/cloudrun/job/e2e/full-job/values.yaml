@@ -60,7 +60,9 @@ volumes:
         dir-mode: '0755'
         uid: '1000'
         gid: '1000'
+
+
 timeoutSeconds: 10
-parallelism: 1
-taskCount: 1
-retryCount: 1
+parallelism: 5
+taskCount: 10
+maxRetries: 5

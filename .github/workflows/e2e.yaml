@@ -89,3 +89,18 @@ jobs:
           dry_run: false
           files: ${{ matrix.job }}/values.yaml
           chart: ./charts/cloudrun/job
+
+      - name: 💣 Cleanup Job
+        if: always()
+        shell: bash
+        run: |
+          # Extract service name from values.yaml
+          JOB_NAME=$(yq eval '.name' ${{ matrix.job }}/values.yaml)
+          REGION=$(yq eval '.region' ${{ matrix.job }}/values.yaml)
+          PROJECT=$(yq eval '.project' ${{ matrix.job }}/values.yaml)
+
+          echo "Deleting job: $JOB_NAME in region: $REGION"
+          gcloud run jobs delete $JOB_NAME \
+            --project=$PROJECT \
+            --region=$REGION \
+            --quiet

@@ -36,58 +36,76 @@
   ],
   "properties": {
     "name": {
-      "$ref": "../common/common.schema.json#/$defs/name"
+      "$ref": "../common/common.schema.json#/$defs/name",
+      "$since": "0.1.1"
     },
     "project": {
-      "$ref": "../common/common.schema.json#/$defs/project"
+      "$ref": "../common/common.schema.json#/$defs/project",
+      "$since": "0.1.1"
     },
     "region": {
-      "$ref": "../common/common.schema.json#/$defs/region"
+      "$ref": "../common/common.schema.json#/$defs/region",
+      "$since": "0.1.1"
     },
     "image": {
-      "$ref": "../common/common.schema.json#/$defs/image"
+      "$ref": "../common/common.schema.json#/$defs/image",
+      "$since": "0.1.1"
     },
     "revisionName": {
-      "$ref": "../common/common.schema.json#/$defs/revisionName"
+      "$ref": "../common/common.schema.json#/$defs/revisionName",
+      "$since": "0.1.1"
     },
     "containerName": {
-      "$ref": "../common/common.schema.json#/$defs/containerName"
+      "$ref": "../common/common.schema.json#/$defs/containerName",
+      "$since": "0.1.1"
     },
     "serviceAccountName": {
-      "$ref": "../common/common.schema.json#/$defs/serviceAccountName"
+      "$ref": "../common/common.schema.json#/$defs/serviceAccountName",
+      "$since": "0.1.1"
     },
     "description": {
-      "$ref": "../common/common.schema.json#/$defs/description"
+      "$ref": "../common/common.schema.json#/$defs/description",
+      "$since": "0.1.1"
     },
     "env": {
-      "$ref": "../common/common.schema.json#/$defs/env"
+      "$ref": "../common/common.schema.json#/$defs/env",
+      "$since": "0.1.1"
     },
     "secrets": {
-      "$ref": "../common/common.schema.json#/$defs/secrets"
+      "$ref": "../common/common.schema.json#/$defs/secrets",
+      "$since": "0.1.1"
     },
     "command": {
-      "$ref": "../common/common.schema.json#/$defs/command"
+      "$ref": "../common/common.schema.json#/$defs/command",
+      "$since": "0.1.1"
     },
     "args": {
-      "$ref": "../common/common.schema.json#/$defs/args"
+      "$ref": "../common/common.schema.json#/$defs/args",
+      "$since": "0.1.1"
     },
     "resources": {
-      "$ref": "../common/common.schema.json#/$defs/resources"
+      "$ref": "../common/common.schema.json#/$defs/resources",
+      "$since": "0.1.1"
     },
     "volumes": {
-      "$ref": "../common/common.schema.json#/$defs/volumes"
+      "$ref": "../common/common.schema.json#/$defs/volumes",
+      "$since": "0.1.1"
     },
     "network": {
-      "$ref": "../common/common.schema.json#/$defs/network"
+      "$ref": "../common/common.schema.json#/$defs/network",
+      "$since": "0.1.1"
     },
     "cloudsql": {
-      "$ref": "../common/common.schema.json#/$defs/cloudsql"
+      "$ref": "../common/common.schema.json#/$defs/cloudsql",
+      "$since": "0.1.1"
     },
     "executionEnvironment": {
-      "$ref": "../common/common.schema.json#/$defs/executionEnvironment"
+      "$ref": "../common/common.schema.json#/$defs/executionEnvironment",
+      "$since": "0.1.1"
     },
     "launchStage": {
-      "$ref": "../common/common.schema.json#/$defs/launchStage"
+      "$ref": "../common/common.schema.json#/$defs/launchStage",
+      "$since": "0.1.1"
     },
     "autoscaling": {
       "$ref": "#/$defs/autoscalingProperties",
@@ -258,22 +276,26 @@
       "$since": "0.1.0"
     },
     "binaryAuthorization": {
-      "$ref": "../common/common.schema.json#/$defs/binaryAuthorization"
+      "$ref": "../common/common.schema.json#/$defs/binaryAuthorization",
+      "$since": "0.1.1"
     },
     "encryption": {
-      "$ref": "../common/common.schema.json#/$defs/encryption"
+      "$ref": "../common/common.schema.json#/$defs/encryption",
+      "$since": "0.1.1"
     },
     "global": {
       "type": "object",
       "additionalProperties": true,
       "description": "Global settings of the Helm chart.",
-      "$hidden": true
+      "$hidden": true,
+      "$since": "0.1.1"
     },
     "common": {
       "type": "object",
       "additionalProperties": true,
       "description": "Common settings of the Helm chart.",
-      "$hidden": true
+      "$hidden": true,
+      "$since": "0.1.1"
     }
   },
   "$defs": {

@@ -1,144 +1,170 @@
 {
-    "$id": "https://github.com/helmless/helmless/charts/cloudrun/job",
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "version": "0.1.1",
-    "additionalProperties": false,
-    "title": "Cloud Run Job Chart",
-    "description": "A Helm chart to template the manifest of a Cloud Run Job.",
-    "required": [
-        "name",
-        "project"
-    ],
-    "type": "object",
-    "examples": [
-        {
-            "$title": "Minimal Job",
-            "name": "my-job",
-            "image": "ghcr.io/my-org/my-image@sha256:abc123",
-            "region": "us-central1",
-            "env": {
-                "MY_ENV_VAR": "my-value"
-            }
-        },
-        {
-            "$title": "Job with Direct VPC Connect",
-            "name": "my-job",
-            "image": "ghcr.io/my-org/my-image@sha256:abc123",
-            "region": "us-central1",
-            "vpc": {
-                "network": "my-network",
-                "subnetwork": "my-subnetwork"
-            }
-        }
-    ],
-    "properties": {
-        "name": {
-            "$ref": "../common/common.schema.json#/$defs/name"
-        },
-        "project": {
-            "$ref": "../common/common.schema.json#/$defs/project"
-        },
-        "region": {
-            "$ref": "../common/common.schema.json#/$defs/region"
-        },
-        "image": {
-            "$ref": "../common/common.schema.json#/$defs/image"
-        },
-        "revisionName": {
-            "$ref": "../common/common.schema.json#/$defs/revisionName"
-        },
-        "containerName": {
-            "$ref": "../common/common.schema.json#/$defs/containerName"
-        },
-        "serviceAccountName": {
-            "$ref": "../common/common.schema.json#/$defs/serviceAccountName"
-        },
-        "description": {
-            "$ref": "../common/common.schema.json#/$defs/description"
-        },
-        "env": {
-            "$ref": "../common/common.schema.json#/$defs/env"
-        },
-        "secrets": {
-            "$ref": "../common/common.schema.json#/$defs/secrets"
-        },
-        "command": {
-            "$ref": "../common/common.schema.json#/$defs/command"
-        },
-        "args": {
-            "$ref": "../common/common.schema.json#/$defs/args"
-        },
-        "parallelism": {
-            "type": "integer",
-            "description": "The number of instances of the job to run in parallel. The maximum number of instances is limited by the CPU and project quotas. It also highly depends on the consumed resources, e.g. database connections, etc.",
-            "default": 0,
-            "minimum": 0,
-            "examples": [
-                1
-            ]
-        },
-        "taskCount": {
-            "type": "integer",
-            "description": "Specifies the desired number of tasks the execution should run. Setting to 1 means that parallelism is limited to 1 and the success of that task signals the success of the execution. Defaults to 1.",
-            "default": 1,
-            "minimum": 1,
-            "examples": [
-                10
-            ]
-        },
-        "timeoutSeconds": {
-            "type": "integer",
-            "description": "The maximum duration in seconds to allow the job to run. If the job is still running after this time, it will be terminated.",
-            "default": 600,
-            "minimum": 1,
-            "examples": [
-                3600
-            ]
-        },
-        "maxRetries": {
-            "type": "integer",
-            "description": "The maximum number of retries for the job. If the job fails, it will be retried up to this number of times.",
-            "default": 3,
-            "minimum": 0,
-            "examples": [
-                0
-            ]
-        },
-        "resources": {
-            "$ref": "../common/common.schema.json#/$defs/resources"
-        },
-        "volumes": {
-            "$ref": "../common/common.schema.json#/$defs/volumes"
-        },
-        "network": {
-            "$ref": "../common/common.schema.json#/$defs/network"
-        },
-        "cloudsql": {
-            "$ref": "../common/common.schema.json#/$defs/cloudsql"
-        },
-        "executionEnvironment": {
-            "$ref": "../common/common.schema.json#/$defs/executionEnvironment"
-        },
-        "launchStage": {
-            "$ref": "../common/common.schema.json#/$defs/launchStage"
-        },
-        "binaryAuthorization": {
-            "$ref": "../common/common.schema.json#/$defs/binaryAuthorization"
-        },
-        "encryption": {
-            "$ref": "../common/common.schema.json#/$defs/encryption"
-        },
-        "global": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Global settings of the Helm chart.",
-            "$hidden": true
-        },
-        "common": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Common settings of the Helm chart.",
-            "$hidden": true
-        }
+  "$id": "https://github.com/helmless/helmless/charts/cloudrun/job",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "0.1.1",
+  "additionalProperties": false,
+  "title": "Cloud Run Job Chart",
+  "description": "A Helm chart to template the manifest of a Cloud Run Job.",
+  "required": [
+    "name",
+    "project"
+  ],
+  "type": "object",
+  "examples": [
+    {
+      "$title": "Minimal Job",
+      "name": "my-job",
+      "image": "ghcr.io/my-org/my-image@sha256:abc123",
+      "region": "us-central1",
+      "env": {
+        "MY_ENV_VAR": "my-value"
+      }
+    },
+    {
+      "$title": "Job with Direct VPC Connect",
+      "name": "my-job",
+      "image": "ghcr.io/my-org/my-image@sha256:abc123",
+      "region": "us-central1",
+      "vpc": {
+        "network": "my-network",
+        "subnetwork": "my-subnetwork"
+      }
     }
+  ],
+  "properties": {
+    "name": {
+      "$ref": "../common/common.schema.json#/$defs/name",
+      "$since": "0.1.1"
+    },
+    "project": {
+      "$ref": "../common/common.schema.json#/$defs/project",
+      "$since": "0.1.1"
+    },
+    "region": {
+      "$ref": "../common/common.schema.json#/$defs/region",
+      "$since": "0.1.1"
+    },
+    "image": {
+      "$ref": "../common/common.schema.json#/$defs/image",
+      "$since": "0.1.1"
+    },
+    "revisionName": {
+      "$ref": "../common/common.schema.json#/$defs/revisionName",
+      "$since": "0.1.1"
+    },
+    "containerName": {
+      "$ref": "../common/common.schema.json#/$defs/containerName",
+      "$since": "0.1.1"
+    },
+    "serviceAccountName": {
+      "$ref": "../common/common.schema.json#/$defs/serviceAccountName",
+      "$since": "0.1.1"
+    },
+    "description": {
+      "$ref": "../common/common.schema.json#/$defs/description",
+      "$since": "0.1.1"
+    },
+    "env": {
+      "$ref": "../common/common.schema.json#/$defs/env",
+      "$since": "0.1.1"
+    },
+    "secrets": {
+      "$ref": "../common/common.schema.json#/$defs/secrets",
+      "$since": "0.1.1"
+    },
+    "command": {
+      "$ref": "../common/common.schema.json#/$defs/command",
+      "$since": "0.1.1"
+    },
+    "args": {
+      "$ref": "../common/common.schema.json#/$defs/args",
+      "$since": "0.1.1"
+    },
+    "parallelism": {
+      "type": "integer",
+      "description": "The number of instances of the job to run in parallel. The maximum number of instances is limited by the CPU and project quotas. It also highly depends on the consumed resources, e.g. database connections, etc.",
+      "default": 0,
+      "minimum": 0,
+      "examples": [
+        1
+      ],
+      "$since": "0.1.1"
+    },
+    "taskCount": {
+      "type": "integer",
+      "description": "Specifies the desired number of tasks the execution should run. Setting to 1 means that parallelism is limited to 1 and the success of that task signals the success of the execution. Defaults to 1.",
+      "default": 1,
+      "minimum": 1,
+      "examples": [
+        10
+      ],
+      "$since": "0.1.1"
+    },
+    "timeoutSeconds": {
+      "type": "integer",
+      "description": "The maximum duration in seconds to allow the job to run. If the job is still running after this time, it will be terminated.",
+      "default": 600,
+      "minimum": 1,
+      "examples": [
+        3600
+      ],
+      "$since": "0.1.1"
+    },
+    "maxRetries": {
+      "type": "integer",
+      "description": "The maximum number of retries for the job. If the job fails, it will be retried up to this number of times.",
+      "default": 3,
+      "minimum": 0,
+      "examples": [
+        0
+      ],
+      "$since": "0.1.1"
+    },
+    "resources": {
+      "$ref": "../common/common.schema.json#/$defs/resources",
+      "$since": "0.1.1"
+    },
+    "volumes": {
+      "$ref": "../common/common.schema.json#/$defs/volumes",
+      "$since": "0.1.1"
+    },
+    "network": {
+      "$ref": "../common/common.schema.json#/$defs/network",
+      "$since": "0.1.1"
+    },
+    "cloudsql": {
+      "$ref": "../common/common.schema.json#/$defs/cloudsql",
+      "$since": "0.1.1"
+    },
+    "executionEnvironment": {
+      "$ref": "../common/common.schema.json#/$defs/executionEnvironment",
+      "$since": "0.1.1"
+    },
+    "launchStage": {
+      "$ref": "../common/common.schema.json#/$defs/launchStage",
+      "$since": "0.1.1"
+    },
+    "binaryAuthorization": {
+      "$ref": "../common/common.schema.json#/$defs/binaryAuthorization",
+      "$since": "0.1.1"
+    },
+    "encryption": {
+      "$ref": "../common/common.schema.json#/$defs/encryption",
+      "$since": "0.1.1"
+    },
+    "global": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Global settings of the Helm chart.",
+      "$hidden": true,
+      "$since": "0.1.1"
+    },
+    "common": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Common settings of the Helm chart.",
+      "$hidden": true,
+      "$since": "0.1.1"
+    }
+  }
 }

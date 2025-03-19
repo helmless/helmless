@@ -44,14 +44,16 @@
       ],
       "examples": [
         "my-cloudrun-container"
-      ]
+      ],
+      "$since": "0.1.1"
     },
     "project": {
       "description": "The Google cloud project to deploy the Cloud Run Service or Job to.",
       "type": "string",
       "examples": [
         "my-project"
-      ]
+      ],
+      "$since": "0.1.1"
     },
     "region": {
       "description": "The region to deploy the CloudRun service to. Uses the default region if not provided.",
@@ -64,7 +66,8 @@
         "us-central1",
         "europe-west1",
         "asia-east1"
-      ]
+      ],
+      "$since": "0.1.1"
     },
     "image": {
       "description": "Container image to deploy. You can provide a direct reference to an image using a `string` or split up the inputs using the `object`.",
@@ -140,21 +143,24 @@
           "name": "my-image",
           "tag": "1.0.0"
         }
-      ]
+      ],
+      "$since": "0.1.1"
     },
     "revisionName": {
       "description": "The name of the Cloud Run revision to deploy. If not provided, a random name will be generated. The revision will always be prefixed with the service name.",
       "type": "string",
       "examples": [
         "my-revision"
-      ]
+      ],
+      "$since": "0.1.1"
     },
     "containerName": {
       "description": "Optional name for the container within a revision. Automatically generated if not supplied.",
       "type": "string",
       "examples": [
         "my-container"
-      ]
+      ],
+      "$since": "0.1.1"
     },
     "serviceAccountName": {
       "description": "Service account to use to run the CloudRun container. If not provided, the default service account of the project is used.",
@@ -169,7 +175,8 @@
       "type": "string",
       "examples": [
         "My service does xyz."
-      ]
+      ],
+      "$since": "0.1.1"
     },
     "env": {
       "description": "Environment variables to set in the CloudRun container. Using an object allows merging of multiple values, e.g. `env.staging` and `env.production`.",
@@ -1007,7 +1014,8 @@
           ],
           "$since": "0.1.0"
         }
-      }
+      },
+      "$since": "0.1.1"
     },
     "sessionAffinity": {
       "default": false,
@@ -1490,13 +1498,15 @@
       "type": "object",
       "additionalProperties": true,
       "description": "Global settings of the Helm chart.",
-      "$hidden": true
+      "$hidden": true,
+      "$since": "0.1.1"
     },
     "common": {
       "type": "object",
       "additionalProperties": true,
       "description": "Common settings of the Helm chart.",
-      "$hidden": true
+      "$hidden": true,
+      "$since": "0.1.1"
     }
   },
   "$defs": {

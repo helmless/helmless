@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/helmless/helmless/compare/google-cloudrun-service-v0.1.1...google-cloudrun-service-v0.2.0) (2025-03-20)
+
+
+### Features
+
+* extract common helm chart and schema ([d8e1d69](https://github.com/helmless/helmless/commit/d8e1d69f6cda8832236b2daba71f0c8439b50a8c))
+
+
+### Bug Fixes
+
+* derefenrence schema before commit ([637b754](https://github.com/helmless/helmless/commit/637b7546f2e9356d67f1b0c15b48de0031107bfa))
+
 ## [0.1.1](https://github.com/helmless/helmless/compare/google-cloudrun-service-v0.1.0...google-cloudrun-service-v0.1.1) (2025-03-07)
 
 

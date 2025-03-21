@@ -51,12 +51,9 @@ jobs:
       - name: ⚙️ Install Helm
         uses: azure/setup-helm@v4
 
-      - name: 🔍 Run Helm Dependency Build
-        run: helm dependency build ${{ matrix.path }}
-
       - name: 📦 Package Helm Chart
         run: |
-          helm package ${{ matrix.path }}
+          helm package --dependency-update ${{ matrix.path }}
 
       - name: 🔐 Set up OCI Registry Authentication
         run: |

@@ -2,7 +2,7 @@ apiVersion: v2
 name: google-cloudrun-common
 description: A Helm chart library for common Google Cloud Run helpers and schemas.
 type: library
-version: 0.1.0
+version: 0.1.1
 icon: https://helmless.io/assets/images/helmless.png
 maintainers:
   - name: Michael Reichenbach (Silthus)

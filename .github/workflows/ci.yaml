@@ -16,6 +16,8 @@ jobs:
       matrix:
         chart:
           - 'charts/cloudrun/service'
+          - 'charts/cloudrun/job'
+          - 'charts/cloudrun/common'
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
@@ -26,17 +28,17 @@ jobs:
       - name: 🧩 Install Helm Plugins
         run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
-      - name: 🔍 Run Helm Dependency Build
-        run: helm dependency build ${{ matrix.chart }}
+      - name: 🔍 Run Helm Dependency Update
+        run: helm dependency update ${{ matrix.chart }}
 
       - name: 🧹 Run Helm Lint
-        run: helm lint ${{ matrix.chart }} --strict --set-string name=my-name --set-string project=my-project
+        run: helm lint --with-subcharts ${{ matrix.chart }} --strict --set-string name=my-name --set-string project=my-project
 
       - name: 🧪 Run Helm Test
         run: helm unittest ${{ matrix.chart }}
 
       - name: 📦 Test Helm Package
-        run: helm package ${{ matrix.chart }} --debug
+        run: helm package --dependency-update ${{ matrix.chart }} --debug
 
       - name: 🔍 Verify Chart Schema
-        run: helm template ${{ matrix.chart }} --set-string name=my-name --set-string project=my-project
+        run: helm template --dependency-update ${{ matrix.chart }} --set-string name=my-name --set-string project=my-project

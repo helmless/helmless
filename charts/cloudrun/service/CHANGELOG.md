@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/helmless/helmless/compare/google-cloudrun-service-v0.2.0...google-cloudrun-service-v0.2.1) (2025-03-21)
+
+
+### Bug Fixes
+
+* trigger release and set new icon ([81d71db](https://github.com/helmless/helmless/commit/81d71db60bcbf5f405fe8bc6711b38b3f81454f2))
+
 ## [0.2.0](https://github.com/helmless/helmless/compare/google-cloudrun-service-v0.1.1...google-cloudrun-service-v0.2.0) (2025-03-20)
 
 

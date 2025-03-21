@@ -3,6 +3,10 @@ name: 🧪 E2E Tests
 env:
   DRY_RUN: false
 
+concurrency:
+  group: e2e
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
   pull_request:
@@ -36,6 +40,7 @@ jobs:
     environment: e2e
     concurrency:
       group: ${{ matrix.service }}
+      cancel-in-progress: false
     strategy:
       matrix:
         service: ${{ fromJson(needs.discover.outputs.services) }}
@@ -69,6 +74,7 @@ jobs:
     environment: e2e
     concurrency:
       group: ${{ matrix.job }}
+      cancel-in-progress: false
     strategy:
       matrix:
         job: ${{ fromJson(needs.discover.outputs.jobs) }}

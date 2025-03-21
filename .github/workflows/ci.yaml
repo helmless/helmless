@@ -17,7 +17,6 @@ jobs:
         chart:
           - 'charts/cloudrun/service'
           - 'charts/cloudrun/job'
-          - 'charts/cloudrun/common'
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4

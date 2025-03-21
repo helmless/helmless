@@ -4,7 +4,7 @@ description: >-
   Templates a Google Cloud Run Job YAML manifest that can be deployed using the
   Google Cloud CLI.
 type: application
-icon: https://www.svgrepo.com/show/375383/cloud-run.svg
+icon: https://helmless.io/assets/images/helmless.png
 version: 0.1.0
 maintainers:
   - name: Michael Reichenbach (Silthus)

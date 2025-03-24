@@ -10,37 +10,50 @@ Helmless is a workflow and collection of resources that allows you to deploy ser
 
 1.   :material-information-slab-circle: See the [extending to other platforms](./architecture.md) page for more information.
 
-It takes a container specification in the form of a Helm chart and a values file, and uses the templating feature of Helm to generate a Cloud Run configuration. This configuration is then deployed using the Cloud Run CLI.
+It takes a container specification in the form of a Helm chart and a values file, and uses the templating feature of Helm to generate a Cloud Run manifest. This manifest is then deployed using the `gcloud` CLI.
 
 --8<-- "docs/_partials/architectur-diagram.md"
 
-Helmless gives you a powerful serverless deployment workflow that is very simple to use, yet flexible and extensible.
+Helmless gives you a powerful serverless deployment workflow that is very simple to use, yet flexible and extensible. It can be easily integrated into your existing CI/CD pipeline and is fully compatible with Helm charts and all tooling surrounding it.
 
 ## Getting Started
 
---8<-- "docs/_partials/getting-started_grid.md"
+<div class="grid cards" markdown>
 
-## Why Helm?
+-   :material-book-open-page-variant:{ .lg .middle } __Why Helmless?__
 
-Helm is a great tool for managing containerized applications, and its templating feature offers a great developer experience. It allows you to define your application container specification in a very simple YAML file and gives the platform teams an easy way to add abstraction and customization on top of it, making container-based deployments a breeze.
+    ---
 
-```yaml title=".hemless/values.yaml"
-name: minimal-service
-region: europe-west1
-project: helmless
-```
+    Not convinced yet? Learn why you should use Helmless and why it's different from other tools.
 
-## Why **no** Kubernetes?
+    [:octicons-arrow-right-24: Learn the WHY](/docs/helmless/)
 
-Helm, and for this project its templating feature, offers a great developer experience for managing containerized applications. However by default Helm is built for Kubernetes, which brings a lot of overhead and complexity for container-based deployments, where often times you don't need the full power of Kubernetes. And small teams and organizations often don't have the resources to maintain a production-grade Kubernetes cluster.
+-   :material-cog-outline:{ .lg .middle } __Helmless Architecture__
 
-Helmless aims to give you the developer experience of Helm, without the overhead of Kubernetes.
+    ---
 
-## Why **no** Terraform?
+    Understand the architecture, technical details behind Helmless, and how to extended it to other platforms.
 
-Terraform is a great tool for managing infrastructure as code, but especially for frequent deployments it quickly becomes a bottleneck. Infrastructure changes should be carefully managed and gated, and not be a part of the fast feedback loop that developers expect for deploying their own code as an application container.
+    [:octicons-arrow-right-24: Understand the Architecture](/docs/helmless/architecture)
 
-This is where Helmless comes in. It decouples the container deployment from the infrastructure deployment, and allows you to use the great developer experience of Helm for application deployments, while leaving the infrastructure management to other tools, like Terraform. By defining the container specification directly inside your application repository and by using the standard CI/CD pipeline, you can frequently deploy your application without waiting for the long approval process of infrastructure changes done in Terraform.
+-   :material-rocket-launch:{ .lg .middle } __Deploy Your First Service__
+
+    ---
+
+    Get hands-on experience and deploy your first service to Google Cloud Run with Helmless
+
+    [:octicons-arrow-right-24: Get Started](/docs/getting-started/quickstart)
+
+-   :material-code-braces:{ .lg .middle } __Examples__
+
+    ---
+
+    Explore real-world examples and sample configurations, including a complete CI/CD pipeline.
+
+    [:octicons-arrow-right-24: View Examples](/docs/getting-started/examples)
+
+</div>
+
 
 
 ## Repositories

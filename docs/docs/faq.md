@@ -33,13 +33,13 @@ job:
     COLOR: 'red'
 ```
 
-## Why **no** Kubernetes?
+## :material-kubernetes: Why **no** Kubernetes?
 
 Helm, and for this project its templating feature, offers a great developer experience for managing containerized applications. However by default Helm is built for Kubernetes, which brings a lot of overhead and complexity for container-based deployments, where often times you don't need the full power of Kubernetes. And small teams and organizations often don't have the resources to maintain a production-grade Kubernetes cluster.
 
 Helmless aims to give you the developer experience of Helm, without the overhead of Kubernetes.
 
-## Why **no** Terraform?
+## :material-terraform: Why **no** Terraform?
 
 Terraform is a great tool for managing infrastructure as code, but especially for frequent deployments it quickly becomes a bottleneck. Infrastructure changes should be carefully managed and gated, and not be a part of the fast feedback loop that developers expect for deploying their own code as an application container.
 

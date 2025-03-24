@@ -1,6 +1,7 @@
 ---
 title: 5min Quick Start
 description: Deploy your first service to Google Cloud Run with Helmless in 5 minutes
+icon: material/timer-outline
 ---
 
 # Quickstart: Deploy to Google Cloud Run
@@ -120,7 +121,38 @@ gcloud run services delete hello-helmless
 
 ## What's Next?
 
-- [Deploy from GitHub Actions](../cloudrun/ci-cd.md)
-- [Explore the full configuration options](/docs/cloudrun/schema) <!-- markdown-link-check-disable-line -->
-- [See more examples](./examples.md)
-- [Learn more about Helmless](../helmless/what-is-helmless.md)
+<div class="grid cards" markdown>
+
+-   :simple-githubactions:{ .lg .middle } __CI/CD with Github Actions__
+
+    ---
+
+    Learn how to deploy your container to Google Cloud Run using Github Actions.
+
+    [:octicons-arrow-right-24: Learn More](./ci-cd.md)
+
+-   :material-file-document-outline:{ .lg .middle } __Configuration Options__
+
+    ---
+
+    Explore the full configuration options for Google Cloud Run Services and Jobs.
+
+    [:octicons-arrow-right-24: View Schema](./schemas/index.md)
+
+-   :material-code-braces:{ .lg .middle } __Examples__
+
+    ---
+
+    See real-world implementations of Helmless for Google Cloud Run.
+
+    [:octicons-arrow-right-24: View Examples](./examples.md)
+
+-   :material-information-outline:{ .lg .middle } __About Helmless__
+
+    ---
+
+    Learn more about what Helmless is and how it works.
+
+    [:octicons-arrow-right-24: Learn More](../architecture.md)
+
+</div>

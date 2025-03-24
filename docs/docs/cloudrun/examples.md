@@ -1,3 +1,9 @@
+---
+title: Cloud Run Examples
+description: Examples of using Helmless to deploy to Google Cloud Run
+icon: material/code-json
+---
+
 # Cloud Run Examples
 
 --8<-- "docs/_partials/wip.md"

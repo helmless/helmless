@@ -1,6 +1,7 @@
 ---
 title: Architecture
 description: Learn how Helmless works under the hood.
+icon: fontawesome/solid/shapes
 ---
 
 # Helmless Architecture

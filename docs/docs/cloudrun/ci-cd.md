@@ -1,4 +1,10 @@
-# CI/CD
+---
+title: CI/CD with Github Actions
+description: Deploy your container to Google Cloud Run using Github Actions
+icon: simple/githubactions
+---
+
+# CI/CD with Github Actions
 
 Helmless is designed to be used in any CI/CD pipeline to deploy your container to the cloud provider of your choice. Since we use Github Actions as our CI/CD platform of choice, this guide will show you how to deploy your container to Google Cloud Run using Github Actions.
 
@@ -119,28 +125,23 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL }} (1)
 
-      - name: 📜 Template Helmless Chart
-        uses: helmless/action@v0.1.0
-        id: template
+      - name: 🚀 Deploy Service
+        uses: helmless/google-cloudrun-action@v0.2.1 (6)
+        id: deploy
         with:
           files: |
             helmless/values.yaml (2)
           chart: oci://ghcr.io/helmless/google-cloudrun-service (3)
           chart_version: "latest" (4)
-
-      - name: 🚀 Deploy Service
-        uses: helmless/google-cloudrun-deploy-action@v0.1.0
-        id: deploy
-        with:
           dry_run: false (5)
 ```
 </div>
 
 1. The `GCP_WORKLOAD_IDENTITY_POOL` is the workload identity pool you created in the [Github Workload Identity Federation](#github-workload-identity-federation) section.
-2. The `files` argument takes one or more `values.yaml` files. In this example we use a single `helmless/values.yaml` file that was created in the [Getting Started](./getting-started.md) guide.
+2. The `files` argument takes one or more `values.yaml` files. In this example we use a single `helmless/values.yaml` file that was created in the [Getting Started](./getting-started.md) guide. The files are applied in the order they are listed. So if you need to override values in a specific file, you can do so by listing the file with the higher precedence last.
 3. The Helmless chart to use for the templating. Defaults to `oci://ghcr.io/helmless/google-cloudrun-service`. See [packages](https://github.com/orgs/helmless/packages) for a list of available charts.
 4. The version of the Helm chart to deploy. `latest` and all valid Helm chart version ranges are supported.
 5. If true the template will only be validated against the GCP Cloud Run API but not deployed.
-
+6. The version of the [Helmless Github Action](https://github.com/helmless/google-cloudrun-action) to use. Make sure to use the latest version.
 
 [github-action]: https://github.com/helmless/google-cloudrun-deploy-action

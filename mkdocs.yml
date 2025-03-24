@@ -11,33 +11,33 @@ schema_renderer:
   schemas:
     - schema_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json
       changelog_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/CHANGELOG.md
-      nav_path: docs/cloudrun/schemas/service.md
+      nav_path: docs/cloudrun/schemas/service/index.md
     - schema_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/job/values.schema.json
       changelog_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/job/CHANGELOG.md
-      nav_path: docs/cloudrun/schemas/job.md
+      nav_path: docs/cloudrun/schemas/job/index.md
 
 nav:
   - Home: index.md
   - Documentation:
       - docs/index.md
-      - Getting Started:
-          - docs/getting-started/index.md
-          - 5min Quick Start: docs/getting-started/quickstart.md
-          - Core Concepts: docs/getting-started/core-concepts.md
-          - Examples: docs/getting-started/examples.md
+      - Why Helmless?: docs/why-helmless.md
+      - Architecture: docs/architecture.md
       - Google Cloud Run:
           - docs/cloudrun/index.md
+          - Getting Started: docs/cloudrun/quickstart.md
           - CI/CD: docs/cloudrun/ci-cd.md
-          # - Examples: docs/cloudrun/examples.md
+          - Examples: docs/cloudrun/examples.md
           # - Advanced Infrastructure: docs/cloudrun/advanced.md
-          - Service Schema: docs/cloudrun/schemas/service.md
-          - Job Schema: docs/cloudrun/schemas/job.md
-          - Chart Changelog: docs/cloudrun/CHANGELOG.md
-      - Why Helmless?:
-          - docs/helmless/index.md
-          - What is Helmless?: docs/helmless/what-is-helmless.md
-          - Architecture: docs/helmless/architecture.md
-          - Conventions: docs/helmless/conventions.md
+          - Schemas:
+            - docs/cloudrun/schemas/index.md
+            - Cloud Run Service:
+              - docs/cloudrun/schemas/service/index.md
+              - Changelog: docs/cloudrun/schemas/service/CHANGELOG.md
+            - Cloud Run Job:
+              - docs/cloudrun/schemas/job/index.md
+              - Changelog: docs/cloudrun/schemas/job/CHANGELOG.md
+      - FAQ: docs/faq.md
+      - Conventions: docs/conventions.md
   - Discord: discord/index.md # required to display the icon
 
 plugins:
@@ -61,7 +61,6 @@ plugins:
   - redirects:
       redirect_maps:
         'discord.md': 'https://discord.gg/A5cjzfyAN5'
-        'docs/index.md': 'docs/getting-started/index.md'
 theme:
   name: material
   custom_dir: docs/_overrides/

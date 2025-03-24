@@ -5,6 +5,7 @@ title: Core Concepts
 As Helmless is built on top of Helm, it shares the same core concepts, but with some differences and new features specific to serverless deployments.
 
 ## Helmless Charts
+
 Helmless charts template your values into cloud-provider specific formats. They handle:
 
 - Resource configuration

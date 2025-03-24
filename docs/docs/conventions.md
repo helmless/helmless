@@ -1,3 +1,9 @@
+---
+title: Conventions
+description: Learn the conventions used in the chart schema documentation.
+icon: material/information-slab-circle
+---
+
 # Conventions
 
 This section explains several conventions used in the chart schema documentation.

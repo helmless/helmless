@@ -22,6 +22,8 @@ nav:
       - docs/index.md
       - Why Helmless?: docs/why-helmless.md
       - Architecture: docs/architecture.md
+      - FAQ: docs/faq.md
+      - Conventions: docs/conventions.md
       - Google Cloud Run:
           - docs/cloudrun/index.md
           - Getting Started: docs/cloudrun/quickstart.md
@@ -36,8 +38,6 @@ nav:
             - Cloud Run Job:
               - docs/cloudrun/schemas/job/index.md
               - Changelog: docs/cloudrun/schemas/job/CHANGELOG.md
-      - FAQ: docs/faq.md
-      - Conventions: docs/conventions.md
   - Discord: discord/index.md # required to display the icon
 
 plugins:

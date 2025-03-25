@@ -29,7 +29,7 @@ jobs:
       - name: 📚 Install Dependencies
         run: pip install -r requirements.txt
 
-      - name: 🔍 Build MkDocs Site
+      - name: 📦 Build MkDocs Site
         run: mkdocs build # --strict # TODO: move schema renderer to own mkdocs plugin and re-enable strict mode
 
       - name: 🧹 Run Pre-commit

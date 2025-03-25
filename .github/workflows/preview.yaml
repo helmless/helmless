@@ -1,19 +1,21 @@
-name: 📜 Docs
-on:
-  push:
-    branches:
-      - main
-permissions:
-  contents: write
-jobs:
-  ci:
-    uses: ./.github/workflows/ci.yaml
+name: 🚀 Deploy PR previews
 
-  deploy:
-    name: 🚀 Deploy Website
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency: preview-${{ github.ref }}
+
+jobs:
+  deploy-preview:
     runs-on: ubuntu-22.04
-    environment: github-pages
-    needs: ci
+    environment:
+        name: preview
+        url: https://helmless.io/pr-preview/pr-${{ github.event.pull_request.number }}
     steps:
       - uses: actions/checkout@v4
         name: 🗂️ Checkout
@@ -38,12 +40,11 @@ jobs:
       - name: 📚 Install Dependencies
         run: pip install -r requirements.txt
 
-      - name: 📦 Build Docs
-        run: mkdocs build
+      - name: 📦 Build MkDocs Site
+        run: mkdocs build # --strict # TODO: move schema renderer to own mkdocs plugin and re-enable strict mode
 
-      - name: 🚀 Deploy Docs
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@v1
         with:
-          folder: site
-          clean-exclude: pr-preview/
-          force: false
+          source-dir: ./site/
+          pages-base-url: helmless.io

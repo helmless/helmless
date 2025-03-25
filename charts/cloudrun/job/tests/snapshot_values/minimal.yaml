@@ -1,3 +1,0 @@
-name: minimal-job
-project: my-project
-image: gcr.io/project/image

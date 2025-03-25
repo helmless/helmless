@@ -1,4 +1,0 @@
-# yaml-language-server: $schema=../../values.schema.json
-name: minimal-service
-region: europe-west1
-project: helmless

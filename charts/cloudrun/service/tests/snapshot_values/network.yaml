@@ -1,7 +1,0 @@
-name: networked-service
-project: my-project
-image: gcr.io/project/image@sha256:abc123
-network:
-  vpc: projects/my-project/global/networks/my-vpc
-  subnetwork: projects/my-project/regions/us-central1/subnetworks/my-subnet
-  egress: all-traffic

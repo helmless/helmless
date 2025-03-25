@@ -1,9 +1,0 @@
-apiVersion: v2
-name: google-cloudrun-common-tests
-description: A helper chart for testing the google-cloudrun-common chart.
-type: application
-version: 0.1.0
-dependencies:
-  - name: google-cloudrun-common
-    version: "0.x.x"
-    repository: file://../../

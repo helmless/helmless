@@ -1,7 +1,0 @@
-name: connector-service
-region: europe-west1
-project: helmless
-image: 'us-docker.pkg.dev/cloudrun/container/hello:latest'
-network:
-  connector: projects/helmless/locations/europe-west1/connectors/default
-  egress: private-ranges-only

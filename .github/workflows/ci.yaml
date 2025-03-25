@@ -32,8 +32,5 @@ jobs:
       - name: 🔍 Build MkDocs Site
         run: mkdocs build # --strict # TODO: move schema renderer to own mkdocs plugin and re-enable strict mode
 
-      - name: 🔗 Check Links
-        run: |
-          pip install linkchecker
-          mkdocs build
-          linkchecker ./site/
+      - name: 🧹 Run Pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure

@@ -34,3 +34,10 @@ jobs:
 
       - name: 🧹 Run Pre-commit
         uses: pre-commit/action@v3.0.1
+
+      - name: 🔗 Check Links
+        uses: umbrelladocs/action-linkspector@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_level: any

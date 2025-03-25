@@ -1,0 +1,190 @@
+{% extends "main.html" %}
+
+<!-- Custom front matter -->
+{% block extrahead %}
+<link rel="stylesheet" href="{{ 'assets/stylesheets/home.css' | url }}" />
+{% endblock %}
+
+<!-- Render hero under tabs -->
+{% block tabs %} {{ super() }}
+
+<!-- Hero section with dynamic text -->
+<section class="tx-container">
+  <div class="md-grid md-typeset">
+    <div class="tx-hero">
+      <div class="hero-logo">
+        <img src="/assets/images/helmless.png" alt="Helmless Logo" class="floating-logo">
+      </div>
+      <div class="tx-hero__content">
+        <h1>
+          <span class="gradient-text">Serverless</span><br />
+          <span class="auto-contrast-text">Deployments Without</span><br />
+          <span class="auto-contrast-text">Compromise</span>
+        </h1>
+        <p class="auto-contrast-text">
+          Deploy Google Cloud Run containers with Helm's simplicity,<br />
+          bypassing the overhead of Kubernetes and Terraform.
+        </p>
+        <div class="tx-hero__buttons">
+          <a href="/docs/getting-started/quickstart" class="md-button md-button--primary">
+            Get started with Helmless
+          </a>
+          <a href="/docs/getting-started" class="md-button md-button--secondary">
+            Learn more
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simplified feature section -->
+  <section class="feature-container">
+    <div class="md-grid md-typeset">
+      <div class="feature-grid">
+        <div class="feature-top-content">
+          <!-- Title and text content -->
+          <div class="feature-text-content">
+            <h2 class="feature-heading">
+              <span class="gradient-text">Kubernetes-like DX</span><br />
+              Without the Complexity
+            </h2>
+            <p>
+              Deploy Google Cloud Run containers using familiar Helm syntax and fast CI/CD
+              workflows, bypassing the overhead of Kubernetes and verbosity of
+              Terraform.
+            </p>
+          </div>
+          <!-- Code example -->
+          <div class="feature-image">
+            <img
+              src="{{ 'assets/images/values_minimal_example.svg' | url }}"
+              alt="Helm Values Example"
+            />
+          </div>
+        </div>
+
+        <!-- Full-width feature cards -->
+        <div class="feature-cards">
+          <div class="feature-card">
+            <div class="feature-card-icon">🎯</div>
+            <div class="feature-card-content">
+              <h3>Simple Configuration</h3>
+              <p>values.yaml configuration for Google Cloud Run deployments</p>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card-icon">⚡</div>
+            <div class="feature-card-content">
+              <h3>Direct Deployment</h3>
+              <p>Serverless deployments using Helm without cluster management</p>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card-icon">🔄</div>
+            <div class="feature-card-content">
+              <h3>GitOps Ready</h3>
+              <p>Environment overrides and version control built-in</p>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card-icon">🌐</div>
+            <div class="feature-card-content">
+              <h3>Cloud Agnostic</h3>
+              <p>Maximum flexibility across cloud providers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workflow feature section -->
+  <section class="workflow-container">
+    <div class="workflow-content">
+      <h2 class="workflow-heading">
+        <span class="gradient-text">Simple Deployment Flow</span><br />
+        From Values to Production
+      </h2>
+      <div class="workflow-steps">
+        <div class="workflow-step">
+          <div class="workflow-icon">
+            <img
+              src="{{ 'assets/images/code-icon.svg' | url }}"
+              alt="Values YAML"
+            />
+          </div>
+          <h3>values.yaml</h3>
+          <p>Define your deployment configuration</p>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+          <div class="workflow-icon">
+            <img
+              src="{{ 'assets/images/cicd-icon.svg' | url }}"
+              alt="CI/CD Pipeline"
+            />
+          </div>
+          <h3>CI/CD Pipeline</h3>
+          <p>Automated deployment process</p>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+          <div class="workflow-icon">
+            <img
+              src="{{ 'assets/images/gcp-icon.svg' | url }}"
+              alt="Cloud CLI"
+            />
+          </div>
+          <h3>Cloud CLI</h3>
+          <p>Direct cloud provider integration</p>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+          <div class="workflow-icon">
+            <img
+              src="{{ 'assets/images/docker-icon.svg' | url }}"
+              alt="Running Container"
+            />
+          </div>
+          <h3>Container</h3>
+          <p>Your application running in production</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA section -->
+  <section class="final-cta-container">
+    <div class="md-grid md-typeset">
+      <div class="final-cta-content">
+        <h2 class="final-cta-heading">
+          <span class="gradient-text">Ready to Simplify</span><br />
+          Your Serverless Deployments?
+        </h2>
+
+        <div class="final-cta-buttons">
+          <a
+            href="/docs/getting-started/quickstart"
+            class="md-button md-button--primary"
+          >
+            Start Deploying Now
+          </a>
+          <a
+            href="/docs/getting-started"
+            class="md-button md-button--secondary"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+{% endblock %}
+
+<!-- Content -->
+{% block content %}{% endblock %}
+
+<!-- Footer -->
+{% block footer %}{{ super() }}{% endblock %}

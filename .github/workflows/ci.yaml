@@ -33,4 +33,4 @@ jobs:
         run: mkdocs build # --strict # TODO: move schema renderer to own mkdocs plugin and re-enable strict mode
 
       - name: 🧹 Run Pre-commit
-        run: pre-commit run --all-files --show-diff-on-failure
+        uses: pre-commit/action@v3

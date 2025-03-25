@@ -13,6 +13,9 @@ concurrency: preview-${{ github.ref }}
 jobs:
   deploy-preview:
     runs-on: ubuntu-22.04
+    environment:
+        name: preview
+        url: https://helmless.io/pr-preview/pr-${{ github.event.pull_request.number }}
     steps:
       - uses: actions/checkout@v4
         name: 🗂️ Checkout

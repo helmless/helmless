@@ -1,0 +1,120 @@
+:root {
+    /* Primary brand color - deep space blue */
+    --md-primary-fg-color: #0A1930;
+    --md-primary-fg-color--light: #1a2942;
+    --md-primary-fg-color--dark: #050d18;
+
+    /* Refined color palette for dark theme */
+    [data-md-color-scheme="slate"] {
+        /* Softer blue for regular links - not competing for attention */
+        --md-typeset-a-color: #63B3ED;
+
+        /* Slightly brighter for primary actions */
+        --md-accent-fg-color: #4299E1;
+
+        /* Background colors */
+        --md-default-bg-color: #1A202C;
+
+        /* Text colors - using softer whites for better readability */
+        --md-typeset-color: #E2E8F0;
+
+        /* Code colors */
+        --md-code-fg-color: #E2E8F0;
+        --md-code-bg-color: #2D3748;
+
+        /* Inline code */
+        --md-code-hl-color: rgba(66, 153, 225, 0.15);
+    }
+}
+
+.mdx-badge {
+    font-size: 0.85em;
+}
+
+.mdx-badge--right {
+    float: right;
+    margin-left: 0.35em;
+}
+
+.mdx-badge__icon {
+    padding: 0.25rem;
+    background: var(--md-accent-fg-color--transparent);
+    border-start-start-radius: 0.125rem;
+    border-end-start-radius: 0.125rem;
+}
+
+.mdx-badge__icon:last-child {
+    border-radius: 0.125rem;
+}
+
+.mdx-badge__text {
+    padding: 0.25rem 0.375rem;
+    border-start-end-radius: 0.125rem;
+    border-end-end-radius: 0.125rem;
+    box-shadow: 0 0 0 1px inset var(--md-accent-fg-color--transparent);
+}
+
+.red-icon {
+    color: #F56565;
+}
+
+.md-button {
+    padding: 0.625em 1.25em;
+    height: 2.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    color: var(--md-typeset-color);
+    background-color: var(--md-default-bg-color);
+    border: 1px solid var(--md-accent-fg-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.md-button:hover {
+    background-color: var(--md-default-bg-color--light);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.md-button--primary {
+    background: linear-gradient(135deg, #64B5F6 0%, #E1F5FE 100%);
+    color: var(--space-blue);
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.md-button--primary:hover {
+    color: var(--cloud-white);
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #4B9FE6 0%, #64B5F6 100%);
+}
+
+/* Ensure buttons are readable in dark mode */
+[data-md-color-scheme="slate"] .md-button {
+    color: var(--md-typeset-color);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--md-accent-fg-color);
+}
+
+[data-md-color-scheme="slate"] .md-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-md-color-scheme="slate"] .md-button--primary {
+    background: linear-gradient(135deg, #64B5F6 0%, #E1F5FE 100%);
+    color: var(--space-blue);
+    border: none;
+}
+
+[data-md-color-scheme="slate"] .md-button--primary:hover {
+    color: var(--cloud-white);
+    background: linear-gradient(135deg, #4B9FE6 0%, #64B5F6 100%);
+    transform: translateY(-1px);
+}

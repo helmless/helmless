@@ -5,7 +5,7 @@ repo_url: https://github.com/helmless/helmless
 repo_name: helmless/helmless
 edit_uri: edit/main/docs/
 
-conventions_path: docs/helmless/conventions.md
+conventions_path: docs/conventions.md
 schema_renderer:
   write_output: false
   schemas:

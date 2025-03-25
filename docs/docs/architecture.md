@@ -16,7 +16,7 @@ Simple but very powerful and adoptable to every cloud provider and CI/CD platfor
 
 Helmless has been battle tested internally using Google Cloud Run and serves hundreds of containers and production deployments every day. That's why the documentation focuses on Google Cloud Run and it currently is the only platform supported out of the box.
 
-Google Cloud Run is a fully managed container platform that allows you to deploy and scale your containers in a serverless way. Under the hood it uses the [Knative](https://knative.dev/) to provide it's serverless platform. In the Google Cloud Run documentation you can find the [full YAML specification](https://cloud.google.com/run/docs/reference/yaml/v1) that is templated by our [Google Cloud Run Helmless chart](https://github.com/helmless/helmless/tree/main/charts/cloudrun/service).
+Google Cloud Run is a fully managed container platform that allows you to deploy and scale your containers in a serverless way. Under the hood it uses the [Knative](https://knative.dev/) to provide it's serverless platform. In the Google Cloud Run documentation you can find the [full YAML specification](https://cloud.google.com/run/docs/reference/yaml/v1) that is templated by our [Google Cloud Run Helmless chart](https://github.com/helmless/google-cloudrun-charts/tree/main/charts/cloudrun/service).
 
 ## Extending to other platforms
 

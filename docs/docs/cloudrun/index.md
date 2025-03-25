@@ -16,7 +16,7 @@ Google Cloud Run is the first platform for which Helmless was adopted.
 
     Learn how to deploy your first Google Cloud Run Service in 5 minutes
 
-    [:octicons-arrow-right-24: Get Started](../getting-started/quickstart.md)
+    [:octicons-arrow-right-24: Get Started](./quickstart.md)
 
 -   :simple-githubactions:{ .lg .middle } __CI/CD with Github Actions__
 

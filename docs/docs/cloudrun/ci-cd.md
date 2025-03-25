@@ -92,7 +92,7 @@ projects/YOUR_PROJECT_ID/locations/global/workloadIdentityPools/github/providers
 
 ## Github Deployment Action
 
-You can find a full example of a Github Actions workflow in the [GitHub repository](https://github.com/helmless/helmless/blob/main/.github/workflows/e2e.yaml).
+You can find a full example of a Github Actions workflow in the [GitHub repository](https://github.com/helmless/google-cloudrun-charts/blob/main/.github/workflows/e2e.yaml).
 
 Here is a simplified version of the workflow with matrix deployment for multiple services:
 

@@ -1,18 +1,26 @@
-name: 🔍 CI
+name: 🚀 Deploy PR previews
 
 on:
-  workflow_call:
   pull_request:
-    branches:
-      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency: preview-${{ github.ref }}
 
 jobs:
-  docs-check:
-    name: 📚 Check Documentation
+  deploy-preview:
     runs-on: ubuntu-22.04
     steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        name: 🗂️ Checkout
+
+      - name: 🔑 Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
       - name: 🛠️ Setup asdf
         uses: asdf-vm/actions/setup@v3
@@ -32,12 +40,7 @@ jobs:
       - name: 📦 Build MkDocs Site
         run: mkdocs build # --strict # TODO: move schema renderer to own mkdocs plugin and re-enable strict mode
 
-      - name: 🧹 Run Pre-commit
-        uses: pre-commit/action@v3.0.1
-
-      - name: 🔗 Check Links
-        uses: umbrelladocs/action-linkspector@v1
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          fail_level: any
+          source-dir: ./site/

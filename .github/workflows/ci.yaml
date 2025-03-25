@@ -1,43 +1,39 @@
 name: 🔍 CI
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
   pull_request:
     branches:
       - main
 
 jobs:
-  lint:
-    name: 🧹 Lint & Test Charts
+  docs-check:
+    name: 📚 Check Documentation
     runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        chart:
-          - 'charts/cloudrun/service'
-          - 'charts/cloudrun/job'
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Helm
-        uses: azure/setup-helm@v4
+      - name: 🛠️ Setup asdf
+        uses: asdf-vm/actions/setup@v3
 
-      - name: 🧩 Install Helm Plugins
-        run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        name: 💾 Cache Python
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
 
-      - name: 🔍 Run Helm Dependency Update
-        run: helm dependency update ${{ matrix.chart }}
+      - name: 📚 Install Dependencies
+        run: pip install -r requirements.txt
 
-      - name: 🧹 Run Helm Lint
-        run: helm lint --with-subcharts ${{ matrix.chart }} --strict --set-string name=my-name --set-string project=my-project
+      - name: 🔍 Build MkDocs Site
+        run: mkdocs build --strict
 
-      - name: 🧪 Run Helm Test
-        run: helm unittest ${{ matrix.chart }}
-
-      - name: 📦 Test Helm Package
-        run: helm package --dependency-update ${{ matrix.chart }} --debug
-
-      - name: 🔍 Verify Chart Schema
-        run: helm template --dependency-update ${{ matrix.chart }} --set-string name=my-name --set-string project=my-project
+      - name: 🔗 Check Links
+        run: |
+          pip install linkchecker
+          mkdocs build
+          linkchecker ./site/

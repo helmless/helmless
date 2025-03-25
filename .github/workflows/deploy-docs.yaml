@@ -6,21 +6,26 @@ on:
 permissions:
   contents: write
 jobs:
+  ci:
+    uses: ./.github/workflows/ci.yaml
+
   deploy:
     name: 🚀 Deploy Website
     runs-on: ubuntu-22.04
     environment: github-pages
+    needs: ci
     steps:
       - uses: actions/checkout@v4
         name: 🗂️ Checkout
+
       - name: 🔑 Configure Git Credentials
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - uses: actions/setup-python@v5
-        name: 🐍 Setup Python
-        with:
-          python-version: 3.x
+
+      - name: 🛠️ Setup asdf
+        uses: asdf-vm/actions/setup@v3
+
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
       - uses: actions/cache@v4
         name: 💾 Cache Python
@@ -29,7 +34,9 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install -r docs/requirements.txt
-        name: 📚 Install Plugins
-      - run: mkdocs gh-deploy --force
-        name: 🚀 Deploy Docs
+
+      - name: 📚 Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: 🚀 Deploy Docs
+        run: mkdocs gh-deploy --force

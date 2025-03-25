@@ -11,6 +11,5 @@ repos:
     rev: v3.13.6
     hooks:
       - id: markdown-link-check
-        files: ^docs/.*$
         args: [-q]
         verbose: true

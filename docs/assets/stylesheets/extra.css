@@ -57,3 +57,64 @@
 .red-icon {
     color: #F56565;
 }
+
+.md-button {
+    padding: 0.625em 1.25em;
+    height: 2.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    color: var(--md-typeset-color);
+    background-color: var(--md-default-bg-color);
+    border: 1px solid var(--md-accent-fg-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.md-button:hover {
+    background-color: var(--md-default-bg-color--light);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.md-button--primary {
+    background: linear-gradient(135deg, #64B5F6 0%, #E1F5FE 100%);
+    color: var(--space-blue);
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.md-button--primary:hover {
+    color: var(--cloud-white);
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #4B9FE6 0%, #64B5F6 100%);
+}
+
+/* Ensure buttons are readable in dark mode */
+[data-md-color-scheme="slate"] .md-button {
+    color: var(--md-typeset-color);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--md-accent-fg-color);
+}
+
+[data-md-color-scheme="slate"] .md-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-md-color-scheme="slate"] .md-button--primary {
+    background: linear-gradient(135deg, #64B5F6 0%, #E1F5FE 100%);
+    color: var(--space-blue);
+    border: none;
+}
+
+[data-md-color-scheme="slate"] .md-button--primary:hover {
+    color: var(--cloud-white);
+    background: linear-gradient(135deg, #4B9FE6 0%, #64B5F6 100%);
+    transform: translateY(-1px);
+}

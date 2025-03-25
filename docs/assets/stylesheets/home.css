@@ -171,32 +171,35 @@ body {
 
 /* Primary CTA - bright blue gradient */
 .tx-hero__buttons .md-button--primary {
-  background: var(--space-blue);
-  color: var(--cloud-white);
+  background: linear-gradient(135deg, #64B5F6 0%, #E1F5FE 100%);
+  color: var(--space-blue);
   border: none;
   box-shadow: 0 4px 14px rgba(75, 159, 230, 0.3);
+  font-weight: 700; /* Increased for better visibility */
 }
 
 .tx-hero__buttons .md-button--primary:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(75, 159, 230, 0.4);
-  background: var(--space-blue-lighter);
+  background: linear-gradient(135deg, #4B9FE6 0%, #64B5F6 100%);
+  color: var(--space-blue);
 }
 
-/* Secondary CTA - glassy effect */
+/* Secondary CTA - with improved contrast */
 .tx-hero__buttons .md-button--secondary {
+  background: linear-gradient(135deg, rgba(100, 181, 246, 0.15) 0%, rgba(225, 245, 254, 0.15) 100%);
   color: var(--cloud-white);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.8); /* Increased border opacity for better visibility */
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
 }
 
 .tx-hero__buttons .md-button--secondary:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(100, 181, 246, 0.25) 0%, rgba(225, 245, 254, 0.25) 100%);
+  border-color: var(--cloud-white);
   color: var(--cloud-white);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Feature section layout */
@@ -637,36 +640,44 @@ body {
 }
 
 .final-cta-buttons .md-button {
-  padding: 0.8rem 2rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625em 2em;
 }
 
-/* Primary button (Start Deploying Now) */
+/* Final CTA buttons with consistent accessibility */
 .final-cta-buttons .md-button--primary {
   background: linear-gradient(135deg, #64B5F6 0%, #E1F5FE 100%);
   color: var(--space-blue);
   border: none;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(75, 159, 230, 0.3);
 }
 
 .final-cta-buttons .md-button--primary:hover {
-  color: var(--cloud-white);
+  color: var(--space-blue);
   transform: translateY(-1px);
   background: linear-gradient(135deg, #4B9FE6 0%, #64B5F6 100%);
+  box-shadow: 0 6px 20px rgba(75, 159, 230, 0.4);
 }
 
-/* Secondary button (GitHub) */
 .final-cta-buttons .md-button--secondary {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(100, 181, 246, 0.15) 0%, rgba(225, 245, 254, 0.15) 100%);
   color: var(--cloud-white);
-  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
 }
 
 .final-cta-buttons .md-button--secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(100, 181, 246, 0.25) 0%, rgba(225, 245, 254, 0.25) 100%);
+  border-color: var(--cloud-white);
   color: var(--cloud-white);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Make feature-top-content responsive */

@@ -9,11 +9,11 @@ conventions_path: docs/helmless/conventions.md
 schema_renderer:
   write_output: false
   schemas:
-    - schema_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json
-      changelog_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/CHANGELOG.md
+    - schema_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/service/values.schema.json
+      changelog_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/service/CHANGELOG.md
       nav_path: docs/cloudrun/schemas/service/index.md
-    - schema_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/job/values.schema.json
-      changelog_path: https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/job/CHANGELOG.md
+    - schema_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/job/values.schema.json
+      changelog_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/job/CHANGELOG.md
       nav_path: docs/cloudrun/schemas/job/index.md
 
 nav:
@@ -43,20 +43,6 @@ nav:
 plugins:
   - privacy
   - search
-  # - awesome-pages:
-  #     filename: .pages
-  #     collapse_single_pages: true
-  #     strict: false
-  #     order: asc
-  #     sort_type: natural
-  #     order_by: title
-  # - multirepo:
-  #     cleanup: false
-  #     keep_docs_dir: false
-  #     nav_repos:
-  #       - name: docs
-  #         import_url: 'https://github.com/helmless/google-cloudrun-chart?branch=main'
-  #         imports: ['cloudrun/schema/*.md']
 
   - redirects:
       redirect_maps:
@@ -71,7 +57,6 @@ theme:
     primary: custom
     accent: light blue
   icon:
-    # logo: material/rocket-launch
     repo: material/github
     annotation: material/chevron-right-circle
   features:

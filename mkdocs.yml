@@ -15,6 +15,13 @@ schema_renderer:
     - schema_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/job/values.schema.json
       changelog_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/job/CHANGELOG.md
       nav_path: docs/cloudrun/schemas/job/index.md
+    # Uncomment to use the local schema files from the google-cloudrun-charts repository
+    # - schema_path: ../google-cloudrun-charts/charts/cloudrun/service/values.schema.json
+    #   changelog_path: ../google-cloudrun-charts/charts/cloudrun/service/CHANGELOG.md
+    #   nav_path: docs/cloudrun/schemas/service/index.md
+    # - schema_path: ../google-cloudrun-charts/charts/cloudrun/job/values.schema.json
+    #   changelog_path: ../google-cloudrun-charts/charts/cloudrun/job/CHANGELOG.md
+    #   nav_path: docs/cloudrun/schemas/job/index.md
 
 nav:
   - Home: index.md

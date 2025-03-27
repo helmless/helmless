@@ -36,6 +36,7 @@ nav:
           - docs/cloudrun/index.md
           - Getting Started: docs/cloudrun/quickstart.md
           - CI/CD: docs/cloudrun/ci-cd.md
+          - Terraform: docs/cloudrun/terraform.md
           - Examples: docs/cloudrun/examples.md
           # - Advanced Infrastructure: docs/cloudrun/advanced.md
           - Schemas:

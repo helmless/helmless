@@ -14,33 +14,16 @@ However by default Helm is built for Kubernetes, which brings a lot of overhead 
 
 Helmless aims to give you the developer experience of Helm, without the overhead of Kubernetes. It does this by only using Helm's templating feature, linting and schema validation and not the full Helm CLI.
 
-```yaml title="values.yaml"
-global:
-  common: &common
-    name: helmless-service
-    project: helmless
-    region: europe-west1
-service:
-  <<: *common
-  env:
-    COLOR: 'blue'
-  secrets:
-    MY_SECRET: 'secret-key-in-gcp'
-job:
-  <<: *common
-  name: helmless-job
-  env:
-    COLOR: 'red'
-```
-
 ## :material-kubernetes: Why **no** Kubernetes?
 
-Helm, and for this project its templating feature, offers a great developer experience for managing containerized applications. However by default Helm is built for Kubernetes, which brings a lot of overhead and complexity for container-based deployments, where often times you don't need the full power of Kubernetes. And small teams and organizations often don't have the resources to maintain a production-grade Kubernetes cluster.
+Every team and organization is different, and so are their infrastructure and application requirements. Kubernetes is a great tool for managing containerized applications, but it's not the only tool for the job. And often times you don't need the full power of Kubernetes. But in the end, it's up to you to decide what's best for your team and organization.
 
-Helmless aims to give you the developer experience of Helm, without the overhead of Kubernetes.
+Helmless just offers a different path to deploy your application containers, without the need to have a Kubernetes cluster or use Terraform.
 
 ## :material-terraform: Why **no** Terraform?
 
-Terraform is a great tool for managing infrastructure as code, but especially for frequent deployments it quickly becomes a bottleneck. Infrastructure changes should be carefully managed and gated, and not be a part of the fast feedback loop that developers expect for deploying their own code as an application container.
+Terraform is a great tool for managing infrastructure as code, but especially for frequent deployments it can quickly become a bottleneck. Infrastructure changes should be carefully managed and gated, and not be a part of the fast feedback loop that developers expect for deploying their own code as an application container.
 
-This is where Helmless comes in. It decouples the container deployment from the infrastructure deployment, and allows you to use the great developer experience of Helm for application deployments, while leaving the infrastructure management to other tools, like Terraform. By defining the container specification directly inside your application repository and by using the standard CI/CD pipeline, you can frequently deploy your application without waiting for the long approval process of infrastructure changes done in Terraform.
+With the increasing size of the stack, the plan and apply times of Terraform can quickly become a bottleneck.
+
+But we also recognize that you still need to somehow link the application container to the underlying infrastructure. This is why we created the [helmless/google-cloudrun-service-terraform-module](https://github.com/helmless/google-cloudrun-service-terraform-module) that creates a [Terraform shell for your application container](./docs/cloudrun/terraform.md), which you can then use in your Terraform code to link the application container to the underlying infrastructure.

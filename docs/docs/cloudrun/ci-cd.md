@@ -48,6 +48,7 @@ After setting up the workload identity federation, you need to grant the Github 
 </div>
 1.   See the [advanced deployment guide](./advanced.md) for more information.
 
+<div class="annotate" markdown>
 ```hcl title="iam.tf"
 locals {
     repositories = ["your-repository"]
@@ -57,16 +58,14 @@ locals {
 
 data "google_project" "project" {}
 
-# This grants the `principalSet` the `roles/run.admin` role on the GCP project.
-resource "google_project_iam_member" "project" { (2)
+resource "google_project_iam_member" "project" { (1)
   for_each = local.repository_principals
   project  = data.google_project.project.project_id
   role     = "roles/run.admin"
   member   = each.value
 }
 
-# This grants the `principalSet` the `roles/iam.serviceAccountUser` role on the GCP projects default service account.
-resource "google_service_account_iam_member" "cloud_run_v2" { (3)
+resource "google_service_account_iam_member" "cloud_run_v2" { (2)
   for_each = local.repository_principals
 
   service_account_id = "projects/${data.google_project.project.project_id}/serviceAccounts/${data.google_project.project.number}-compute@developer.gserviceaccount.com"
@@ -74,6 +73,7 @@ resource "google_service_account_iam_member" "cloud_run_v2" { (3)
   member             = each.value
 }
 ```
+</div>
 
 Now run the following command to get the `GCP_WORKLOAD_IDENTITY_POOL`:
 
@@ -126,7 +126,7 @@ jobs:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_POOL }} (1)
 
       - name: 🚀 Deploy Service
-        uses: helmless/google-cloudrun-action@v0.2.1 (6)
+        uses: helmless/google-cloudrun-action@v1 (6)
         id: deploy
         with:
           files: |
@@ -142,6 +142,11 @@ jobs:
 3. The Helmless chart to use for the templating. Defaults to `oci://ghcr.io/helmless/google-cloudrun-service`. See [packages](https://github.com/orgs/helmless/packages) for a list of available charts.
 4. The version of the Helm chart to deploy. `latest` and all valid Helm chart version ranges are supported.
 5. If true the template will only be validated against the GCP Cloud Run API but not deployed.
-6. The version of the [Helmless Github Action](https://github.com/helmless/google-cloudrun-action) to use. Make sure to use the latest version.
+6. The version of the [Helmless Github Action][github-action] to use. Make sure to use the latest version.
 
-[github-action]: https://github.com/helmless/google-cloudrun-deploy-action
+
+!!! info "Helmless Github Action"
+    You can find more examples in the Readme of the [helmless/google-cloudrun-action][github-action] and the [e2e tests][e2e-tests].
+
+[github-action]: https://github.com/helmless/google-cloudrun-action
+[e2e-tests]: https://github.com/helmless/google-cloudrun-charts/blob/main/.github/workflows/e2e.yaml

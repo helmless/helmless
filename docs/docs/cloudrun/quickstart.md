@@ -42,10 +42,11 @@ You'll need:
 2. Create a `helmless/values.yaml` file:
    ```bash
    cat <<EOF > helmless/values.yaml
-   # yaml-language-server: \$schema=https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json
+   # yaml-language-server: \$schema=https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/service/values.schema.json
+   global:
+      region: $(gcloud config get run/region)
+      project: $(gcloud config get project)
    name: hello-helmless
-   region: $(gcloud config get run/region)
-   project: $(gcloud config get project)
    image: 'us-docker.pkg.dev/cloudrun/container/hello'
    env:
       COLOR: 'blue'
@@ -55,7 +56,7 @@ You'll need:
 This is your service configuration. It defines everything about your service that would normally be defined via the GCP Console or Terraform.
 
 !!! note "Helmless Chart Schema"
-    You can find the full schema for the Google Cloud Run Service Helmless chart [here](/docs/cloudrun/schema). <!-- markdown-link-check-disable-line -->
+    You can find the full schema for the Google Cloud Run Service Helmless chart [here](/docs/cloudrun/schemas). <!-- markdown-link-check-disable-line -->
 
 ## Step 3: Generate the Cloud Run Configuration
 

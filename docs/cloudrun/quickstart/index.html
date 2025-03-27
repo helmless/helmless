@@ -555,6 +555,8 @@
       
         
       
+        
+      
     
     
       
@@ -765,6 +767,29 @@
   
   <span class="md-ellipsis">
     CI/CD
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terraform/" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 5.4v6.4L15.4 15V8.7zm-6.2 3.3V15l-5.6-3.2V5.4zm0 7v6.4l-5.6-3.2v-6.4zM8.6 5.1v6.4L3 8.3V1.9z"/></svg>
+  
+  <span class="md-ellipsis">
+    Terraform
   </span>
   
 
@@ -1064,21 +1089,22 @@
 <li>
 <p>Create a <code>helmless/values.yaml</code> file:
    <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt; helmless/values.yaml</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s"># yaml-language-server: \$schema=https://raw.githubusercontent.com/helmless/helmless/main/charts/cloudrun/service/values.schema.json</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">name: hello-helmless</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">region: $(gcloud config get run/region)</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">project: $(gcloud config get project)</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">image: &#39;us-docker.pkg.dev/cloudrun/container/hello&#39;</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">env:</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">   COLOR: &#39;blue&#39;</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">EOF</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s"># yaml-language-server: \$schema=https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/service/values.schema.json</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">global:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">   region: $(gcloud config get run/region)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">   project: $(gcloud config get project)</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">name: hello-helmless</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">image: &#39;us-docker.pkg.dev/cloudrun/container/hello&#39;</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">env:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">   COLOR: &#39;blue&#39;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s">EOF</span>
 </span></code></pre></div></p>
 </li>
 </ol>
 <p>This is your service configuration. It defines everything about your service that would normally be defined via the GCP Console or Terraform.</p>
 <div class="admonition note">
 <p class="admonition-title">Helmless Chart Schema</p>
-<p>You can find the full schema for the Google Cloud Run Service Helmless chart <a href="/docs/cloudrun/schema">here</a>. <!-- markdown-link-check-disable-line --></p>
+<p>You can find the full schema for the Google Cloud Run Service Helmless chart <a href="/docs/cloudrun/schemas">here</a>. <!-- markdown-link-check-disable-line --></p>
 </div>
 <h2 id="step-3-generate-the-cloud-run-configuration">Step 3: Generate the Cloud Run Configuration<a class="headerlink" href="#step-3-generate-the-cloud-run-configuration" title="Permanent link">&para;</a></h2>
 <p>Run this command to template your service:</p>

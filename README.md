@@ -1,7 +1,9 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/helmless_title.png">
-  <img alt="Helmless.io - Serverless Deployments Without Compromise" src=".github/helmless_title_light.png">
-</picture>
+<a href="https://helmless.io">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/helmless_title.png">
+    <img alt="Helmless.io - Serverless Deployments Without Compromise" src=".github/helmless_title_light.png">
+  </picture>
+</a>
 
 ## 💡 What is Helmless?
 

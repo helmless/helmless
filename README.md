@@ -1,5 +1,3 @@
-# helmless.io
-
 [![Helmless Title](.github/helmless_title.png)](https://helmless.io)
 
 ## 💡 What is Helmless?
@@ -10,11 +8,13 @@ It leverages Helm's templating system and the `gcloud` CLI to deploy Cloud Run j
 
 The Helmless project provides pre-built Helm charts, Github Actions, and Terraform modules.
 
-[![Helmless Poster](docs/assets/images/poster.jpg)](https://helmless.io/docs)
+Helmless was first presented at [KubeCon Europe 2025](https://kccnceu2025.sched.com/event/b4c79f12ddc46cd74bd39a159cd7f08f). Here is the poster:
+
+![Helmless Poster](docs/assets/images/poster.jpg)
 
 ## 🏃‍♂️ Quick Start
 
-Visit [helmless.io](https://helmless.io) for comprehensive documentation, or jump right in:
+Visit [helmless.io](https://helmless.io) for the docs, or jump right in:
 
 1. [Why use Helmless?](https://helmless.io/why-helmless)
 2. [Helmless Architecture](https://helmless.io/docs/architecture/)

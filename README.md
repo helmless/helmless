@@ -1,105 +1,50 @@
 # helmless.io
 
-[![📜 Docs](https://github.com/helmless/helmless/actions/workflows/deploy-docs.yaml/badge.svg)](https://helmless.io)
-[![CloudRun Chart GitHub Release](https://img.shields.io/github/v/release/helmless/helmless?include_prereleases&label=google-cloudrun-service&color=blue)](https://github.com/helmless/google-cloudrun-chart/)
-![GitHub Org's stars](https://img.shields.io/github/stars/helmless)
+[![Helmless Title](.github/helmless_title.png)](https://helmless.io)
 
-> Deploy serverless containers to cloud platforms with Helm's simplicity, bypassing the overhead of Kubernetes and Terraform.
+## 💡 What is Helmless?
 
-## 🚀 What is Helmless?
+Helmless is a workflow for serverless deployments to Google Cloud Run.
 
-Helmless gives you the power of GitOps workflows for serverless deployments without the complexity of Kubernetes or the overhead of Terraform. Think of it as "Helm for serverless" - familiar tools, simpler deployments.
+It leverages Helm's templating system and the `gcloud` CLI to deploy Cloud Run jobs and services, bypassing the complexity of Kubernetes and the overhead of Terraform.
 
-### Key Features
+The Helmless project provides pre-built Helm charts, Github Actions, and Terraform modules.
 
-- 🎯 **Kubernetes-like DX** - Familiar Helm-based workflows
-- ⚡ **Lightning Fast** - Direct serverless deployments without K8s overhead
-- 🌐 **Cloud Agnostic** - Works across major cloud providers
-- 🤝 **Open Source** - Community-driven and built to evolve
+[![Helmless Poster](docs/assets/images/poster.jpg)](https://helmless.io/docs)
 
 ## 🏃‍♂️ Quick Start
 
 Visit [helmless.io](https://helmless.io) for comprehensive documentation, or jump right in:
 
-1. [What is Helmless?](https://helmless.io/docs/getting-started)
-2. [Architecture Overview](https://helmless.io/docs/helmless/architecture/)
-3. [Deploy to Google Cloud Run](https://helmless.io/docs/cloudrun/)
+1. [Why use Helmless?](https://helmless.io/why-helmless)
+2. [Helmless Architecture](https://helmless.io/docs/architecture/)
+3. [5min Quickstart](https://helmless.io/docs/cloudrun/quickstart)
 
-## 🏗️ Project Components
+## 🏗️ Repositories
 
-Helmless is organized into focused repositories:
+To help organize the Helmless project, we have grouped the repositories by prefixing them with the cloud provider, e.g. `google-cloudrun-*`.
 
-- **[helmless](https://github.com/helmless/helmless)** - Charts Monorepo and Documentation
-- **[template-action](https://github.com/helmless/template-action)** - GitHub Action for templating Helmless charts into cloud provider specific manifests
-- **[google-cloudrun-deploy-action](https://github.com/helmless/google-cloudrun-deploy-action)** - Deployment action for Google Cloud Run
-- **[google-cloudrun-service-terraform-module](https://github.com/helmless/google-cloudrun-service-terraform-module)** - Supporting Terraform module for Google Cloud Run
-- **[google-workload-identity-federation-terraform-module](https://github.com/helmless/google-workload-identity-federation-terraform-module)** - Supporting Terraform module for Google Workload Identity setting up GitHub Actions to deploy to Google Cloud Run
+### 🪴 Core Repositories
+
+- **[helmless](https://github.com/helmless/helmless)** - The Helmless homepage and documentation
+- **[template-action](https://github.com/helmless/template-action)** - Basic GitHub Action for templating Helm charts, merging values on the fly
+
+### 🚀 Google Cloud Run Repositories
+
+- **[google-cloudrun-action](https://github.com/helmless/google-cloudrun-action)** - Deployment action for Google Cloud Run wrapping the `gcloud` CLI and [template-action](https://github.com/helmless/template-action)
+- **[google-cloudrun-charts](https://github.com/helmless/google-cloudrun-charts)** - Helm charts for Google Cloud Run Jobs and Services
+- **[google-cloudrun-service-terraform-module](https://github.com/helmless/google-cloudrun-service-terraform-module)** - Supporting Terraform module for creating a Helmless Google Cloud Run Service
+- **[google-workload-identity-federation-terraform-module](https://github.com/helmless/google-workload-identity-federation-terraform-module)** - Supporting Terraform module for setting up GitHub Actions to deploy to Google Cloud Run using Workload Identity Federation
+
+### 🗃️ Miscellaneous Repositories
+
+- **[gcp-infrastructure](https://github.com/helmless/gcp-infrastructure)** - The GCP infrastructure for the Helmless project to setup the CI/CD end-to-end testing pipelines
 
 ## 🤝 Contributing
 
 You want to contribute to Helmless? Great ❤️!
-We use [asdf](https://asdf-vm.com/) to manage the tools and dependencies and [pre-commit](https://pre-commit.com/) to check if everything is fine before committing.
 
-To setup the development environment, install [asdf](https://asdf-vm.com/) and the following plugins:
-
-```sh
-asdf plugin add python
-asdf plugin add helm
-asdf plugin add helm-docs
-asdf plugin add pre-commit
-```
-
-Then install the tools and dependencies:
-
-```sh
-asdf install
-```
-
-After that install the pre-commit hooks:
-
-```sh
-pre-commit install
-```
-
-### 📜 Documentation
-
-The documentation site is built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
-
-To setup the development environment, install [Python](https://www.python.org/) using asdf and the following dependencies:
-
-```sh
-pip install -r docs/requirements.txt
-```
-
-To run the documentation site locally, run:
-
-```sh
-mkdocs serve
-```
-
-All primary documentation is located in the `docs/docs/` folder and written in [Markdown](https://www.markdownguide.org/) with some additional files for the website.
-
-The Chart schemas are written in [JSON Schema](https://json-schema.org/) and are located in the `charts/` folder and rendered using a [custom mkdocs plugin](docs/_hooks/schema_renderer.py).
-
-### ⚙️ Helm Charts
-
-All charts are written schema and test first and use [helm-unittest](https://github.com/helm-unittest/helm-unittest) to test the charts. To setup the testing environment, install the helm-unittest plugin:
-
-```sh
-helm plugin install https://github.com/helm-unittest/helm-unittest.git
-```
-
-To run the tests for a chart, navigate to the chart directory and run:
-
-```sh
-helm unittest .
-```
-
-To update the snapshot tests, run:
-
-```sh
-helm unittest . -u
-```
+Check out our [Contributing Guide](https://helmless.io/contributing) on the website or the [CONTRIBUTING.md](CONTRIBUTING.md) files in the relevant repository to get started.
 
 ## 📝 License
 

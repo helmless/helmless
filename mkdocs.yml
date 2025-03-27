@@ -20,9 +20,10 @@ nav:
   - Home: index.md
   - Documentation:
       - docs/index.md
-      - Why Helmless?: docs/why-helmless.md
+      - Why Helmless?: why-helmless.md
       - Architecture: docs/architecture.md
-      - FAQ: docs/faq.md
+      - FAQ: faq.md
+      - Contributing: contributing.md
       - Conventions: docs/conventions.md
       - Google Cloud Run:
           - docs/cloudrun/index.md

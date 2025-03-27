@@ -40,7 +40,7 @@ Helmless allows you to deploy your containers to Google Cloud Run at any time, w
 
     Learn what Helmless is, how it works and why it's different from other tools.
 
-    [:octicons-arrow-right-24: Learn more](./index.md)
+    [:octicons-arrow-right-24: Learn more](./docs/index.md)
 
 -   :material-cog-outline:{ .lg .middle } __Helmless Architecture__
 
@@ -48,7 +48,7 @@ Helmless allows you to deploy your containers to Google Cloud Run at any time, w
 
     Understand the architecture, technical details behind Helmless, and how to extended it to other platforms.
 
-    [:octicons-arrow-right-24: Understand the Architecture](./architecture.md)
+    [:octicons-arrow-right-24: Understand the Architecture](./docs/architecture.md)
 
 -   :material-rocket-launch:{ .lg .middle } __Deploy Your First Service__
 
@@ -56,7 +56,7 @@ Helmless allows you to deploy your containers to Google Cloud Run at any time, w
 
     Get hands-on experience and deploy your first service to Google Cloud Run with Helmless
 
-    [:octicons-arrow-right-24: Get Started](./cloudrun/quickstart.md)
+    [:octicons-arrow-right-24: Get Started](./docs/cloudrun/quickstart.md)
 
 -   :material-code-braces:{ .lg .middle } __Examples__
 
@@ -64,7 +64,7 @@ Helmless allows you to deploy your containers to Google Cloud Run at any time, w
 
     Explore real-world examples and sample configurations, including a complete CI/CD pipeline.
 
-    [:octicons-arrow-right-24: View Examples](./cloudrun/examples.md)
+    [:octicons-arrow-right-24: View Examples](./docs/cloudrun/examples.md)
 
 </div>
 

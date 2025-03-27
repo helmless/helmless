@@ -33,7 +33,7 @@ Helmless gives you a powerful serverless deployment workflow that is very simple
 
     Not convinced yet? Learn why you should use Helmless and why it's different from other tools.
 
-    [:octicons-arrow-right-24: Learn the WHY](why-helmless.md)
+    [:octicons-arrow-right-24: Learn the WHY](../why-helmless.md)
 
 -   :material-cog-outline:{ .lg .middle } __Helmless Architecture__
 

@@ -1,4 +1,5 @@
-[![Helmless Title](.github/helmless_title.png)](https://helmless.io)
+[![Helmless Title - Dark Mode](.github/helmless_title.png#gh-dark-mode-only)](https://helmless.io)
+[![Helmless Title - Light Mode](.github/helmless_title_light.png#gh-light-mode-only)](https://helmless.io)
 
 ## 💡 What is Helmless?
 

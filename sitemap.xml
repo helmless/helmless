@@ -2,98 +2,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://helmless.io/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/contributing/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/faq/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/why-helmless/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/_includes/abbreviations/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/_partials/architectur-diagram/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/_partials/getting-started_grid/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/_partials/wip/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/discord/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/architecture/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/conventions/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/core-concepts/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/advanced/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/ci-cd/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/examples/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/quickstart/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/terraform/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
+    </url>
+    <url>
+         <loc>https://helmless.io/docs/cloudrun/values/</loc>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/schemas/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/schemas/service/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/schemas/service/CHANGELOG/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/schemas/job/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
     <url>
          <loc>https://helmless.io/docs/cloudrun/schemas/job/CHANGELOG/</loc>
-         <lastmod>2025-03-27</lastmod>
+         <lastmod>2025-03-28</lastmod>
     </url>
 </urlset>

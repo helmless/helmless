@@ -1124,9 +1124,9 @@ The <a href="https://github.com/helmless/google-workload-identity-federation-ter
 </div>
 <ol>
 <li>Use your own <code>github_organization</code> and <code>repositories</code> to create the correct <code>principalSet</code> for your repositories.</li>
-<li>This name must match the <code>name</code> in the <a href="./values.md">values.yaml</a> of your Helmless deployment.</li>
+<li>This name must match the <code>name</code> in the <a href="../values/">values.yaml</a> of your Helmless deployment.</li>
 <li>The deployment account is a list of repository principals that will be granted the <code>roles/run.admin</code> role on the Cloud Run service in order to deploy it. In a real scenario this will just be one repository.</li>
-<li>By default the module will create a new service account just for the Cloud Run service. This is best practice as it allows you to scope the permissions to the individual service account. You must set the <code>serviceAccountName</code> in your <a href="./values.md">values.yaml</a> to use this.</li>
+<li>By default the module will create a new service account just for the Cloud Run service. This is best practice as it allows you to scope the permissions to the individual service account. You must set the <code>serviceAccountName</code> in your <a href="../values/">values.yaml</a> to use this.</li>
 </ol>
 <h3 id="project-wide-permissions">Project wide permissions<a class="headerlink" href="#project-wide-permissions" title="Permanent link">&para;</a></h3>
 <p>You can also grant your repositories project wide permissions to create and deploy Cloud Run services. This is more permissive and should only be used in a development environment or for dynamic creation of feature branch deployments for example. By default Helmless will create the Cloud Run service if it doesn't exist yet.</p>
@@ -1167,7 +1167,7 @@ The <a href="https://github.com/helmless/google-workload-identity-federation-ter
 <ol>
 <li>Use your own <code>github_organization</code> and <code>repositories</code> to create the correct <code>principalSet</code> for your repositories.</li>
 <li>This grants every repository listed above the <code>roles/run.admin</code> role in the whole GCP project.</li>
-<li>This is the default Cloud Run service account used if no specific service account is specified in the <a href="./values.md">values.yaml</a>.</li>
+<li>This is the default Cloud Run service account used if no specific service account is specified in the <a href="../values/">values.yaml</a>.</li>
 <li>The <code>roles/iam.serviceAccountUser</code> is required by Cloud Run to deploy the service.</li>
 </ol>
 <div class="admonition success">

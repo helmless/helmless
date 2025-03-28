@@ -28,9 +28,9 @@ nav:
   - Documentation:
       - docs/index.md
       - Why Helmless?: why-helmless.md
+      - Architecture: docs/helmless/architecture.md
       - Using Helmless:
         - docs/helmless/index.md
-        - Architecture: docs/helmless/architecture.md
         - Configuration: docs/helmless/configuration.md
         - Adopting Helmless: docs/helmless/adopting.md
       - Google Cloud Run:

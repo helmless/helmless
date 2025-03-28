@@ -55,7 +55,7 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
     else:
         type_str = f'`{prop_type}`'
 
-    if name != "root":
+    if level > 1:
         # Build markdown output
         md.append(f"{prefix} <!-- md:setting values.{name} -->")
 
@@ -101,7 +101,7 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
         for sub_name, sub_prop in prop['properties'].items():
             md.append("")
             md.append(_render_property(
-                f"{name}.{sub_name}",
+                f"{name}.{sub_name}" if level > 1 else sub_name,
                 sub_prop,
                 prop.get('required', []),
                 level=level + 1,
@@ -118,7 +118,7 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
             pattern_prop["pattern"] = pattern
             md.append("")
             md.append(_render_property(
-                f"{name}.{pattern_name}",
+                f"{name}.{pattern_name}" if level > 1 else pattern_name,
                 pattern_prop,
                 pattern_prop.get('required', []),
                 level=level + 1,
@@ -142,7 +142,7 @@ def _render_property(name: str, prop: dict, required: list = None, level: int = 
                     # Render the option's properties
                     for sub_name, sub_prop in option['properties'].items():
                         sub_content = _render_property(
-                            f"{name}.{sub_name}",
+                            f"{name}.{sub_name}" if level > 1 else sub_name,
                             sub_prop,
                             option.get('required', []),
                             level=level + 1,
@@ -212,24 +212,6 @@ def _render_dict_example(data: dict, indent: str, prefix: str = "") -> list[str]
 
 def _render_example(name: str, example: any, indent: str = "") -> list[str]:
     """Render a single example as YAML with proper indentation."""
-    if name is None:
-        if isinstance(example, dict):
-            return _render_dict_example(example, indent)
-        elif isinstance(example, list):
-            # Handle array of objects
-            yaml_lines = []
-            for item in example:
-                if isinstance(item, dict):
-                    yaml_lines.append(f"{indent}-")  # Start array item
-                    # Indent the dictionary content
-                    dict_lines = _render_dict_example(item, indent + "  ")
-                    yaml_lines.extend(dict_lines)
-                else:
-                    yaml_lines.append(f"{indent}- {item}")
-            return yaml_lines
-        else:
-            return [f"{indent}{example}"]
-
     yaml_lines = []
 
     # Handle dotted names by creating nested structure

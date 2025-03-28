@@ -79,9 +79,9 @@ Here are some of the most common questions about Helmless.
 
     [:octicons-arrow-right-24: Go to Issue #4](https://github.com/helmless/google-cloudrun-charts/issues/4)
 
-??? faq "Does it support all the features of Cloud Run (that e.g. the API / terraform provider offers)?"
+??? faq "Does it support all the features of Cloud Run?"
 
-    Yes you can!
+    Yes it does.
 
     With the exception of sidecars and traffic splitting on new revisions, Helmless supports all Cloud Run features.
 
@@ -121,9 +121,11 @@ Here are some of the most common questions about Helmless.
 
     [:octicons-arrow-right-24: Learn more](./docs/helmless/configuration.md)
 
-??? faq "Is there a way to plan changes like with terraform? (maybe dry-run?)
+??? faq "Is there a way to plan changes like with Terraform?"
 
     Yes there is. You can use `dry_run` flag in the Github Action or the `--dry-run` flag in the `gcloud` CLI.
+
+    A diff command is coming to the Helmless CLI to make it easier to review the changes.
 
     [:octicons-arrow-right-24: Learn more](./docs/cloudrun/ci-cd.md)
 

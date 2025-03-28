@@ -32,7 +32,7 @@ nav:
       - Using Helmless:
         - docs/helmless/index.md
         - Configuration: docs/helmless/configuration.md
-        - Adopting Helmless: docs/helmless/adopting.md
+        - Adopting: docs/helmless/adopting.md
       - Google Cloud Run:
           - docs/cloudrun/index.md
           - Getting Started: docs/cloudrun/quickstart.md

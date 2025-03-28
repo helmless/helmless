@@ -79,7 +79,7 @@ Here are some of the most common questions about Helmless.
 
     [:octicons-arrow-right-24: Go to Issue #4](https://github.com/helmless/google-cloudrun-charts/issues/4)
 
-??? faq "Can I use all Cloud Run features with Helmless?"
+??? faq "Does it support all the features of Cloud Run (that e.g. the API / terraform provider offers)?"
 
     Yes you can!
 
@@ -96,3 +96,41 @@ Here are some of the most common questions about Helmless.
     There is documentation on how to [migrate from Terraform to Helmless](./docs/cloudrun/migrate.md) in the Helmless Cloud Run Service documentation.
 
     [:octicons-arrow-right-24: Learn more](./docs/cloudrun/migrate.md)
+
+??? faq "How hard is it to extend the chart / add features?"
+
+    Both charts (Job and Service) are built on top of the [Google Cloud Run `common`](https://github.com/helmless/google-cloudrun-charts/tree/main/charts/cloudrun/common) library chart. This allows you to overwrite some of the helper functions to customize the chart to your needs.
+
+    The other option would be to contribute or fork the individual charts and extend them to your needs.
+
+    [:octicons-arrow-right-24: Learn more](./contributing.md)
+
+??? faq "Can I template the chart locally first to see changes?"
+
+    Yes you can!
+
+    You can use the `helm template` command to template the chart locally first to see changes.
+
+    [:octicons-arrow-right-24: Learn more](./docs/helmless/configuration.md)
+
+??? faq "Can I deploy multiple services from the same pipeline?"
+
+    Yes you can!
+
+    See the [configuration guide](./docs/helmless/configuration.md) and [examples](./docs/cloudrun/examples.md) for more information.
+
+    [:octicons-arrow-right-24: Learn more](./docs/helmless/configuration.md)
+
+??? faq "Is there a way to plan changes like with terraform? (maybe dry-run?)
+
+    Yes there is. You can use `dry_run` flag in the Github Action or the `--dry-run` flag in the `gcloud` CLI.
+
+    [:octicons-arrow-right-24: Learn more](./docs/cloudrun/ci-cd.md)
+
+??? faq "Can I specify per environment settings for dev, prd,... ?"
+
+    Yes you can provide multiple `values.yaml` files to the `helm template` command to specify per environment settings for dev, prd,...
+
+    See the [configuration guide](./docs/helmless/configuration.md) for more information.
+
+    [:octicons-arrow-right-24: Learn more](./docs/helmless/configuration.md)

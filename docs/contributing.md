@@ -5,7 +5,7 @@ icon: material/handshake
 ---
 
 <figure markdown="span">
-  ![Helmless Logo](/assets/images/helmless.png){ width="50%" }
+  ![Helmless Logo](./assets/images/helmless.png){ width="50%" }
   <figcaption>WOW 😍<br/>
   Amazing to see you here!<br/>
   It is people like you that make the Helmless project possible.</figcaption>

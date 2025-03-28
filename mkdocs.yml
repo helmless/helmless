@@ -5,16 +5,16 @@ repo_url: https://github.com/helmless/helmless
 repo_name: helmless/helmless
 edit_uri: edit/main/docs/
 
-conventions_path: docs/conventions.md
+conventions_path: docs/schemas/conventions.md
 schema_renderer:
   write_output: false
   schemas:
     - schema_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/service/values.schema.json
       changelog_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/service/CHANGELOG.md
-      nav_path: docs/cloudrun/schemas/service/index.md
+      nav_path: docs/schemas/service/index.md
     - schema_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/job/values.schema.json
       changelog_path: https://raw.githubusercontent.com/helmless/google-cloudrun-charts/main/charts/cloudrun/job/CHANGELOG.md
-      nav_path: docs/cloudrun/schemas/job/index.md
+      nav_path: docs/schemas/job/index.md
     # Uncomment to use the local schema files from the google-cloudrun-charts repository
     # - schema_path: ../google-cloudrun-charts/charts/cloudrun/service/values.schema.json
     #   changelog_path: ../google-cloudrun-charts/charts/cloudrun/service/CHANGELOG.md
@@ -28,10 +28,11 @@ nav:
   - Documentation:
       - docs/index.md
       - Why Helmless?: why-helmless.md
-      - Architecture: docs/architecture.md
-      - FAQ: faq.md
-      - Contributing: contributing.md
-      - Conventions: docs/conventions.md
+      - Using Helmless:
+        - docs/helmless/index.md
+        - Architecture: docs/helmless/architecture.md
+        - Configuration: docs/helmless/configuration.md
+        - Adopting Helmless: docs/helmless/adopting.md
       - Google Cloud Run:
           - docs/cloudrun/index.md
           - Getting Started: docs/cloudrun/quickstart.md
@@ -39,14 +40,18 @@ nav:
           - Terraform: docs/cloudrun/terraform.md
           - Examples: docs/cloudrun/examples.md
           # - Advanced Infrastructure: docs/cloudrun/advanced.md
-          - Schemas:
-            - docs/cloudrun/schemas/index.md
-            - Cloud Run Service:
-              - docs/cloudrun/schemas/service/index.md
-              - Changelog: docs/cloudrun/schemas/service/CHANGELOG.md
-            - Cloud Run Job:
-              - docs/cloudrun/schemas/job/index.md
-              - Changelog: docs/cloudrun/schemas/job/CHANGELOG.md
+      - Schemas:
+        - docs/schemas/index.md
+        - Cloud Run Service:
+          - docs/schemas/service/index.md
+          - Changelog: docs/schemas/service/CHANGELOG.md
+        - Cloud Run Job:
+          - docs/schemas/job/index.md
+          - Changelog: docs/schemas/job/CHANGELOG.md
+        - Conventions: docs/schemas/conventions.md
+      - FAQ: faq.md
+      - Contributing: contributing.md
+
   - Discord: discord/index.md # required to display the icon
 
 plugins:

@@ -5,7 +5,7 @@ icon: octicons/book-24
 ---
 
 <figure markdown="span">
-  ![Helmless Logo](/assets/images/helmless.png){ width="50%" }
+  ![Helmless Logo](../assets/images/helmless.png){ width="50%" }
   <figcaption>Welcome 👋🏻<br/>
   So glad you're here!</figcaption>
 </figure>
@@ -15,7 +15,7 @@ icon: octicons/book-24
 Helmless is a workflow and collection of resources that allows you to deploy serverless containers to Google Cloud Run, and potentially other platforms (1), with Helm, bypassing the complexity of Kubernetes and Terraform.
 { .annotate }
 
-1.   :material-information-slab-circle: See the [extending to other platforms](./architecture.md) page for more information.
+1.   :material-information-slab-circle: See the [extending to other platforms](./helmless/architecture.md) page for more information.
 
 It takes a container specification in the form of a Helm chart and a values file, and uses the templating feature of Helm to generate a Cloud Run manifest. This manifest is then deployed using the `gcloud` CLI.
 
@@ -41,7 +41,7 @@ Helmless gives you a powerful serverless deployment workflow that is very simple
 
     Understand the architecture, technical details behind Helmless, and how to extended it to other platforms.
 
-    [:octicons-arrow-right-24: Understand the Architecture](architecture.md)
+    [:octicons-arrow-right-24: Understand the Architecture](./helmless/architecture.md)
 
 -   :material-rocket-launch:{ .lg .middle } __Deploy Your First Service__
 

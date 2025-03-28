@@ -67,7 +67,7 @@ jobs:
 </div>
 
 1. The `GCP_WORKLOAD_IDENTITY_POOL` is the workload identity pool you created in the [Github Workload Identity Federation](#github-workload-identity-federation) section.
-2. The `files` argument takes one or more `values.yaml` files. In this example we use a single `helmless/values.yaml` file that was created in the [Getting Started](./getting-started.md) guide. The files are applied in the order they are listed. So if you need to override values in a specific file, you can do so by listing the file with the higher precedence last.
+2. The `files` argument takes one or more `values.yaml` files. In this example we use a single `helmless/values.yaml` file that was created in the [Getting Started](./quickstart.md) guide. The files are applied in the order they are listed. So if you need to override values in a specific file, you can do so by listing the file with the higher precedence last.
 3. The Helmless chart to use for the templating. Defaults to `oci://ghcr.io/helmless/google-cloudrun-service`. See [packages](https://github.com/orgs/helmless/packages) for a list of available charts.
 4. The version of the Helm chart to deploy. `latest` and all valid Helm chart version ranges are supported.
 5. If true the template will only be validated against the GCP Cloud Run API but not deployed.

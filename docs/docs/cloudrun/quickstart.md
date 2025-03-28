@@ -56,7 +56,7 @@ You'll need:
 This is your service configuration. It defines everything about your service that would normally be defined via the GCP Console or Terraform.
 
 !!! note "Helmless Chart Schema"
-    You can find the full schema for the Google Cloud Run Service Helmless chart [here](/docs/cloudrun/schemas). <!-- markdown-link-check-disable-line -->
+    You can find the full schema for the Google Cloud Run Service Helmless chart [here](../schemas/index.md).
 
 ## Step 3: Generate the Cloud Run Configuration
 
@@ -138,7 +138,7 @@ gcloud run services delete hello-helmless
 
     Explore the full configuration options for Google Cloud Run Services and Jobs.
 
-    [:octicons-arrow-right-24: View Schema](./schemas/index.md)
+    [:octicons-arrow-right-24: View Schema](../schemas/index.md)
 
 -   :material-code-braces:{ .lg .middle } __Examples__
 
@@ -154,6 +154,6 @@ gcloud run services delete hello-helmless
 
     Learn more about what Helmless is and how it works.
 
-    [:octicons-arrow-right-24: Learn More](../architecture.md)
+    [:octicons-arrow-right-24: Learn More](../helmless/architecture.md)
 
 </div>

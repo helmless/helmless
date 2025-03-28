@@ -1,7 +1,7 @@
 ---
 title: Conventions
 description: Learn the conventions used in the chart schema documentation.
-icon: material/information-slab-circle
+# icon: material/information-slab-circle
 ---
 
 # Conventions

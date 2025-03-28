@@ -25,10 +25,6 @@
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
-         <loc>https://helmless.io/_partials/getting-started_grid/</loc>
-         <lastmod>2025-03-28</lastmod>
-    </url>
-    <url>
          <loc>https://helmless.io/_partials/wip/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
@@ -38,14 +34,6 @@
     </url>
     <url>
          <loc>https://helmless.io/docs/</loc>
-         <lastmod>2025-03-28</lastmod>
-    </url>
-    <url>
-         <loc>https://helmless.io/docs/architecture/</loc>
-         <lastmod>2025-03-28</lastmod>
-    </url>
-    <url>
-         <loc>https://helmless.io/docs/conventions/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
@@ -69,6 +57,10 @@
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
+         <loc>https://helmless.io/docs/cloudrun/migrate/</loc>
+         <lastmod>2025-03-28</lastmod>
+    </url>
+    <url>
          <loc>https://helmless.io/docs/cloudrun/quickstart/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
@@ -81,23 +73,43 @@
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
-         <loc>https://helmless.io/docs/cloudrun/schemas/</loc>
+         <loc>https://helmless.io/docs/helmless/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
-         <loc>https://helmless.io/docs/cloudrun/schemas/service/</loc>
+         <loc>https://helmless.io/docs/helmless/adopting/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
-         <loc>https://helmless.io/docs/cloudrun/schemas/service/CHANGELOG/</loc>
+         <loc>https://helmless.io/docs/helmless/architecture/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
-         <loc>https://helmless.io/docs/cloudrun/schemas/job/</loc>
+         <loc>https://helmless.io/docs/helmless/configuration/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
     <url>
-         <loc>https://helmless.io/docs/cloudrun/schemas/job/CHANGELOG/</loc>
+         <loc>https://helmless.io/docs/schemas/</loc>
+         <lastmod>2025-03-28</lastmod>
+    </url>
+    <url>
+         <loc>https://helmless.io/docs/schemas/conventions/</loc>
+         <lastmod>2025-03-28</lastmod>
+    </url>
+    <url>
+         <loc>https://helmless.io/docs/schemas/service/</loc>
+         <lastmod>2025-03-28</lastmod>
+    </url>
+    <url>
+         <loc>https://helmless.io/docs/schemas/service/CHANGELOG/</loc>
+         <lastmod>2025-03-28</lastmod>
+    </url>
+    <url>
+         <loc>https://helmless.io/docs/schemas/job/</loc>
+         <lastmod>2025-03-28</lastmod>
+    </url>
+    <url>
+         <loc>https://helmless.io/docs/schemas/job/CHANGELOG/</loc>
          <lastmod>2025-03-28</lastmod>
     </url>
 </urlset>

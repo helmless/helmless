@@ -1154,7 +1154,7 @@
 <p><a href="https://github.com/helmless/google-cloudrun-charts/issues/4"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Go to Issue #4</a></p>
 </details>
 <details class="faq">
-<summary>Can I use all Cloud Run features with Helmless?</summary>
+<summary>Does it support all the features of Cloud Run (that e.g. the API / terraform provider offers)?</summary>
 <p>Yes you can!</p>
 <p>With the exception of sidecars and traffic splitting on new revisions, Helmless supports all Cloud Run features.</p>
 <p>Contributions are welcome!</p>
@@ -1165,6 +1165,35 @@
 <p>Right now the migration is not fully automated, but we are working on creating a Helmless CLI to help with the migration.</p>
 <p>There is documentation on how to <a href="../docs/cloudrun/migrate/">migrate from Terraform to Helmless</a> in the Helmless Cloud Run Service documentation.</p>
 <p><a href="../docs/cloudrun/migrate/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Learn more</a></p>
+</details>
+<details class="faq">
+<summary>How hard is it to extend the chart / add features?</summary>
+<p>Both charts (Job and Service) are built on top of the <a href="https://github.com/helmless/google-cloudrun-charts/tree/main/charts/cloudrun/common">Google Cloud Run <code>common</code></a> library chart. This allows you to overwrite some of the helper functions to customize the chart to your needs.</p>
+<p>The other option would be to contribute or fork the individual charts and extend them to your needs.</p>
+<p><a href="../contributing/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Learn more</a></p>
+</details>
+<details class="faq">
+<summary>Can I template the chart locally first to see changes?</summary>
+<p>Yes you can!</p>
+<p>You can use the <code>helm template</code> command to template the chart locally first to see changes.</p>
+<p><a href="../docs/helmless/configuration/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Learn more</a></p>
+</details>
+<details class="faq">
+<summary>Can I deploy multiple services from the same pipeline?</summary>
+<p>Yes you can!</p>
+<p>See the <a href="../docs/helmless/configuration/">configuration guide</a> and <a href="../docs/cloudrun/examples/">examples</a> for more information.</p>
+<p><a href="../docs/helmless/configuration/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Learn more</a></p>
+</details>
+<p>??? faq "Is there a way to plan changes like with terraform? (maybe dry-run?)</p>
+<div class="language-text highlight"><pre><span></span><code>Yes there is. You can use `dry_run` flag in the Github Action or the `--dry-run` flag in the `gcloud` CLI.
+
+[:octicons-arrow-right-24: Learn more](./docs/cloudrun/ci-cd.md)
+</code></pre></div>
+<details class="faq">
+<summary>Can I specify per environment settings for dev, prd,... ?</summary>
+<p>Yes you can provide multiple <code>values.yaml</code> files to the <code>helm template</code> command to specify per environment settings for dev, prd,...</p>
+<p>See the <a href="../docs/helmless/configuration/">configuration guide</a> for more information.</p>
+<p><a href="../docs/helmless/configuration/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Learn more</a></p>
 </details>
 
 

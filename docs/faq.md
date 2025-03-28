@@ -79,6 +79,14 @@ Here are some of the most common questions about Helmless.
 
     [:octicons-arrow-right-24: Go to Issue #4](https://github.com/helmless/google-cloudrun-charts/issues/4)
 
+??? faq "Does it support traffic splitting on new revisions?"
+
+    Helmless currently does not support traffic splitting on new revisions.
+
+    Contributions are welcome!
+
+    [:octicons-arrow-right-24: Learn more](./contributing.md)
+
 ??? faq "Does it support all the features of Cloud Run?"
 
     Yes it does.
@@ -136,3 +144,11 @@ Here are some of the most common questions about Helmless.
     See the [configuration guide](./docs/helmless/configuration.md) for more information.
 
     [:octicons-arrow-right-24: Learn more](./docs/helmless/configuration.md)
+
+??? faq "When not to use Helmless?"
+
+    It comes down to your specific use-case, requirements and setup.
+
+    Take a look at the [Adoption Guide](./docs/helmless/adopting.md) for more information.
+
+    [:octicons-arrow-right-24: Learn more](./docs/helmless/adopting.md)

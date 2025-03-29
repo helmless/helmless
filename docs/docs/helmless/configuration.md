@@ -33,11 +33,11 @@ Add the Helmless charts as dependencies to your Helm chart.
 ```yaml title="my-app/Chart.yaml"
 dependencies:
   - name: google-cloudrun-service
-    version: 1.0.0
+    version: 0.3.0
     repository: oci://ghcr.io/helmless
     alias: service
   - name: google-cloudrun-job
-    version: 1.0.0
+    version: 0.3.0
     repository: oci://ghcr.io/helmless
     alias: job
 ```

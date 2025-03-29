@@ -6,11 +6,11 @@ icon: material/timer-outline
 
 # Quickstart: Deploy to Google Cloud Run
 
-   version: 1.0.0
+   version: 0.3.0
    repository: oci://ghcr.io/helmless
    alias: service
 - name: google-cloudrun-job
-   version: 1.0.0
+   version: 0.3.0
    repository: oci://ghcr.io/helmless
    alias: job
 
@@ -60,7 +60,7 @@ You now need to add the Helmless charts as dependencies to your application char
 
    dependencies:
      - name: google-cloudrun-service (1)
-       version: 1.0.0
+       version: 0.3.0
        repository: oci://ghcr.io/helmless
        alias: service (2)
    EOF

@@ -34,12 +34,12 @@ Google Cloud Run is the first platform for which Helmless was adopted.
 
     [:octicons-arrow-right-24: View Examples](./examples.md)
 
--   :material-book-open-page-variant:{ .lg .middle } __Advanced Concepts__
+-   :material-book-open-page-variant:{ .lg .middle } __Using Terraform__
 
     ---
 
-    Learn advanced concepts for Google Cloud Run with Helmless, like how to use Terraform to create a shell around your service
+    Learn how you can tie in your Google Cloud Run Service to your GCP infrastructure using Terraform
 
-    [:octicons-arrow-right-24: Dive Deeper](./advanced.md)
+    [:octicons-arrow-right-24: Learn More](./terraform.md)
 
 </div>

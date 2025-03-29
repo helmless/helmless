@@ -13,7 +13,7 @@ It leverages Helm's templating system and the `gcloud` CLI to deploy Cloud Run j
 
 The Helmless project provides pre-built Helm charts, Github Actions, and Terraform modules.
 
-Helmless was first presented at [KubeCon Europe 2025](https://kccnceu2025.sched.com/event/b4c79f12ddc46cd74bd39a159cd7f08f). Here is the poster:
+Helmless was first presented at [KubeCon Europe 2025](https://kccnceu2025.sched.com/event/b4c79f12ddc46cd74bd39a159cd7f08f) as a poster session:
 
 ![Helmless Poster](docs/assets/images/poster.jpg)
 

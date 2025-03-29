@@ -214,6 +214,10 @@ def _render_example(name: str, example: any, indent: str = "") -> list[str]:
     """Render a single example as YAML with proper indentation."""
     yaml_lines = []
 
+    if name == 'root':
+        yaml_lines.extend(_render_dict_example(example, indent))
+        return yaml_lines
+
     # Handle dotted names by creating nested structure
     if '.' in name:
         parts = name.split('.')

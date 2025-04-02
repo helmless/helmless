@@ -12,7 +12,7 @@ icon: octicons/book-24
 
 # Welcome to Helmless
 
-Helmless is a workflow and collection of resources that allows you to deploy serverless containers to Google Cloud Run, and potentially other platforms (1), with Helm, bypassing the complexity of Kubernetes and Terraform.
+Helmless is a workflow and collection of resources that allows you to deploy serverless containers to Google Cloud Run, and potentially other platforms (1), with Helm, without the complexity of Kubernetes and bypassing the need for Terraform.
 { .annotate }
 
 1.   :material-information-slab-circle: See the [extending to other platforms](./helmless/architecture.md) page for more information.

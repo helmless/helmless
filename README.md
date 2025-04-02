@@ -7,7 +7,7 @@
 
 ## 💡 What is Helmless?
 
-Helmless is a workflow for serverless deployments to Google Cloud Run.
+Helmless is a workflow for serverless deployments to Google Cloud Run without the need for Kubernetes.
 
 It leverages Helm's templating system and the `gcloud` CLI to deploy Cloud Run jobs and services, bypassing the complexity of Kubernetes and the overhead of Terraform.
 
@@ -22,7 +22,7 @@ Helmless was first presented at [KubeCon Europe 2025](https://kccnceu2025.sched.
 Visit [helmless.io](https://helmless.io) for the docs, or jump right in:
 
 1. [Why use Helmless?](https://helmless.io/why-helmless)
-2. [Helmless Architecture](https://helmless.io/docs/architecture/)
+2. [Helmless Architecture](https://helmless.io/docs/helmless/architecture/)
 3. [5min Quickstart](https://helmless.io/docs/cloudrun/quickstart)
 
 ## 🏗️ Repositories

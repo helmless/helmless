@@ -1,5 +1,5 @@
 site_name: Helmless
-site_description: Serverless Deployments Without Compromise. Deploy Google Cloud Run containers using Helm, without the overhead of Kubernetes and Terraform.
+site_description: Helm for Serverless Without Kubernetes. Deploy Google Cloud Run containers using Helm, without the overhead of Kubernetes and Terraform.
 site_url: https://helmless.io
 repo_url: https://github.com/helmless/helmless
 repo_name: helmless/helmless

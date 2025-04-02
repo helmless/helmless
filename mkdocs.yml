@@ -52,7 +52,7 @@ nav:
       - FAQ: faq.md
       - Contributing: contributing.md
 
-  - Discord: discord/index.md # required to display the icon
+  - Community: community/index.md # required to display the icon
 
 plugins:
   - privacy
@@ -60,7 +60,7 @@ plugins:
 
   - redirects:
       redirect_maps:
-        'discord.md': 'https://discord.gg/A5cjzfyAN5'
+        'community.md': 'https://github.com/helmless/helmless/discussions'
 theme:
   name: material
   custom_dir: docs/_overrides/
@@ -118,9 +118,6 @@ extra:
     - icon: fontawesome/brands/linkedin
       name: LinkedIn
       link: https://www.linkedin.com/in/michael-reichenbach/
-    - icon: fontawesome/brands/discord
-      name: Discord
-      link: https://discord.gg/A5cjzfyAN5
   analytics:
     provider: google
     property: G-1ZHVXV2WWV

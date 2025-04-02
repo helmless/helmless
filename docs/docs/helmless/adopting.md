@@ -64,4 +64,4 @@ Then run after the remaining 20% of teams and you are done 🥳.
 
 You did it! You are now a Helmless organization! 🎉
 
-If you have any questions or need help, please join our [Discord server](https://discord.gg/sT7PjPj) and ask away!
+If you have any questions or need help, please join our [Community Forum](https://github.com/helmless/helmless/discussions) and ask away!

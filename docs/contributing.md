@@ -16,7 +16,7 @@ icon: material/handshake
 
 --8<-- "docs/_partials/wip.md"
 
-We welcome any contributions to the Helmless project, be it code, documentation, helping out other users or just a friendly hello in our [Discord server][Discord].
+We welcome any contributions to the Helmless project, be it code, documentation, helping out other users or just a friendly hello in our [Community Forum][Community].
 
 ## 🏗️ Repositories
 
@@ -75,4 +75,4 @@ mkdocs serve
 
 For more information on how to contribute to the documentation, please refer to the [CONTRIBUTING.md](https://github.com/helmless/helmless/blob/main/CONTRIBUTING.md) file of the `helmless` repository. That is the place where the documentation is built and hosted.
 
-[Discord]: https://discord.gg/A5cjzfyAN5
+[Community]: https://github.com/helmless/helmless/discussions

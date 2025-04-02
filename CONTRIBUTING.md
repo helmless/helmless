@@ -65,4 +65,4 @@ Create a new file in the `docs/docs/` folder or one of the subfolders and add it
 
 ## ❓ Questions?
 
-If you have any questions, please reach out to us on [Discord](https://discord.gg/sT5AS7G4).
+If you have any questions, please reach out to us on the [Discussion Forum](https://github.com/helmless/helmless/discussions).

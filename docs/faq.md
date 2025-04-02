@@ -10,7 +10,7 @@ Here are some of the most common questions about Helmless.
 
 !!! question "Not finding what you're looking for?"
 
-    If you don't find what you're looking for, please [join the Discord server](/discord) and ask away!
+    If you don't find what you're looking for, [join our Community Forum](https://github.com/helmless/helmless/discussions) and ask away!
 
 ??? faq "What is Helmless?"
 
@@ -42,7 +42,7 @@ Here are some of the most common questions about Helmless.
 
     Helmless currently only supports Google Cloud Run, but any contributions are welcome!
 
-    Join the [Discord server](/discord) to help us build Helmless for other cloud providers.
+    Join the [Community Forum](https://github.com/helmless/helmless/discussions) to help us build Helmless for other cloud providers.
 
     [:octicons-arrow-right-24: Learn more](./contributing.md)
 

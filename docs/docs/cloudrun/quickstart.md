@@ -44,7 +44,7 @@ Create a new directory for your service and initialize a Helm chart:
 
 ```bash
 helm create helmless && cd helmless
-rm -rf helmless/templates/* && rm -f helmless/values.yaml
+rm -rf templates/* && rm -f values.yaml
 echo "output" >> .gitignore
 ```
 
